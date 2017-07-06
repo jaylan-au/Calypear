@@ -1,7 +1,7 @@
 module.exports = [
   {
     method: 'GET',
-    path: '/www/{filename*}',
+    path: '/dist/{filename*}',
     handler: {
       directory: {
         path: './',

@@ -2,13 +2,13 @@
 
 const Path = require('path');
 const Hapi = require('hapi');
-
+const Hoek = require('hoek');
 
 const server = new Hapi.Server({
   connections: {
     routes: {
       files: {
-        relativeTo: Path.join(__dirname, 'www-public')
+        relativeTo: Path.join(__dirname, 'dist')
       }
     }
   },
@@ -24,11 +24,23 @@ server.connection({ port: 3000, host: 'localhost' });
   Register Plugins
 */
 server.register(require('inert'), (err) =>{
-  if (err) {
-            throw err;
-        }
-
+  Hoek.assert(!err, err);
 });
+
+server.register(require('vision'), (err) => {
+
+  Hoek.assert(!err, err);
+
+  server.views({
+      engines: {
+          html: require('handlebars')
+      },
+      relativeTo: __dirname,
+      path: 'templates',
+      layout: true,
+      layoutPath: 'templates/layout',
+  });
+})
 
 /*
   Register routes

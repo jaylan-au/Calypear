@@ -1,7 +1,7 @@
 var archcomponentRoutes = require('./archcomponent');
-var wwwRoutes = require('./www');
+var distRoutes = require('./dist');
 
 module.exports = [].concat(
   archcomponentRoutes,
-  wwwRoutes
+  distRoutes
 );
