@@ -4,6 +4,10 @@ const Path = require('path');
 const Hapi = require('hapi');
 const Hoek = require('hoek');
 
+const ArchComponent = require('./model/archcomponent');
+
+
+
 const server = new Hapi.Server({
   connections: {
     routes: {
@@ -33,7 +37,7 @@ server.register(require('vision'), (err) => {
 
   server.views({
       engines: {
-          html: require('handlebars')
+          hbs: require('handlebars')
       },
       relativeTo: __dirname,
       path: 'templates',

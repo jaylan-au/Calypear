@@ -1,0 +1,28 @@
+{
+  "archcomponents": [
+    {
+      "id": "a203cca7-da86-48f1-89bf-826f8d221ec0",
+      "name": "dfasdfas",
+      "componentType": "1",
+      "relationships": []
+    },
+    {
+      "id": "94a3fe33-5167-41a8-bb28-e5fe38447dd3",
+      "name": "Testin1",
+      "componentType": "Data2",
+      "relationships": []
+    }
+  ],
+  "lookuptypes": [],
+  "relationshiptypes": [],
+  "componenttypes": [
+    {
+      "id": "1",
+      "name": "data"
+    },
+    {
+      "id": "2",
+      "name": "System"
+    }
+  ]
+}

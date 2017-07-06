@@ -1,4 +1,4 @@
-const LookupType = require('lookuptype');
+const LookupType = require('./lookuptype');
 
 class RelationshipType extends LookupType {
   constructor (name, inverseName, id = null) {

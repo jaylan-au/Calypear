@@ -1,6 +1,6 @@
-const LookupType = require('lookuptype');
+const LookupType = require('./lookuptype');
 
-class ComponentType extends LookupType {
+class ComponentType  {
   constructor (name, id = null) {
     this.id = id;
     this.name = name;

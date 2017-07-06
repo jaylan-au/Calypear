@@ -1,0 +1,39 @@
+<h1>Architecture Components List</h1>
+<table>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Alternative Names</th>
+    <th>Type</th>
+  </tr>
+</thead>
+<tbody>
+  {{#each archComponents}}
+    <tr>
+      <td><a href="/archcomponent/{{id}}">{{name}}</a></td>
+      <td></td>
+      <td>{{componentType}}</td>
+    </tr>
+  {{/each}}
+</tbody>
+</table>
+
+<h1>Create new component</h1>
+<form method="POST" action="/archcomponent">
+  <div class="row">
+    <div class="six columns">
+      <label for="componentName">Component Name</label>
+      <input class="u-full-width" type="text" placeholder="New Component" id="componentName" name="name" required />
+    </div>
+    <div class="six columns">
+      <label for="componentType">Type</label>
+      <select class="u-full-width" name="componentType" required >
+        {{#each componentTypes}}
+        <option value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <input type="hidden" name="forwardToEdit" value="true"/>
+    <input type="submit" class="button-primary" value="Create"/>
+  </div>
+</form>

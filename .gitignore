@@ -1,3 +1,11 @@
+#######################################################################
+# Calypear Specific
+
+server/dist/*
+
+# End Calypear Specific
+#######################################################################
+
 # Logs
 logs
 *.log
@@ -56,4 +64,3 @@ typings/
 
 # dotenv environment variables file
 .env
-

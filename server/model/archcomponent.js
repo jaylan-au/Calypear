@@ -1,7 +1,7 @@
 class ArchComponent {
-  constructor (name, id = null) {
-    this.id = id;
-    this.name = name;
+  constructor () {
+    this.id = null;
+    this.name = null;
     this.componentType = null;
     this.relationships = [];
   }
