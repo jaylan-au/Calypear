@@ -2,10 +2,9 @@
 <h2>Properties</h2>
 {{#with archComponent}}
 <form method="POST" action="/archcomponent/{{id}}">
-<div class="row">
+<div class="row data-edit">
   <div class="twelve columns">
-    <label for="acFieldName">Name</label>
-    <p class="data-view" id="acName">{{name}}</p>
+    <label for="acFieldName" class="data-edit">Name</label>
     <input type="text" class="u-full-width data-edit" placeholder="{{name}}" value="{{name}}" id="acFieldName" name="name"/>
   </div>
 </div>
@@ -22,13 +21,14 @@
   <div class="row">
     <div class="twelve columns">
       <label for="name">Last Updated</label>
-      <p class="data-view">{{type.updatedAt}}</p>
+      <p class="data-view">{{updatedAt}}</p>
     </div>
 </div>
 <div class="row">
   <div class="twelve columns">
-    <button class="button-primary data-view" value="Edit">Edit</button>
+    <a class="button button-primary data-view" id="editComponentEnable">Edit</a>
     <input type="submit" class="button-primary data-edit" value="Save"/>
+    <a class="button data-edit" href="/archcomponent/{{id}}">Cancel</a>
   </div>
 </div>
 </form>
@@ -85,3 +85,13 @@
 
   </tbody>
 </table>
+
+<script>
+  $().ready(function(){
+    $('.data-edit').hide();
+    $('#editComponentEnable').click(function(){
+      $('.data-edit').show();
+      $('.data-view').hide();
+    });
+  });
+</script>

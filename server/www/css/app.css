@@ -1,0 +1,25 @@
+.navbar {
+  display: block;
+  position: static;
+  width: 100%;
+  border-bottom-width: thin;
+  border-bottom-color: #bbb;
+  border-bottom-style: solid;
+  margin-bottom: 3em;
+}
+
+.navbar ul {
+  list-style-type: none;
+  list-style-position: outside;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar ul li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  padding-right: 3em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
