@@ -1,0 +1,80 @@
+<h1>{{archComponent.name}}</h1>
+<h2>Properties</h2>
+{{#with archComponent}}
+<form method="POST" action="/archcomponent/{{id}}">
+<div class="row">
+  <div class="twelve columns">
+    <label for="acName">Name</label>
+    <p class="data-view" id="name">{{name}}</p>
+    <input type="text" class="u-full-width data-edit" placeholder="{{name}}" value="{{name}}" id="acName" name="name"/>
+  </div>
+</div>
+<div class="row">
+  <div class="twelve columns">
+    <label for="name">Type</label>
+    <p class="data-view" id="name">{{type.name}}</p>
+    <select class="u-full-width data-edit" name="typeId" required id="componentType">
+      {{#each ../componentTypes}}
+      <option value="{{id}}" >{{name}}</option>
+      {{/each}}
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="twelve columns">
+    <button class="button-primary data-view" value="Edit">Edit</button>
+    <input type="submit" class="button-primary data-edit" value="Save"/>
+  </div>
+</div>
+</form>
+{{/with}}
+<h2>Relationships</h2>
+<table>
+  <thead>
+    <th>From</th>
+    <th>Relation</th>
+    <th>To</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {{#each componentRelations}}
+      <tr>
+        {{#if inverse}}
+          <td>{{from.name}}</td>
+          <td>{{type.nameInverse}}</td>
+          <td><a href="/archcomponent/{{to.id}}">{{to.name}}</a></td>
+        {{else}}
+          <td>{{from.name}}</td>
+          <td>{{type.name}}</td>
+          <td><a href="/archcomponent/{{to.id}}">{{to.name}}</a></td>
+        {{/if}}
+        <td><a href="/archcomponent/{{../archComponent.id}}/relation/{{transaction}}/delete">Delete</a></td>
+      </tr>
+    {{/each}}
+    <tr>
+      <form method="post" action="/archcomponent/{{archComponent.id}}/relation">
+        <td>
+          <input type="hidden" name="fromId" id="fromId" value="{{archComponent.id}}"/>
+          {{archComponent.name}}
+        </td>
+        <td>
+          <select class="u-full-width" name="relationTypeId" required id="relationTypeId">
+            {{#each relationTypes}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </td>
+        <td>
+          <select class="u-full-width" name="toId" required id="toId">
+            {{#each allComponents}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </td>
+        <td>
+          <input type="submit" value="Create"/>
+        </td>
+    </form>
+    </tr>
+  </tbody>
+</table>

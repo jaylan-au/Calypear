@@ -5,7 +5,7 @@ module.exports = {
     name: {
       type: 'string'
     },
-    inverseName: {
+    nameInverse: {
       type: 'string'
     },
   }

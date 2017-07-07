@@ -8,5 +8,9 @@ module.exports = {
     type: {
       model: 'componenttype',
     },
+    relationships: {
+      collection: 'componentrelation',
+      via: 'from',
+    }
   }
 }

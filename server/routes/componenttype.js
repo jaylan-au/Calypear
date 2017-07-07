@@ -5,10 +5,12 @@ module.exports = [
     handler: function (request, reply) {
       const ComponentType = request.server.collections().componenttype;
 
-      ComponentType.find().exec(function(err,types){
+      ComponentType.find().then(function(types){
         reply.view('componenttype/componenttypes.hbs',{
           'componenttypes': types,
         });
+      }).catch(function(err){
+        //TODO: Do something meaningfull here
       });
 
     },
@@ -37,6 +39,7 @@ module.exports = [
       if (request.params.id) {
         ComponentType.destroy({id: request.params.id}).exec(function(err){
           Hoek.assert(!err, err);
+
         });
       } else {
         //TODO: Reply with some kind of error
