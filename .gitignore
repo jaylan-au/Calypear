@@ -2,6 +2,7 @@
 # Calypear Specific
 
 server/dist/*
+.tmp
 
 # End Calypear Specific
 #######################################################################

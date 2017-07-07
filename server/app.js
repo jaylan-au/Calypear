@@ -27,14 +27,13 @@ server.connection({ port: 3000, host: 'localhost' });
 /*
   Register Plugins
 */
+//Static Content Plugin
 server.register(require('inert'), (err) =>{
   Hoek.assert(!err, err);
 });
-
+//Views Rendering Plugin + Configuration
 server.register(require('vision'), (err) => {
-
   Hoek.assert(!err, err);
-
   server.views({
       engines: {
           hbs: require('handlebars')
@@ -45,6 +44,24 @@ server.register(require('vision'), (err) => {
       layoutPath: 'templates/layout',
   });
 })
+//ORM Dogwater/Waterline
+const Dogwater = require('dogwater');
+const SailsDisk = require('sails-disk');
+server.register({
+  register: Dogwater,
+  options: {
+    adapters: {
+      disk: SailsDisk
+    },
+    connections: {
+      primary: { adapter: 'disk' }
+    },
+    models: require('./model'),
+  }
+}, (err) => {
+  Hoek.assert(!err, err);
+  // Define a model using a connection declared above
+});
 
 /*
   Register routes
@@ -58,5 +75,19 @@ server.start((err) => {
     if (err) {
         throw err;
     }
+
+    // const ComponentType = server.collections().componenttype;
+    // ComponentType.create([
+    //   {name: 'System'},
+    //   {name: 'Data'}
+    // ]).then(() => {
+    //
+    //         console.log(`Go find some dogs at ${server.info.uri}`);
+    //     })
+    //     .catch((err) => {
+    //
+    //         console.error(err);
+    //     });
+
     console.log(`Server running at: ${server.info.uri}`);
 });

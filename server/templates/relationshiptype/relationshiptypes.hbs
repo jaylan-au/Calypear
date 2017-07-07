@@ -1,0 +1,34 @@
+<h1>Relationship Types</h1>
+<table>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th>Inverse Name</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  {{#each relationshiptypes}}
+    <tr>
+      <td>{{name}}</td>
+      <td>{{nameInverse}}</td>
+      <td><a href="/relationshiptype/{{id}}/delete" class="button-primary">Delete</a></td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+<h1>New Component Type</h1>
+<form method="POST" action="/relationshiptype/new">
+  <div class="row">
+    <div class="six columns">
+      <label for="typeName">Name</label>
+      <input class="u-full-width" type="text" placeholder="Type Name" id="typeName" name="name" required />
+    </div>
+    <div class="six columns">
+      <label for="typeNameInverse">Name Inverse</label>
+      <input class="u-full-width" type="text" placeholder="Type Name" id="typeNameInverse" name="nameInverse" required />
+    </div>
+    <input type="submit" class="button-primary" value="Create"/>
+
+  </div>
+</form>

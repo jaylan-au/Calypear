@@ -1,0 +1,27 @@
+<h1>Component Types</h1>
+<table>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  {{#each componenttypes}}
+    <tr>
+      <td>{{name}}</td>
+      <td><a href="/componenttype/{{id}}/delete" class="button-primary">Delete</a></td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+<h1>New Component Type</h1>
+<form method="POST" action="/componenttype/new">
+  <div class="row">
+      <label for="typeName">Name</label>
+      <input class="u-full-width" type="text" placeholder="Type Name" id="typeName" name="name" required />
+
+    <input type="submit" class="button-primary" value="Create"/>
+
+  </div>
+</form>

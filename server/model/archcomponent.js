@@ -1,10 +1,12 @@
-class ArchComponent {
-  constructor () {
-    this.id = null;
-    this.name = null;
-    this.componentType = null;
-    this.relationships = [];
+module.exports = {
+  identity: 'archcomponent',
+  connection: 'primary',
+  attributes: {
+    name: {
+      type: 'string',
+    },
+    type: {
+      model: 'componenttype',
+    },
   }
 }
-
-module.exports = ArchComponent;

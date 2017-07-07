@@ -1,7 +1,6 @@
-var archcomponentRoutes = require('./archcomponent');
-var distRoutes = require('./dist');
-
 module.exports = [].concat(
-  archcomponentRoutes,
-  distRoutes
+  require('./archcomponent'),
+  require('./componenttype'),
+  require('./relationshiptype'),
+  require('./dist')
 );

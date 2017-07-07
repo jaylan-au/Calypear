@@ -12,7 +12,7 @@
     <tr>
       <td><a href="/archcomponent/{{id}}">{{name}}</a></td>
       <td></td>
-      <td>{{componentType}}</td>
+      <td>{{type.name}}</td>
     </tr>
   {{/each}}
 </tbody>
@@ -27,7 +27,7 @@
     </div>
     <div class="six columns">
       <label for="componentType">Type</label>
-      <select class="u-full-width" name="componentType" required >
+      <select class="u-full-width" name="typeId" required id="componentType">
         {{#each componentTypes}}
         <option value="{{id}}">{{name}}</option>
         {{/each}}

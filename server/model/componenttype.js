@@ -1,12 +1,9 @@
-const LookupType = require('./lookuptype');
-
-class ComponentType  {
-  constructor (name, id = null) {
-    this.id = id;
-    this.name = name;
-    this.category = 'component';
+module.exports = {
+  identity: 'componenttype',
+  connection: 'primary',
+  attributes: {
+    name: {
+      type: 'string',
+    },
   }
-
 }
-
-module.exports = ComponentType;
