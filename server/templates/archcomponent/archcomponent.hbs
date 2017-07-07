@@ -4,21 +4,26 @@
 <form method="POST" action="/archcomponent/{{id}}">
 <div class="row">
   <div class="twelve columns">
-    <label for="acName">Name</label>
-    <p class="data-view" id="name">{{name}}</p>
-    <input type="text" class="u-full-width data-edit" placeholder="{{name}}" value="{{name}}" id="acName" name="name"/>
+    <label for="acFieldName">Name</label>
+    <p class="data-view" id="acName">{{name}}</p>
+    <input type="text" class="u-full-width data-edit" placeholder="{{name}}" value="{{name}}" id="acFieldName" name="name"/>
   </div>
 </div>
 <div class="row">
   <div class="twelve columns">
-    <label for="name">Type</label>
-    <p class="data-view" id="name">{{type.name}}</p>
-    <select class="u-full-width data-edit" name="typeId" required id="componentType">
+    <label for="acFieldTypeId">Type</label>
+    <p class="data-view" id="acType">{{type.name}}</p>
+    <select class="u-full-width data-edit" name="typeId" required id="acFieldTypeId">
       {{#each ../componentTypes}}
-      <option value="{{id}}" >{{name}}</option>
+      <option value="{{id}}" {{#isEqual id ../type.id }}selected{{/isEqual}}>{{name}}</option>
       {{/each}}
     </select>
   </div>
+  <div class="row">
+    <div class="twelve columns">
+      <label for="name">Last Updated</label>
+      <p class="data-view">{{type.updatedAt}}</p>
+    </div>
 </div>
 <div class="row">
   <div class="twelve columns">

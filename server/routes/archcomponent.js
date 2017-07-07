@@ -156,5 +156,21 @@ module.exports = [
       });
 
     }
+  },
+  {
+    method: 'GET',
+    path: '/archcomponent/search/{namesearch}',
+    handler: function (request, reply) {
+      const ArchComponent = request.server.collections().archcomponent;
+      ArchComponent.find({name: {'like': '%'+request.params.namesearch+'%'}}).then(function(ac){
+        reply.view('archcomponent/jsonlookup',{
+          'archComponents': ac
+        },{
+          layout: false
+        })
+      }).catch(function(err) {
+          //TODO: Do somethign meaningfull here
+      });
+    }
   }
 ];

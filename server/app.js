@@ -38,10 +38,13 @@ server.register(require('vision'), (err) => {
       engines: {
           hbs: require('handlebars')
       },
+      isCached: false,
       relativeTo: __dirname,
       path: 'templates',
-      layout: true,
       layoutPath: 'templates/layout',
+      layout: true,
+      partialsPath: 'templates/partials',
+      helpersPath: 'templates/helpers'
   });
 })
 //ORM Dogwater/Waterline
