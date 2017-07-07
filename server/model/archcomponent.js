@@ -8,6 +8,12 @@ module.exports = {
     type: {
       model: 'componenttype',
     },
+    alternativeNames: {
+      type: 'string'
+    },
+    description: {
+      type: 'string'
+    },
     relationships: {
       collection: 'componentrelation',
       via: 'from',

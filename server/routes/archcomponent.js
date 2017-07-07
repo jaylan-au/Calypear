@@ -99,7 +99,9 @@ module.exports = [
         id: request.params.id
       },{
         name: request.payload.name,
-        type: request.payload.typeId
+        type: request.payload.typeId,
+        description: request.payload.description,
+        alternativeNames: request.payload.alternativeNames
       }
       )
       .then(() => {
