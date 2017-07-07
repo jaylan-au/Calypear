@@ -51,8 +51,9 @@
         <td><a href="/archcomponent/{{../archComponent.id}}/relation/{{transaction}}/delete">Delete</a></td>
       </tr>
     {{/each}}
-    <tr>
+
       <form method="post" action="/archcomponent/{{archComponent.id}}/relation">
+            <tr>
         <td>
           <input type="hidden" name="fromId" id="fromId" value="{{archComponent.id}}"/>
           {{archComponent.name}}
@@ -74,7 +75,8 @@
         <td>
           <input type="submit" value="Create"/>
         </td>
+        </tr>
     </form>
-    </tr>
+
   </tbody>
 </table>
