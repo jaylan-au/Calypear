@@ -59,32 +59,35 @@ module.exports = [
       var componentTypes = [];
       var componentRelations = [];
       var archComponent = null;
+      var viewParams = {};
+
       Promise.all([
-        RelationshipType.find().then(function(types){
-          relationTypes = types;
+        RelationshipType.find().then(function(results){
+          viewParams.relationTypes = results;
         }),
-        ArchComponent.find().then(function(components){
-          archComponents = components;
+        ArchComponent.find().then(function(results){
+          viewParams.allComponents = results;
         }),
-        ComponentType.find().then(function(types){
-          componentTypes = types;
+        ComponentType.find().then(function(results){
+          viewParams.componentTypes = results;
         }),
-        ComponentRelation.find({from: request.params.id}).populate(['from','to','type']).then(function(relations){
-          componentRelations = relations;
+        ComponentRelation.find({from: request.params.id}).populate(['from','to','type']).then(function(results){
+          viewParams.componentRelations = results;
         }),
         ArchComponent.findOne({id: request.params.id})
         .populate('type')
-        .then(function(ac){
-          archComponent = ac;
+        .then(function(results){
+          viewParams.archComponent = results;
         })
       ]).then(function(){
-        reply.view('archcomponent/archcomponent.hbs',{
-          'archComponent': archComponent,
-          'componentRelations': componentRelations,
-          'allComponents': archComponents,
-          'relationTypes': relationTypes,
-          'componentTypes': componentTypes
-        });
+        reply.view('archcomponent/archcomponent.hbs',viewParams);
+        // reply.view('archcomponent/archcomponent.hbs',{
+        //   'archComponent': archComponent,
+        //   'componentRelations': componentRelations,
+        //   'allComponents': archComponents,
+        //   'relationTypes': relationTypes,
+        //   'componentTypes': componentTypes
+        // });
       }).catch(function(err){
         //TODO: Do somethign meaningfull here
       })

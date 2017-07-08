@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jaylan-au/calypear#readme",
   "dependencies": {
+    "d3": "^4.9.1",
     "dogwater": "^2.3.0",
     "handlebars": "^4.0.10",
     "hapi": "^16.4.3",
