@@ -38,13 +38,15 @@ module.exports = [
       const RelationshipType = request.server.collections().relationshiptype;
       //Prevent empty ID
       if (request.params.id) {
-        RelationshipType.destroy({id: request.params.id}).exec(function(err){
-          Hoek.assert(!err, err);
+        RelationshipType.destroy({id: request.params.id}).then(() =>{
+          reply.redirect('/relationshiptypes');
+        }).catch((err) => {
+          //TODO: Handle this
         });
       } else {
         //TODO: Reply with some kind of error
       }
-      reply.redirect('/relationshiptypes');
+
 
     }
   },

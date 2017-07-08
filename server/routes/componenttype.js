@@ -37,14 +37,16 @@ module.exports = [
       const ComponentType = request.server.collections().componenttype;
       //Prevent empty ID
       if (request.params.id) {
-        ComponentType.destroy({id: request.params.id}).exec(function(err){
-          Hoek.assert(!err, err);
-
+        ComponentType.destroy({id: request.params.id}).then(() => {
+          //all good
+          reply.redirect('/componenttypes');
+        }).catch((err) => {
+          //TODO: Handle
         });
       } else {
         //TODO: Reply with some kind of error
       }
-      reply.redirect('/componenttypes');
+
 
     }
   },
