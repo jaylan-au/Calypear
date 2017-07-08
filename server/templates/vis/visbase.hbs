@@ -20,12 +20,12 @@
 var graph = {
   "nodes": [
     {{#each components}}
-      {"id": "{{id}}", "name": "{{name}}", "type": "{{type}}" },
+      {"id": "{{id}}", "name": "{{name}}", "type": "{{type}}" } {{#unless @last}},{{/unless}}
     {{/each}}
   ],
   "links": [
     {{#each relations}}
-      {"source": "{{from}}", "target": "{{to}}", "type": "{{type}} "},
+      {"source": "{{from}}", "target": "{{to}}", "type": "{{type}} "} {{#unless @last}},{{/unless}}
     {{/each}}
   ]
 };
