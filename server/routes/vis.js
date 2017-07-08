@@ -17,7 +17,7 @@ module.exports = [
         ArchComponent.find().then((results)=>{
           viewParams.components = results;
         }),
-        ComponentRelation.find().then((results) => {
+        ComponentRelation.find({inverse: false}).then((results) => {
           viewParams.relations = results;
         })
       ]).then(() => {
