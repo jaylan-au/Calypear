@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="twelve columns">
+    <label class="{{#if hideView}}data-edit{{/if}}"for="acField{{fieldName}}">{{fieldLabel}}</label>
+    {{#unless hideView}}
+    <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
+    {{/unless}}
+    <input type="text" class="u-full-width data-edit" name="{{fieldName}}" id="acField{{fieldName}}" value="{{fieldValue}}" />
+  </div>
+</div>

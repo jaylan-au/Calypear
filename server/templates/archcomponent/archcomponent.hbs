@@ -2,12 +2,7 @@
 <h2>Properties</h2>
 {{#with archComponent}}
 <form method="POST" action="/archcomponent/{{id}}">
-<div class="row data-edit">
-  <div class="twelve columns">
-    <label for="acFieldName" class="data-edit">Name</label>
-    <input type="text" class="u-full-width data-edit" placeholder="{{name}}" value="{{name}}" id="acFieldName" name="name"/>
-  </div>
-</div>
+{{> formInput hideView=true fieldName="name" fieldLabel="Name" fieldValue=name}}
 <div class="row">
   <div class="twelve columns">
     <label for="acFieldTypeId">Type</label>
@@ -19,25 +14,13 @@
     </select>
   </div>
 </div>
+{{> formInput fieldName="alternativeNames" fieldLabel="Alternative Names" fieldValue=alternativeNames}}
+{{> formInput fieldName="description" fieldLabel="Description" fieldValue=description}}
 <div class="row">
   <div class="twelve columns">
-    <label for="acFieldAlternativeNames">Alternative Names</label>
-    <p class="data-view" id="acAlternativeNames">{{alternativeNames}}</p>
-    <textarea class="u-full-width data-edit" name="alternativeNames" id="acFieldAlternativeNames">{{alternativeNames}}</textarea>
+    <label for="name">Last Updated</label>
+    <p class="data-view">{{updatedAt}}</p>
   </div>
-</div>
-<div class="row">
-  <div class="twelve columns">
-    <label for="acFieldDescription">Description</label>
-    <p class="data-view" id="acDescription">{{description}}</p>
-    <textarea class="u-full-width data-edit" name="description" id="acFieldDescription">{{description}}</textarea>
-  </div>
-</div>
-  <div class="row">
-    <div class="twelve columns">
-      <label for="name">Last Updated</label>
-      <p class="data-view">{{updatedAt}}</p>
-    </div>
 </div>
 <div class="row">
   <div class="twelve columns">
