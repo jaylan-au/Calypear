@@ -4,11 +4,21 @@
   stroke-opacity: 0.6;
 }
 
+.links path {
+  stroke: #999;
+  stroke-opacity: 0.6;
+  fill: none;
+}
+
+
 .nodes circle {
   stroke: #fff;
   stroke-width: 1.5px;
 }
 
+.node-text {
+  font-size: 8px;
+}
 </style>
 <svg width="500" height="500">
 </svg>
@@ -17,52 +27,103 @@
 
 </script>
 <script>
-var graph = {
-  "nodes": [
-    {{#each components}}
-      {"id": "{{id}}", "name": "{{name}}", "type": "{{type}}" } {{#unless @last}},{{/unless}}
-    {{/each}}
-  ],
-  "links": [
-    {{#each relations}}
-      {"source": "{{from}}", "target": "{{to}}", "type": "{{type}} "} {{#unless @last}},{{/unless}}
-    {{/each}}
-  ]
-};
+  var graph = {
+    "nodes": [
+      {{#each components}}
+        {"id": "{{id}}", "name": "{{name}}", "type": "{{type}}" } {{#unless @last}},{{/unless}}
+      {{/each}}
+    ],
+    "links": [
+      {{#each relations}}
+        {"source": "{{from}}", "target": "{{to}}", "type": "{{type}} "} {{#unless @last}},{{/unless}}
+      {{/each}}
+    ]
+  };
 
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+  var svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height");
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+  var color = d3.scaleOrdinal(d3.schemeCategory20);
 
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
+  var simulation = d3.forceSimulation()
+      .force("link", d3.forceLink().id(function(d) { return d.id; }))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width / 2, height / 2));
 
+  var connectorGenerator = d3.line()
+    .curve(d3.curveStep);
 
   var link = svg.append("g")
       .attr("class", "links")
     .selectAll("line")
     .data(graph.links)
-    .enter().append("line")
+    .enter().append("path")
+      .attr("d",function(d) {
+        var points = [
+          [d.source.x,d.source.y],
+          [d.target.x,d.target.y]
+        ];
+        return connectorGenerator(points);
+      })
       .attr("stroke-width", function(d) { return Math.sqrt(d.type); });
+
+  function constructNode(context) {
+    context.append("rect")
+      .attr("width",120)
+      .attr("height",15)
+      .attr("fill",function(d) {return color(d.type)});
+    context.append("rect")
+      .attr("x",0)
+      .attr("y",15)
+      .attr("width",120)
+      .attr("height",40)
+      .attr("fill","none");
+    context.append("rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width",120)
+      .attr("height",55)
+      .attr("fill","none")
+      .attr("stroke","#999")
+    context.append("foreignObject")
+      .attr("x",5)
+      .attr("y",20)
+      .attr("width",110)
+      .attr("height",35)
+      .attr("class","node-text")
+      .append("xhtml:p")
+        .text(function(d) {return d.name});
+    // context.append("text")
+    //   .attr("dx", 20)
+    //   .attr("dy", "1em")
+    //   .attr("class","node-text")
+    //   .text(function(d) {return d.name});
+  }
 
   var node = svg.append("g")
       .attr("class", "nodes")
-    .selectAll("circle")
+    .selectAll(".nodeitem")
     .data(graph.nodes)
-    .enter().append("circle")
-      .attr("r", 5)
-      .attr("fill", function(d) { return color(d.type); })
+    .enter()
+      .append("g")
+      .attr("class","nodeitem")
+      .on("dblclick", dblclick)
       .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended));
 
-  node.append("title")
-      .text(function(d) { return d.id; });
+  constructNode(node);
+
+  // node.append('foreignObject')
+  //   .attr("x",0)
+  //   .attr("y",0)
+  //   .attr("width",150)
+  //   .attr("height",100)
+  //   .append("xhtml:p")
+  //     .text(function(d) { return d.name });
+
 
   simulation
       .nodes(graph.nodes)
@@ -73,31 +134,42 @@ var simulation = d3.forceSimulation()
 
   function ticked() {
     link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+      .attr("d",function(d) {
+        var points = [
+          [d.source.x,d.source.y],
+          [d.target.x,d.target.y]
+        ];
+        return connectorGenerator(points);
+      });
 
     node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
   }
 
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
+  function dragstarted(d) {
+    d3.select(this).classed("fixed",true);
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+    //note in D3 \v4 .fixed setting no longer works need to use fx/fy
+  }
 
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
+  function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
 
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
+  function dragended(d) {
+    //Stop the simulation
+    if (!d3.event.active) simulation.alphaTarget(0);
+  }
+
+  function dblclick(d) {
+    d3.select(this).classed("fixed",false);
+    //if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = null;
+    d.fy = null;
+  }
+
 
 </script>
