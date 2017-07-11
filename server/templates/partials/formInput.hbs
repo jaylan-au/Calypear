@@ -4,6 +4,21 @@
     {{#unless hideView}}
     <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
     {{/unless}}
-    <input type="text" class="u-full-width data-edit" name="{{fieldName}}" id="acField{{fieldName}}" value="{{fieldValue}}" />
+    {{#switch fieldType}}
+      {{#case "textarea" break=true}}
+        <textarea class="u-full-width data-edit" name="{{fieldName}}" id="acField{{fieldName}}" value="{{fieldValue}}"></textarea>
+      {{/case}}
+      {{#case "select" break=true}}
+        <select class="u-full-width data-edit" name="{{fieldName}}" required id="ac{{fieldName}}">
+          {{#each selectOptions}}
+          <option value="{{id}}" {{#isEqual id ../selectedOption }}selected{{/isEqual}}>{{name}}</option>
+          {{/each}}
+        </select>
+      {{/case}}
+      {{#default}}
+        <input type="{{#if fieldType}}{{fieldType}}{{else}}text{{/if}}" class="u-full-width data-edit" name="{{fieldName}}" id="acField{{fieldName}}" value="{{fieldValue}}" />
+      {{/default}}
+    {{/switch}}
+
   </div>
 </div>

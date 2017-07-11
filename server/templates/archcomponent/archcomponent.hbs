@@ -3,19 +3,9 @@
 {{#with archComponent}}
 <form method="POST" action="/archcomponent/{{id}}">
 {{> formInput hideView=true fieldName="name" fieldLabel="Name" fieldValue=name}}
-<div class="row">
-  <div class="twelve columns">
-    <label for="acFieldTypeId">Type</label>
-    <p class="data-view" id="acType">{{type.name}}</p>
-    <select class="u-full-width data-edit" name="typeId" required id="acFieldTypeId">
-      {{#each ../componentTypes}}
-      <option value="{{id}}" {{#isEqual id ../type.id }}selected{{/isEqual}}>{{name}}</option>
-      {{/each}}
-    </select>
-  </div>
-</div>
+{{> formInput fieldType="select" selectOptions=../componentTypes selectedOption=type.id fieldName="typeId" fieldLabel="Type" fieldValue=type.name}}
 {{> formInput fieldName="alternativeNames" fieldLabel="Alternative Names" fieldValue=alternativeNames}}
-{{> formInput fieldName="description" fieldLabel="Description" fieldValue=description}}
+{{> formInput fieldType="textarea" fieldName="description" fieldLabel="Description" fieldValue=description}}
 <div class="row">
   <div class="twelve columns">
     <label for="name">Last Updated</label>
