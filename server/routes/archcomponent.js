@@ -47,6 +47,19 @@ module.exports = [
   },
   {
     method: 'GET',
+    path: '/archcomponent/{id}/delete',
+    handler: function(request, reply) {
+      const ArchComponent = request.server.collections().archcomponent;
+
+      ArchComponent.destroy({id : request.params.id}).then(()=>{
+        reply.redirect('/archcomponents');
+      }).catch((err)=>{
+        //TODO: Something meaningfull here
+      })
+    }
+  },
+  {
+    method: 'GET',
     path: '/archcomponent/{id}',
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
@@ -104,7 +117,10 @@ module.exports = [
         name: request.payload.name,
         type: request.payload.typeId,
         description: request.payload.description,
-        alternativeNames: request.payload.alternativeNames
+        alternativeNames: request.payload.alternativeNames,
+        docUrl: request.payload.docUrl,
+        vendor: request.payload.vendor,
+        deployedVersion: request.payload.deployedVersion
       }
       )
       .then(() => {

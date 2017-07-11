@@ -14,6 +14,15 @@ module.exports = {
     description: {
       type: 'string'
     },
+    docUrl: {
+      type: 'string'
+    },
+    vendor: {
+      type: 'string'
+    },
+    deployedVersion: {
+      type: 'string'
+    },
     relationships: {
       collection: 'componentrelation',
       via: 'from',

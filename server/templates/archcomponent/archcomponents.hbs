@@ -5,14 +5,16 @@
     <th>Name</th>
     <th>Alternative Names</th>
     <th>Type</th>
+    <th></th>
   </tr>
 </thead>
 <tbody>
   {{#each archComponents}}
     <tr>
       <td><a href="/archcomponent/{{id}}">{{name}}</a></td>
-      <td></td>
+      <td>{{alternativeNames}}</td>
       <td>{{type.name}}</td>
+      <td><a href="/archcomponent/{{id}}/delete">Delete</a></td>
     </tr>
   {{/each}}
 </tbody>

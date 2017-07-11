@@ -1,8 +1,20 @@
 <div class="row">
   <div class="twelve columns">
-    <label class="{{#if hideView}}data-edit{{/if}}"for="acField{{fieldName}}">{{fieldLabel}}</label>
+    <label class="{{#if hideView}}data-edit{{/if}} {{#unless fieldValue}}data-edit{{/unless}}"for="acField{{fieldName}}">{{fieldLabel}}</label>
     {{#unless hideView}}
-    <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
+      {{#if fieldValue}}
+      {{#switch fieldType}}
+        {{#case "url" break=true}}
+          <a href="{{fieldValue}}">
+            <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
+          </a>
+        {{/case}}
+        {{#default}}
+          <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
+        {{/default}}
+      {{/switch}}
+
+      {{/if}}
     {{/unless}}
     {{#switch fieldType}}
       {{#case "textarea" break=true}}

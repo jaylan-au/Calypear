@@ -6,6 +6,9 @@
 {{> formInput fieldType="select" selectOptions=../componentTypes selectedOption=type.id fieldName="typeId" fieldLabel="Type" fieldValue=type.name}}
 {{> formInput fieldName="alternativeNames" fieldLabel="Alternative Names" fieldValue=alternativeNames}}
 {{> formInput fieldType="textarea" fieldName="description" fieldLabel="Description" fieldValue=description}}
+{{> formInput fieldType="url" fieldName="docUrl" fieldLabel="Documentation Url" fieldValue=docUrl}}
+{{> formInput fieldType="text" fieldName="vendor" fieldLabel="Vendor" fieldValue=vendor}}
+{{> formInput fieldType="text" fieldName="deployedVersion" fieldLabel="Deployed Version" fieldValue=deployedVersion}}
 <div class="row">
   <div class="twelve columns">
     <label for="name">Last Updated</label>
