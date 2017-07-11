@@ -35,7 +35,7 @@
     ],
     "links": [
       {{#each relations}}
-        {"source": "{{from}}", "target": "{{to}}", "type": "{{type}} "} {{#unless @last}},{{/unless}}
+        {"source": "{{from}}", "target": "{{to}}", "type": "{{type}}", "distance": "{{type.distance}}" } {{#unless @last}},{{/unless}}
       {{/each}}
     ]
   };
@@ -52,7 +52,7 @@
       .force("center", d3.forceCenter(width / 2, height / 2));
 
   var connectorGenerator = d3.line()
-    .curve(d3.curveStep);
+    .curve(d3.curveBasis);
 
   var link = svg.append("g")
       .attr("class", "links")
@@ -66,7 +66,7 @@
         ];
         return connectorGenerator(points);
       })
-      .attr("stroke-width", function(d) { return Math.sqrt(d.type); });
+      .attr("stroke-width", function(d) { return d.distance; });
 
   function constructNode(context) {
     context.append("rect")
@@ -155,8 +155,12 @@
   }
 
   function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
+    // d.fx = d3.event.x;
+    // d.fy = d3.event.y;
+    var grid = 10;
+
+    d.fx = Math.round(d3.event.x/grid)*grid;
+    d.fy = Math.round(d3.event.y/grid)*grid;
   }
 
   function dragended(d) {

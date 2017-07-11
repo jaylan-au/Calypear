@@ -8,5 +8,8 @@ module.exports = {
     nameInverse: {
       type: 'string'
     },
+    distance: {
+      type: 'integer'
+    }
   }
 }

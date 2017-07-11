@@ -20,7 +20,8 @@ module.exports = [
       const RelationshipType = request.server.collections().relationshiptype;
       RelationshipType.create({
         name: request.payload.name,
-        nameInverse: request.payload.nameInverse
+        nameInverse: request.payload.nameInverse,
+        distance: request.payload.distance
       })
         .then(() => {
             reply.redirect('/relationshiptypes');
