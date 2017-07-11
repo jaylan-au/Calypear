@@ -18,6 +18,7 @@
 
 .node-text {
   font-size: 8px;
+  text-align: center;
 }
 </style>
 <svg width="500" height="500">
@@ -35,7 +36,7 @@
     ],
     "links": [
       {{#each relations}}
-        {"source": "{{from}}", "target": "{{to}}", "type": "{{type}}", "distance": "{{type.distance}}" } {{#unless @last}},{{/unless}}
+        {"id": {{id}}, "source": "{{from}}", "target": "{{to}}", "type": "{{type.id}}", "distanceAssoc": {{type.distance}} } {{#unless @last}},{{/unless}}
       {{/each}}
     ]
   };
@@ -49,7 +50,9 @@
   var simulation = d3.forceSimulation()
       .force("link", d3.forceLink().id(function(d) { return d.id; }))
       .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width / 2, height / 2));
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collide", d3.forceCollide(30));
+
 
   var connectorGenerator = d3.line()
     .curve(d3.curveBasis);
@@ -58,7 +61,8 @@
       .attr("class", "links")
     .selectAll("line")
     .data(graph.links)
-    .enter().append("path")
+    .enter()
+      .append("path")
       .attr("d",function(d) {
         var points = [
           [d.source.x,d.source.y],
@@ -69,28 +73,34 @@
       .attr("stroke-width", function(d) { return d.distance; });
 
   function constructNode(context) {
-    context.append("rect")
-      .attr("width",120)
-      .attr("height",15)
+    context.append("circle")
+      .attr("cx",0)
+      .attr("cy",0)
+      .attr("r",20)
       .attr("fill",function(d) {return color(d.type)});
-    context.append("rect")
-      .attr("x",0)
-      .attr("y",15)
-      .attr("width",120)
-      .attr("height",40)
-      .attr("fill","none");
-    context.append("rect")
-      .attr("x",0)
-      .attr("y",0)
-      .attr("width",120)
-      .attr("height",55)
-      .attr("fill","none")
-      .attr("stroke","#999")
+    //
+    // context.append("rect")
+    //   .attr("width",120)
+    //   .attr("height",15)
+    //   .attr("fill",function(d) {return color(d.type)});
+    // context.append("rect")
+    //   .attr("x",0)
+    //   .attr("y",15)
+    //   .attr("width",120)
+    //   .attr("height",40)
+    //   .attr("fill","none");
+    // context.append("rect")
+    //   .attr("x",0)
+    //   .attr("y",0)
+    //   .attr("width",120)
+    //   .attr("height",55)
+    //   .attr("fill","none")
+    //   .attr("stroke","#999")
     context.append("foreignObject")
-      .attr("x",5)
-      .attr("y",20)
-      .attr("width",110)
-      .attr("height",35)
+      .attr("x",-40)
+      .attr("y",30)
+      .attr("width",80)
+      .attr("height",40)
       .attr("class","node-text")
       .append("xhtml:p")
         .text(function(d) {return d.name});
@@ -130,7 +140,8 @@
       .on("tick", ticked);
 
   simulation.force("link")
-      .links(graph.links);
+      .links(graph.links)
+      .distance(function(link){return link.distanceAssoc*10;});
 
   function ticked() {
     link
