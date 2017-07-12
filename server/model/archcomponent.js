@@ -23,6 +23,10 @@ module.exports = {
     deployedVersion: {
       type: 'string'
     },
+    tags: {
+      collection: 'componenttag',
+      via: 'component'
+    },
     relationships: {
       collection: 'componentrelation',
       via: 'from',

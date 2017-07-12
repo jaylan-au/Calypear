@@ -9,7 +9,8 @@ module.exports = {
       type: 'string'
     },
     distance: {
-      type: 'integer'
+      type: 'integer',
+      defaultsTo: 0
     }
   }
 }

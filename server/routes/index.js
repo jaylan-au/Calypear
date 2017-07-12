@@ -4,6 +4,7 @@ module.exports = [].concat(
   require('./relationshiptype'),
   require('./dist'),
   require('./vis'),
+  require('./tagtype'),
   {
     method: 'GET',
     path: '/',
