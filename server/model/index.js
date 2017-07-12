@@ -2,5 +2,7 @@ module.exports = [
   require('./archcomponent'),
   require('./componenttype'),
   require('./relationshiptype'),
-  require('./componentrelation')
+  require('./componentrelation'),
+  require('./diagram'),
+  require('./diagramcomponent')
 ]
