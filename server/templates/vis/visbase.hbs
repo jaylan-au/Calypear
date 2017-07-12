@@ -8,6 +8,8 @@
   stroke: #999;
   stroke-opacity: 0.6;
   fill: none;
+  marker-end: url(#markerArrow);
+  marker-mid: url(#markerArrow);
 }
 
 
@@ -20,8 +22,19 @@
   font-size: 8px;
   text-align: center;
 }
+
+.linklabel {
+  font-size: 8px;
+  text-align: center;
+}
 </style>
 <svg width="500" height="500">
+    <defs>
+      <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6"
+           orient="auto">
+        <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
+    </marker>
+    </defs>
 </svg>
 <script src="dist/js/d3.js"></script>
 <script>
@@ -31,12 +44,12 @@
   var graph = {
     "nodes": [
       {{#each components}}
-        {"id": "{{id}}", "name": "{{name}}", "type": "{{type}}" } {{#unless @last}},{{/unless}}
+        {"id": "{{id}}", "name": "{{name}}", "type": {"id": {{type.id}}, "name": "{{type.name}}"} } {{#unless @last}},{{/unless}}
       {{/each}}
     ],
     "links": [
       {{#each relations}}
-        {"id": {{id}}, "source": "{{from}}", "target": "{{to}}", "type": "{{type.id}}", "distanceAssoc": {{type.distance}} } {{#unless @last}},{{/unless}}
+        {"id": {{id}}, "source": "{{from}}", "target": "{{to}}", "type": {"id": {{type.id}}, "name": "{{type.name}}"}, "distanceAssoc": {{#if type.distance}}{{type.distance}}{{else}}0{{/if}} } {{#unless @last}},{{/unless}}
       {{/each}}
     ]
   };
@@ -59,10 +72,11 @@
 
   var link = svg.append("g")
       .attr("class", "links")
-    .selectAll("line")
+    .selectAll(".link-item")
     .data(graph.links)
     .enter()
       .append("path")
+      .attr("class","linkitem")
       .attr("d",function(d) {
         var points = [
           [d.source.x,d.source.y],
@@ -70,14 +84,32 @@
         ];
         return connectorGenerator(points);
       })
-      .attr("stroke-width", function(d) { return d.distance; });
+      .attr("stroke-width", function(d) { return d.distance; })
+      .attr("id",function(d) {return "link"+d.id;});
+
+  var linkLabels = svg.append("g")
+      .attr("class","linklabels")
+    .selectAll(".linklabel")
+    .data(graph.links)
+    .enter()
+      .append("text")
+      .attr("class","linklabel")
+      .append("textPath")
+        .attr("xlink:href",function(d) {return "#link"+d.id;})
+        .attr("startOffset","50%")
+        .text(function(d) {return d.type.name;});
+
+
+  function constructLink(context) {
+      context.append()
+  }
 
   function constructNode(context) {
     context.append("circle")
       .attr("cx",0)
       .attr("cy",0)
-      .attr("r",20)
-      .attr("fill",function(d) {return color(d.type)});
+      .attr("r",10)
+      .attr("fill",function(d) {return color(d.type.id)});
     //
     // context.append("rect")
     //   .attr("width",120)

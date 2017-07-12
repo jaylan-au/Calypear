@@ -14,7 +14,7 @@ module.exports = [
       const ComponentRelation = request.server.collections().componentrelation
       var viewParams = {};
       Promise.all([
-        ArchComponent.find().then((results)=>{
+        ArchComponent.find().populate(['type']).then((results)=>{
           viewParams.components = results;
         }),
         ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
