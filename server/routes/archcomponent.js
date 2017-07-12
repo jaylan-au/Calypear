@@ -51,11 +51,11 @@ module.exports = [
     handler: function(request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation;
-      Promise.all(
+      Promise.all([
         ArchComponent.destroy({id : request.params.id}),
         ComponentRelation.destroy({from: request.params.id}),
-        ComponentRelation.destroy({to: request.params.id}),
-      ).then(()=>{
+        ComponentRelation.destroy({to: request.params.id})
+      ]).then(()=>{
         reply.redirect('/archcomponents');
       }).catch((err)=>{
         //TODO: Something meaningfull here
