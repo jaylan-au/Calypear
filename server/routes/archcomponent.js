@@ -15,7 +15,10 @@ module.exports = [
         ComponentType.find().then(function(types){
           componentTypes = types;
         }),
-        ArchComponent.find().populate('type').then(function(elements) {
+        ArchComponent.find()
+        .populate('type')
+        .sort('name')
+        .then(function(elements) {
           archComponents = elements
         })
       ]).then(function(){
@@ -89,22 +92,29 @@ module.exports = [
       var viewParams = {};
 
       Promise.all([
-        RelationshipType.find().then(function(results){
+        RelationshipType.find().sort('name').then(function(results){
           viewParams.relationTypes = results;
         }),
-        ArchComponent.find().then(function(results){
+        ArchComponent.find().sort('name').then(function(results){
           viewParams.allComponents = results;
         }),
-        ComponentType.find().then(function(results){
+        ComponentType.find().sort('name').then(function(results){
           viewParams.componentTypes = results;
         }),
-        ComponentRelation.find({from: request.params.id}).populate(['from','to','type']).then(function(results){
+        ComponentRelation.find({from: request.params.id})
+          .populate(['from','to','type'])
+          .sort('inverse')
+          .sort('type')
+          .then(function(results){
           viewParams.componentRelations = results;
         }),
-        TagType.find().then((results) => {
+        TagType.find().sort('name').then((results) => {
           viewParams.tagTypes = results;
         }),
-        ComponentTag.find({component: request.params.id}).populate('tag').then((results) => {
+        ComponentTag.find({component: request.params.id})
+          .populate('tag')
+          .sort('tag')
+          .then((results) => {
           viewParams.componentTags = results;
         }),
         ArchComponent.findOne({id: request.params.id})
@@ -189,8 +199,7 @@ module.exports = [
       var transactionId = uuidv4();
       var relationComponentId = null;
 
-
-      if (request.payload.andCreate) {
+      if (!request.payload.toId) {
           //First create the object - then build the relation.
           ArchComponent.create({
             name: request.payload.componentName,
