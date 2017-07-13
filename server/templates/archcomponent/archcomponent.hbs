@@ -73,7 +73,41 @@
         </td>
         </tr>
     </form>
-
+    <form method="post" action="/archcomponent/{{archComponent.id}}/relation">
+          <tr>
+      <td>
+        <input type="hidden" name="fromId" id="fromId" value="{{archComponent.id}}"/>
+        {{archComponent.name}}
+      </td>
+      <td>
+        <select class="u-full-width" name="relationTypeId" required id="relationTypeId">
+          {{#each relationTypes}}
+          <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select>
+      </td>
+      <td>
+        <div class="row">
+          <div class="six columns">
+            <label for="componentName">Component Name</label>
+            <input class="u-full-width" type="text" placeholder="New Component" id="componentName" name="componentName" required />
+          </div>
+          <div class="six columns">
+            <label for="componentType">Type</label>
+            <select class="u-full-width" name="compoenntTypeId" required id="componentType">
+              {{#each componentTypes}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <input type="hidden" name="andCreate" value="true"/>
+        </div>
+      </td>
+      <td>
+        <input type="submit" value="Create"/>
+      </td>
+      </tr>
+  </form>
   </tbody>
 </table>
 

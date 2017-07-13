@@ -146,32 +146,66 @@ module.exports = [
     method: 'POST',
     path: '/archcomponent/{id}/relation',
     handler: function (request, reply) {
+      const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation;
       var transactionId = uuidv4();
+      var relationComponentId = null;
 
-      //Create two RElations - one and inverse of the other but sharing a transactionId
-      ComponentRelation.create([
-        {
-          from: request.payload.fromId,
-          to: request.payload.toId,
-          type: request.payload.relationTypeId,
-          inverse: false,
-          transaction: transactionId
-        },
-        {
-          from: request.payload.toId,
-          to: request.payload.fromId,
-          type: request.payload.relationTypeId,
-          inverse: true,
-          transaction: transactionId
-        }
-      ]).then(() => {
-        reply.redirect('/archcomponent/'+request.params.id);
-      })
-      .catch((err) => {
-        //TODO: Do something more meaningfull here
-        console.error(err);
-      });
+
+      if (request.payload.andCreate) {
+          //First create the object - then build the relation.
+          ArchComponent.create({
+            name: request.payload.componentName,
+            type: request.payload.compoenntTypeId
+          }).then((component)=> {
+            ComponentRelation.create([
+              {
+                from: request.payload.fromId,
+                to: component.id,
+                type: request.payload.relationTypeId,
+                inverse: false,
+                transaction: transactionId
+              },
+              {
+                from: component.id,
+                to: request.payload.fromId,
+                type: request.payload.relationTypeId,
+                inverse: true,
+                transaction: transactionId
+              }
+            ]).then(() => {
+              reply.redirect('/archcomponent/'+request.params.id);
+            })
+            .catch((err) => {
+              reply(err);
+            });
+          }).catch((err) =>{
+            reply(err);
+          });
+      } else {
+        ComponentRelation.create([
+          {
+            from: request.payload.fromId,
+            to: request.payload.toId,
+            type: request.payload.relationTypeId,
+            inverse: false,
+            transaction: transactionId
+          },
+          {
+            from: request.payload.toId,
+            to: request.payload.fromId,
+            type: request.payload.relationTypeId,
+            inverse: true,
+            transaction: transactionId
+          }
+        ]).then(() => {
+          reply.redirect('/archcomponent/'+request.params.id);
+        })
+        .catch((err) => {
+          reply(err);
+        });
+      }
+
     },
   },
   {
