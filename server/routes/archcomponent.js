@@ -138,9 +138,7 @@ module.exports = [
         type: request.payload.typeId,
         description: request.payload.description,
         alternativeNames: request.payload.alternativeNames,
-        docUrl: request.payload.docUrl,
-        vendor: request.payload.vendor,
-        deployedVersion: request.payload.deployedVersion
+        docUrl: request.payload.docUrl
       }
       )
       .then(() => {

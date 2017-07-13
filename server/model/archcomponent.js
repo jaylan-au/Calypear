@@ -17,12 +17,6 @@ module.exports = {
     docUrl: {
       type: 'string'
     },
-    vendor: {
-      type: 'string'
-    },
-    deployedVersion: {
-      type: 'string'
-    },
     tags: {
       collection: 'componenttag',
       via: 'component'
