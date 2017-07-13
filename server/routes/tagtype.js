@@ -20,7 +20,10 @@ module.exports = [
     path: '/tagtype/new',
     handler: function (request, reply){
       const TagType = request.server.collections().tagtype;
-      TagType.create({name: request.payload.name})
+      TagType.create({
+        name: request.payload.name,
+        category: request.payload.category
+      })
         .then(() => {
             reply.redirect('/tagtypes');
           })

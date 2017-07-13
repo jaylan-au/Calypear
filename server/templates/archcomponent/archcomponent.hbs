@@ -11,21 +11,47 @@
 {{> formInput fieldType="text" fieldName="deployedVersion" fieldLabel="Deployed Version" fieldValue=deployedVersion}}
 <div class="row">
   <div class="twelve columns">
-    <label for="name">Last Updated</label>
+    <label for="name data-view">Last Updated</label>
     <p class="data-view">{{updatedAt}}</p>
   </div>
 </div>
 <div class="row">
   <div class="twelve columns">
-    <a class="button button-primary data-view" id="editComponentEnable">Edit</a>
-    <input type="submit" class="button-primary data-edit" value="Save"/>
+    <a class="button button-primary data-view" id="editComponentEnable">Edit Properties</a>
+    <input type="submit" class="button-primary data-edit" value="Save Properties"/>
     <a class="button data-edit" href="/archcomponent/{{id}}">Cancel</a>
   </div>
 </div>
 </form>
 {{/with}}
+<h2>Tags</h2>
+<div class="row">
+  <div class="twelve columns">
+    <dl>
+      {{#each componentTags}}
+      <dt>{{tag.name}}</dt>
+      <dd>{{value}} <a href="/archcomponent/{{../archComponent.id}}/tag/{{id}}/delete">x</a><dd>
+    {{/each}}
+    <dl>
+  </div>
+</div>
+<div class="row">
+  <form method="post" action="/archcomponent/{{archComponent.id}}/tag">
+    <div class="twelve columns">
+      <label for="fieldTagTypeId">Tag</label>
+      <select name="tagTypeId" required id="fieldTagTypeId">
+        {{#each tagTypes}}
+          <option value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select>
+      <label for="fieldTagValue">Value</label>
+      <input type="text" name="value" id="fieldTagValue" placeholder="Type value"/>
+      <input type="submit" value="Add Tag"></input>
+    </div>
+  </form>
+</div>
 <h2>Relationships</h2>
-<table>
+<table class="u-full-width">
   <thead>
     <th>From</th>
     <th>Relation</th>

@@ -3,6 +3,7 @@
 <thead>
   <tr>
     <th>Name</th>
+    <th>Category</th>
     <th></th>
   </tr>
 </thead>
@@ -10,6 +11,7 @@
   {{#each tagtypes}}
     <tr>
       <td>{{name}}</td>
+      <td>{{category}}</td>
       <td><a href="/tagtype/{{id}}/delete" class="button-primary">Delete</a></td>
     </tr>
   {{/each}}
@@ -18,8 +20,10 @@
 <h1>New Tag Type</h1>
 <form method="POST" action="/tagtype/new">
   <div class="row">
-      <label for="typeName">Name</label>
-      <input class="u-full-width" type="text" placeholder="Type Name" id="typeName" name="name" required />
+      <label for="fieldName">Name</label>
+      <input class="u-full-width" type="text" placeholder="Type Name" id="fieldName" name="name" required />
+      <label for="fieldCategory">Category</label>
+      <input class="u-full-width" type="text" placeholder="Type Category" id="fieldCategory" name="category" required />
 
     <input type="submit" class="button-primary" value="Create"/>
 

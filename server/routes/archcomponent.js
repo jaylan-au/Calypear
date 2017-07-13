@@ -7,6 +7,7 @@ module.exports = [
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentType = request.server.collections().componenttype;
+
       var componentTypes = [];
       var archComponents = [];
 
@@ -51,6 +52,7 @@ module.exports = [
     handler: function(request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation;
+
       Promise.all([
         ArchComponent.destroy({id : request.params.id}),
         ComponentRelation.destroy({from: request.params.id}),
@@ -76,6 +78,8 @@ module.exports = [
       const RelationshipType = request.server.collections().relationshiptype;
       const ComponentRelation = request.server.collections().componentrelation;
       const ComponentType = request.server.collections().componenttype;
+      const ComponentTag = request.server.collections().componenttag;
+      const TagType = request.server.collections().tagtype;
 
       var relationTypes = [];
       var archComponents = [];
@@ -96,6 +100,12 @@ module.exports = [
         }),
         ComponentRelation.find({from: request.params.id}).populate(['from','to','type']).then(function(results){
           viewParams.componentRelations = results;
+        }),
+        TagType.find().then((results) => {
+          viewParams.tagTypes = results;
+        }),
+        ComponentTag.find({component: request.params.id}).populate('tag').then((results) => {
+          viewParams.componentTags = results;
         }),
         ArchComponent.findOne({id: request.params.id})
         .populate('type')
@@ -141,6 +151,36 @@ module.exports = [
         console.error(err);
       });
     },
+  },
+  {
+    method: 'POST',
+    path: '/archcomponent/{id}/tag',
+    handler: function (request, reply) {
+      const ComponentTag = request.server.collections().componenttag;
+
+      ComponentTag.create({
+        component: request.params.id,
+        tag: request.payload.tagTypeId,
+        value: request.payload.value
+      }).then(() => {
+        reply.redirect('/archcomponent/'+request.params.id);
+      }).catch((err) => {
+        reply(err);
+      });
+    }
+  },
+  {
+    method: 'GET',
+    path: '/archcomponent/{id}/tag/{tagId}/delete',
+    handler: function (request, reply) {
+      const ComponentTag = request.server.collections().componenttag;
+
+      ComponentTag.destroy({id: request.params.tagId}).then(() => {
+        reply.redirect('/archcomponent/'+request.params.id);
+      }).catch((err) => {
+        reply(err);
+      });
+    }
   },
   {
     method: 'POST',

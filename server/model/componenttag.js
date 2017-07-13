@@ -7,6 +7,9 @@ module.exports = {
     },
     component: {
       model: 'archcomponent',
+    },
+    value: {
+      type: 'string'
     }
   }
 }

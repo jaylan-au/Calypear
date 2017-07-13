@@ -4,6 +4,9 @@ module.exports = {
   attributes: {
     name: {
       type: 'string'
+    },
+    category: {
+      type: 'string'
     }
   }
 }
