@@ -5,6 +5,9 @@ module.exports = {
     component: {
       model: 'archcomponent',
     },
+    diagram: {
+      model: 'diagram',
+    },
     fixedX: {
       type: 'integer'
     },

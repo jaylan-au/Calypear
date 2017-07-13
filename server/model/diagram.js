@@ -6,7 +6,8 @@ module.exports = {
       type: 'string',
     },
     components: {
-      collection: 'diagramcomponent'
+      collection: 'diagramcomponent',
+      via: 'diagram'
     },
   }
 }
