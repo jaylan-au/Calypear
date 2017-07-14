@@ -5,6 +5,7 @@ module.exports = [].concat(
   require('./dist'),
   require('./vis'),
   require('./tagtype'),
+  require('./admin'),
   {
     method: 'GET',
     path: '/',
