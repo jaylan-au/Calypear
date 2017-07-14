@@ -51,9 +51,7 @@ module.exports = [
     path: '/admin/importdb/{format}',
     config: {
     payload: {
-      output: 'data',
-      parse: true,
-      allow: 'application/x-www-form-urlencoded'
+      output: 'data'
     },
     handler: function (request, reply) {
       //Export the Database in a readable format
