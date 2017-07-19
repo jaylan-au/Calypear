@@ -1,10 +1,11 @@
 {
   "name": "calypear",
   "version": "1.0.0",
-  "description": "",
+  "description": "Enterprise Architecture documentation and visualization tool",
   "main": "server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/app.js"
   },
   "repository": {
     "type": "git",
@@ -17,12 +18,13 @@
   },
   "homepage": "https://github.com/jaylan-au/calypear#readme",
   "dependencies": {
-    "d3": "^4.9.1",
+    "d3": "^4.10.0",
     "dogwater": "^2.3.0",
     "handlebars": "^4.0.10",
     "hapi": "^16.4.3",
-    "hoek": "^4.1.1",
+    "hoek": "^4.2.0",
     "inert": "^4.2.0",
+    "jquery": "^3.2.1",
     "path": "^0.12.7",
     "sails-disk": "^0.10.10",
     "skeleton-css": "^2.0.4",

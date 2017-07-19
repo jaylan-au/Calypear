@@ -21,7 +21,7 @@ gulp.task('watch',function(){
   //Only need to watch calypear specific files
   gulp.watch('server/www/css/*',['styles']);
   gulp.watch('server/www/js/*',['scripts']);
-})
+});
 
 
 gulp.task('default', ['styles', 'scripts']);

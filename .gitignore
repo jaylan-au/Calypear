@@ -4,6 +4,7 @@
 server/dist/*
 .tmp
 .DS_Store
+package-lock.json
 
 
 # End Calypear Specific
