@@ -37,9 +37,6 @@
 </svg>
 <script src="dist/js/d3.js"></script>
 <script>
-
-</script>
-<script>
   var graph = {
     "nodes": [
       {{#each components}}
@@ -230,5 +227,73 @@
     d.fy = null;
   }
 
+
+</script>
+<script>
+  class ClientDiagramComponent {
+    constructor() {
+    }
+
+    pinAt(x,y){
+      this.pinX = x;
+      this.pinY = y;
+
+      return this;
+    }
+
+    pinRelease(){
+      this.pin(null,null);
+
+      return this;
+    }
+
+    get isPinned(){
+      return (this.pinX != null) || (this.pinY != null);
+    }
+
+    set populationLevel(level = null) {
+      this._populationLevel = level;
+      return this;
+    }
+
+    set populateRelationships(level = null) {
+
+
+      return this;
+    }
+
+
+
+  }
+
+  class ClientDiagram  {
+    constructor(components) {
+      if (components) {
+        this.components = components;
+      } else {
+        this.components = new Array();
+      }
+    }
+
+
+  }
+
+  class Visualization {
+    constructor(diagram) {
+      if (diagram) {
+        this.clientDiagram = diagram;
+      } else {
+        this.clientDiagram = new ClientDiagram();
+      }
+    }
+
+  }
+
+
+
+
+  /*
+    Diagram Component Add/Remove/Filter and Save Functions
+  */
 
 </script>
