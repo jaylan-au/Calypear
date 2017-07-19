@@ -8,24 +8,31 @@ module.exports = [
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentType = request.server.collections().componenttype;
 
-      var componentTypes = [];
-      var archComponents = [];
+      var viewParams = {};
+      viewParams.filter = {};
+
 
       Promise.all([
         ComponentType.find().then(function(types){
-          componentTypes = types;
+          viewParams.componentTypes = types;
         }),
-        ArchComponent.find()
-        .populate('type')
-        .sort('name')
-        .then(function(elements) {
-          archComponents = elements
+        new Promise(function(resolve, reject){
+          var accessor = ArchComponent.find()
+            .populate('type')
+            .sort('name');
+            if (request.query.typeId) {
+              accessor.where({type: request.query.typeId});
+              viewParams.filter.typeId = request.query.typeId;
+            }
+            accessor.then(function(elements) {
+              viewParams.archComponents = elements
+              resolve(elements);
+            }).catch((err) => {
+              reject(err);
+            });
         })
       ]).then(function(){
-        reply.view('archcomponent/archcomponents.hbs',{
-          'archComponents': archComponents,
-          'componentTypes': componentTypes,
-        });
+        reply.view('archcomponent/archcomponents.hbs',viewParams);
       }).catch(function(err){
         //TODO: Do something meaningfull here
       });

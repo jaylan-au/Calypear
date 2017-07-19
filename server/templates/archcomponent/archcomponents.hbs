@@ -1,5 +1,16 @@
 <h1>Architecture Components List</h1>
-<table>
+<div class="row">
+  <div class="twelve columns">
+    <label for="filterFormComponentTypeId">Filter by Type</label>
+    <select name="typeId" id="filterFormComponentTypeId">
+      <option value="" default>No Filter</option>
+      {{#each componentTypes}}
+      <option value="{{id}}" {{#isEqual id ../filter.typeId}}selected{{/isEqual}}>{{name}}</option>
+      {{/each}}
+    </select>
+  </div>
+</div>
+<table class="u-full-width">
 <thead>
   <tr>
     <th>Name</th>
@@ -39,3 +50,11 @@
     <input type="submit" class="button-primary" value="Create"/>
   </div>
 </form>
+
+<script>
+  $().ready(function(){
+    $('#filterFormComponentTypeId').change(function(){
+      window.location = "archcomponents?typeId="+this.value;
+    })
+  });
+</script>
