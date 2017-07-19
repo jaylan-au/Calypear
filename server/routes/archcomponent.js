@@ -286,7 +286,7 @@ module.exports = [
           'archComponents': ac
         },{
           layout: false
-        })
+        }).type('application/json');
       }).catch(function(err) {
           //TODO: Do somethign meaningfull here
       });

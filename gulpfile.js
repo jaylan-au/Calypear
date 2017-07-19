@@ -4,6 +4,7 @@ var gulp = require('gulp');
 gulp.task('styles',function(){
   gulp.src([
     'node_modules/skeleton-css/css/*',
+    'node_modules/easy-autocomplete/dist/easy-autocomplete.min.css',
     'server/www/css/*'
     ])
     .pipe(gulp.dest('server/dist/css'));
@@ -12,6 +13,7 @@ gulp.task('styles',function(){
 gulp.task('scripts',function(){
   gulp.src([
     'node_modules/d3/build/d3.js',
+    'node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.js',
     'server/www/js/*'
   ])
   .pipe(gulp.dest('server/dist/js'));

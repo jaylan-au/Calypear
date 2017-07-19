@@ -1,0 +1,23 @@
+<script src="/dist/js/jquery.easy-autocomplete.js"></script>
+<link rel="stylesheet" href="/dist/css/easy-autocomplete.min.css">
+<input type="text" class="u-full-width data-edit" name="autocomplete{{fieldName}}" id="autocompleteField{{fieldName}}" />
+<input type="hidden" class="u-full-width data-edit" name="{{fieldName}}" id="field{{fieldName}}" />
+<script>
+  $('#autocompleteField{{fieldName}}').easyAutocomplete({
+    url: function(searchPhrase){
+      return  "/archcomponent/search/"+searchPhrase;
+    },
+    getValue: "name",
+    requestDelay: 500,
+    placeholder: "{{placeholder}}",
+    list: {
+      match: {
+        enabled: true
+      },
+      onSelectItemEvent: function() {
+  			var value = $("#autocompleteField{{fieldName}}").getSelectedItemData().id;
+  			$('#field{{fieldName}}').val(value).trigger("change");
+		  }
+    }
+  });
+</script>

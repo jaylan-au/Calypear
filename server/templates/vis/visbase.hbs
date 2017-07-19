@@ -230,13 +230,81 @@
 
 </script>
 <script>
-  class ClientDiagramComponent {
-    constructor() {
+  class CalypearDiagramComponent {
+    constructor(componentData = null,relationData = null) {
+      if (componentData != null) {
+        if (componentData.id) {
+          this.id = componentData.id;
+        }
+
+        if (componentData.name) {
+          this.id = componentData.name;
+        }
+
+        if (componentData.type) {
+          this.type = {};
+          if (componentData.type.id) {
+            this.type.id = componentData.type.id;
+          }
+          if (componentData.type.name) {
+            this.type.name = componentData.type.name;
+          }
+        }
+      }
+
+      if (relationData != null) {
+        if (relationData instanceof Array) {
+          this.addRelationships(relationData);
+        } else {
+          this.addRelationship(relationData);
+        }
+      }
+
+    }
+
+    addRelationship(relationData) {
+      if (!this.relationships instanceof Array) {
+        this.relationData = [];
+      }
+
+      if (relationData) {
+        var newRelation = {};
+        if (relationData.id) {
+          newRelation.id = relationData.id;
+        }
+        if (relationData.from) {
+          newRelation.from = relationData.from;
+        }
+        if (relationData.to) {
+          newRelation.to = relationData.to;
+        }
+        if (relationData.type) {
+          newRelation.type = {};
+          if (relationData.type.id) {
+            newRelation.type.id = relationData.type.id;
+          }
+          if (relationData.type.name) {
+            newRelation.type.name = relationData.type.name;
+          }
+        }
+
+        this.relationData.push(newRelation);
+      }
+      return this;
+    }
+
+    addRelationships(relationData) {
+      if (relationData instanceof Array) {
+        relationData.forEach(function(relation){
+          this.addRelationship(relation);
+        });
+      }
+      return this;
     }
 
     pinAt(x,y){
-      this.pinX = x;
-      this.pinY = y;
+      this.fx = x;
+      this.fy = y;
 
       return this;
     }
@@ -247,45 +315,40 @@
       return this;
     }
 
-    get isPinned(){
-      return (this.pinX != null) || (this.pinY != null);
+    isPinned(){
+      return (this.fx != null) || (this.fy != null);
     }
 
-    set populationLevel(level = null) {
-      this._populationLevel = level;
-      return this;
+    getRelationships() {
+      return this.relationData;
     }
-
-    set populateRelationships(level = null) {
-
-
-      return this;
-    }
-
-
-
   }
 
-  class ClientDiagram  {
-    constructor(components) {
-      if (components) {
+  class CalypearDiagram  {
+    constructor(components = null) {
+      if (components instanceof Array) {
         this.components = components;
       } else {
         this.components = new Array();
       }
     }
 
+    get nodes() {
+      return this.components;
+    }
+
+    get edges() {
+      var edges = [];
+      this.components.forEach(function(component) {
+        edges = edges.concat(component.getRelationships());
+      })
+      return edges;
+    }
 
   }
 
-  class Visualization {
-    constructor(diagram) {
-      if (diagram) {
-        this.clientDiagram = diagram;
-      } else {
-        this.clientDiagram = new ClientDiagram();
-      }
-    }
+  class CalypearVisualization {
+
 
   }
 
