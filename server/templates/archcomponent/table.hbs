@@ -1,0 +1,30 @@
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      {{#each interestingTags}}
+      <th>{{name}}<th>
+      {{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each components}}
+    <tr>
+      <td><a href="/archcomponent/{{id}}">{{name}}</a></td>
+      <td>{{type.name}}</td>
+      {{#each tagRow}}
+      <td>
+        {{#each this}}
+          {{#if value}}
+            <div>{{value}}</div>
+          {{else}}
+            <div>Present</div>
+          {{/if}}
+        {{/each}}
+      <td>
+      {{/each}}
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

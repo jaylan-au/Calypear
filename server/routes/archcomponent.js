@@ -291,5 +291,62 @@ module.exports = [
           //TODO: Do somethign meaningfull here
       });
     }
+  },
+  {
+    method: 'GET',
+    path: '/archcomponent/table',
+    handler: function (request, reply) {
+      const ArchComponent = request.server.collections().archcomponent;
+      const TagType = request.server.collections().tagtype;
+      const ComponentRelation = request.server.collections().componentrelation;
+      var viewParams = {};
+      Promise.all([
+        ArchComponent.find().populate(['type','tags','relationships']).then((results) => {
+          //Now get a list of the Tags/Relationship Types we want to create columns from
+          var interestingTagIds = [];
+
+          results.forEach(function(archComponent){
+            if (archComponent.tags) {
+              archComponent.tags.forEach(function(componentTag){
+                interestingTagIds.push(componentTag.tag);
+              });
+            }
+          });
+          interestingTagIds = interestingTagIds.filter((v, i, a) => a.indexOf(v) === i);
+          viewParams.components = results;
+          viewParams.interestingTagIds = interestingTagIds;
+
+          return Promise.all([
+            TagType.find({id: interestingTagIds}).then((results) => {
+              viewParams.interestingTags = results;
+            })
+          ]);
+        })
+      ]).then(() => {
+        //Map the data onto a row based table
+        viewParams.components.forEach(function(archComponent){
+          archComponent.tagRow = [];
+          if (archComponent.tags) {
+             viewParams.interestingTags.forEach(function(tagType, tagTypeIndex){
+              archComponent.tagRow[tagTypeIndex] = archComponent.tags.filter(function(componentTag){
+                return (componentTag.tag == tagType.id);
+              });
+            });
+          }
+        });
+        //reply(viewParams);
+        reply.view('archcomponent/table.hbs',viewParams);
+      }).catch((err) => {
+        reply(err);
+      });
+      //   reply.view('archcomponent/jsonlookup',{
+      //     'archComponents': ac
+      //   },{
+      //     layout: false
+      //   }).type('application/json');
+      // }).catch(function(err) {
+      //     //TODO: Do somethign meaningfull here
+      // });
+    }
   }
 ];
