@@ -1,0 +1,3 @@
+"id","Name","Type",{{#each interestingTags}}"{{name}}"{{#if @last}}{{else}},{{/if}}{{/each}}
+{{#each components}}"{{id}}","{{name}}","{{type.name}}",{{#each tagRow}}"{{#each this}}{{#if value}}{{value}}{{else}}Present{{/if}}{{#if @last}}{{else}}/{{/if}}{{/each}}"{{#if @last}}{{else}},{{/if}}{{/each}}
+{{/each}}

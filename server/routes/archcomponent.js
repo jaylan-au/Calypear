@@ -335,7 +335,16 @@ module.exports = [
           }
         });
         //reply(viewParams);
-        reply.view('archcomponent/table.hbs',viewParams);
+        switch (request.query.format) {
+          case 'csv':
+            reply.view('archcomponent/tableCSV.hbs',viewParams,{layout: false})
+            .type('text/csv')
+            .header("Content-Disposition", "attachment; filename=\"component-table.csv\"");;
+          break;
+          default:
+            reply.view('archcomponent/table.hbs',viewParams);
+        }
+
       }).catch((err) => {
         reply(err);
       });
