@@ -298,7 +298,6 @@ module.exports = [
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const TagType = request.server.collections().tagtype;
-      const ComponentRelation = request.server.collections().componentrelation;
       var viewParams = {};
       Promise.all([
         ArchComponent.find().populate(['type','tags','relationships']).then((results) => {
@@ -319,7 +318,7 @@ module.exports = [
           return Promise.all([
             TagType.find({id: interestingTagIds}).then((results) => {
               viewParams.interestingTags = results;
-            })
+            }),
           ]);
         })
       ]).then(() => {
@@ -335,6 +334,12 @@ module.exports = [
           }
         });
         //reply(viewParams);
+        //Additional Params for Export Formats
+        viewParams.exportData = {
+          hostname: request.info.host
+        }
+
+        //console.log(request.server);
         switch (request.query.format) {
           case 'csv':
             reply.view('archcomponent/tableCSV.hbs',viewParams,{layout: false})
