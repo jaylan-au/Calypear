@@ -294,7 +294,7 @@ module.exports = [
   },
   {
     method: 'GET',
-    path: '/archcomponent/table',
+    path: '/archcomponents/table',
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const TagType = request.server.collections().tagtype;
