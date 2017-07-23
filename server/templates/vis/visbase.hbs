@@ -231,7 +231,7 @@
 </script>
 <script>
   class CalypearDiagramComponent {
-    constructor(componentData = null,relationData = null) {
+    constructor(componentData = null,relationData = null, required = false) {
       if (componentData != null) {
         if (componentData.id) {
           this.id = componentData.id;
@@ -259,6 +259,8 @@
           this.addRelationship(relationData);
         }
       }
+
+      this._required = required;
 
     }
 
@@ -319,8 +321,25 @@
       return (this.fx != null) || (this.fy != null);
     }
 
+    stored(stored = true) {
+      this._stored = stored
+      return this;
+    }
+
+    isStored() {
+      return this._stored;
+    }
+
     getRelationships() {
       return this.relationData;
+    }
+
+    saveToDiagram(){
+      return {
+        archComponentId = this.id,
+        fixedX = this.fx,
+        fixedY = this.fy
+      };
     }
   }
 
@@ -330,6 +349,17 @@
         this.components = components;
       } else {
         this.components = new Array();
+      }
+
+      this.diagramName = 'Untitled';
+    }
+
+    name(name){
+      if (name) {
+        this.diagramName = name;
+        return this;
+      } else {
+        return this.diagramName;
       }
     }
 
@@ -343,6 +373,31 @@
         edges = edges.concat(component.getRelationships());
       })
       return edges;
+    }
+
+    retrieveAndAddComponent(archComponentId){
+      var url = '/archcomponent/'+archComponentId+'?format=JSON';
+      $.getJSON(url, function( data ) {
+
+        /*
+          a) 1 Component with no Relationships
+          b) 1 Component with forward only relationships
+          c) 1 Component with all relationships
+          d) Multiple Components with any of the above.
+        */
+      });
+    }
+
+    saveToDiagram(){
+      returnObj = {
+        components: [],
+        name: this.diagramName,
+      };
+      this.components.forEach(function(diagramComponent) {
+        returnObj.components.push(diagramComponent.saveToDiagram);
+      });
+
+      return returnObj;
     }
 
   }
