@@ -1,3 +1,4 @@
+const Accepts = require('accepts');
 module.exports = [
   {
     method: 'GET',
@@ -6,9 +7,16 @@ module.exports = [
       const TagType = request.server.collections().tagtype;
 
       TagType.find().then(function(types){
-        reply.view('tagtype/tagtypes.hbs',{
-          'tagtypes': types,
-        });
+        switch (Accepts(request.raw.req).type(['json','html'])) {
+          case 'json':
+            reply(types);
+          break;
+
+          default:
+          reply.view('tagtype/tagtypes.hbs',{
+            'tagtypes': types,
+          });
+        }
       }).catch(function(err){
         //TODO: Do something meaningfull here
       });

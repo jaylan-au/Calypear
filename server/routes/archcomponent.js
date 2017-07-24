@@ -1,4 +1,5 @@
 const uuidv4 = require('uuid/v4');
+const Accepts = require('accepts');
 
 module.exports = [
   {
@@ -44,10 +45,10 @@ module.exports = [
             });
         })
       ]).then(function(){
-        switch (request.query.format) {
-          case 'JSON':
+        switch (Accepts(request.raw.req).type(['json','html'])) {
+          case 'json':
             //Build the response object
-            reply(viewParams).type('application/JSON');
+            reply(viewParams);
           break;
           default:
             reply.view('archcomponent/archcomponents.hbs',viewParams);

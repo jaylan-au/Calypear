@@ -1,3 +1,4 @@
+const Accepts = require('accepts');
 module.exports = [
   {
     method: 'GET',
@@ -6,11 +7,17 @@ module.exports = [
       const ComponentType = request.server.collections().componenttype;
 
       ComponentType.find().then(function(types){
-        reply.view('componenttype/componenttypes.hbs',{
-          'componenttypes': types,
-        });
+        switch (Accepts(request.raw.req).type(['json','html'])){
+          case 'json':
+            reply(types);
+          break;
+          default:
+            reply.view('componenttype/componenttypes.hbs',{
+              'componenttypes': types,
+            });
+        }
       }).catch(function(err){
-        //TODO: Do something meaningfull here
+        reply(err);
       });
 
     },
@@ -25,8 +32,7 @@ module.exports = [
             reply.redirect('/componenttypes');
           })
           .catch((err) => {
-              //TODO: Do something more meaningfull here
-             console.error(err);
+              reply(err);
          });
     }
   },

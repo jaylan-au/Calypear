@@ -1,3 +1,4 @@
+const Accepts = require('accepts');
 module.exports = [
   {
     method: 'GET',
@@ -6,9 +7,15 @@ module.exports = [
       const RelationshipType = request.server.collections().relationshiptype;
 
       RelationshipType.find().exec(function(exec,types){
-        reply.view('relationshiptype/relationshiptypes.hbs',{
-          'relationshiptypes': types,
-        });
+        switch (Accepts(request.raw.req).type(['json','html'])) {
+          case 'json':
+            reply(types);
+          break;
+          default:
+          reply.view('relationshiptype/relationshiptypes.hbs',{
+            'relationshiptypes': types,
+          });
+        }
       });
 
     },
