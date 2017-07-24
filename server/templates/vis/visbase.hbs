@@ -1,10 +1,6 @@
 <style>
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
 
-.links path {
+.link-group path {
   stroke: #999;
   stroke-opacity: 0.6;
   fill: none;
@@ -13,7 +9,7 @@
 }
 
 
-.nodes circle {
+.node-group circle {
   stroke: #fff;
   stroke-width: 1.5px;
 }
@@ -23,7 +19,7 @@
   text-align: center;
 }
 
-.linklabel {
+.diagram-link-label {
   font-size: 8px;
   text-align: center;
 }
@@ -37,18 +33,6 @@
 </svg>
 <script src="dist/js/d3.js"></script>
 <script>
-  var graph = {
-    "nodes": [
-      {{#each components}}
-        {"id": "{{id}}", "name": "{{name}}", "type": {"id": {{type.id}}, "name": "{{type.name}}"} } {{#unless @last}},{{/unless}}
-      {{/each}}
-    ],
-    "links": [
-      {{#each relations}}
-        {"id": {{id}}, "source": "{{from}}", "target": "{{to}}", "type": {"id": {{type.id}}, "name": "{{type.name}}"}, "distanceAssoc": {{#if type.distance}}{{type.distance}}{{else}}0{{/if}} } {{#unless @last}},{{/unless}}
-      {{/each}}
-    ]
-  };
 
   var svg = d3.select("svg");
   width = 600;
@@ -57,50 +41,9 @@
       // height = +svg.attr("height");
 
   var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-  var simulation = d3.forceSimulation()
-      .force("link", d3.forceLink().id(function(d) { return d.id; }))
-      .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collide", d3.forceCollide(10));
-
-
   var connectorGenerator = d3.line()
     .curve(d3.curveBasis);
 
-  var link = svg.append("g")
-      .attr("class", "links")
-    .selectAll(".link-item")
-    .data(graph.links)
-    .enter()
-      .append("path")
-      .attr("class","linkitem")
-      .attr("d",function(d) {
-        var points = [
-          [d.source.x,d.source.y],
-          [d.target.x,d.target.y]
-        ];
-        return connectorGenerator(points);
-      })
-      .attr("stroke-width", 1)
-      .attr("id",function(d) {return "link"+d.id;});
-
-  var linkLabels = svg.append("g")
-      .attr("class","linklabels")
-    .selectAll(".linklabel")
-    .data(graph.links)
-    .enter()
-      .append("text")
-      .attr("class","linklabel")
-      .append("textPath")
-        .attr("xlink:href",function(d) {return "#link"+d.id;})
-        .attr("startOffset","50%")
-        .text(function(d) {return d.type.name;});
-
-
-  function constructLink(context) {
-      context.append()
-  }
 
   function constructNode(context) {
     context.append("circle")
@@ -108,24 +51,6 @@
       .attr("cy",0)
       .attr("r",6)
       .attr("fill",function(d) {return color(d.type.id)});
-    //
-    // context.append("rect")
-    //   .attr("width",120)
-    //   .attr("height",15)
-    //   .attr("fill",function(d) {return color(d.type)});
-    // context.append("rect")
-    //   .attr("x",0)
-    //   .attr("y",15)
-    //   .attr("width",120)
-    //   .attr("height",40)
-    //   .attr("fill","none");
-    // context.append("rect")
-    //   .attr("x",0)
-    //   .attr("y",0)
-    //   .attr("width",120)
-    //   .attr("height",55)
-    //   .attr("fill","none")
-    //   .attr("stroke","#999")
     context.append("foreignObject")
       .attr("x",-40)
       .attr("y",5)
@@ -134,27 +59,55 @@
       .attr("class","node-text")
       .append("xhtml:p")
         .text(function(d) {return d.name});
-    // context.append("text")
-    //   .attr("dx", 20)
-    //   .attr("dy", "1em")
-    //   .attr("class","node-text")
-    //   .text(function(d) {return d.name});
   }
 
-  var node = svg.append("g")
-      .attr("class", "nodes")
-    .selectAll(".nodeitem")
-    .data(graph.nodes)
-    .enter()
-      .append("g")
-      .attr("class","nodeitem")
-      .on("dblclick", dblclick)
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
 
-  constructNode(node);
+  var simulation = d3.forceSimulation()
+      .force("link", d3.forceLink().id(function(d) { return d.id; }))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collide", d3.forceCollide(10))
+      .on("tick",ticked);
+
+
+  var link = svg.append("g")
+      .attr("class", "link-group")
+    .selectAll(".diagram-link");
+
+
+    // .data(graph.links)
+    // .enter()
+    //   .append("path")
+    //   .attr("class","linkitem")
+    //   .attr("stroke-width", 1)
+    //   .attr("id",function(d) {return "link"+d.id;});
+
+  var linkLabels = svg.append("g")
+      .attr("class","link-label-group")
+    .selectAll(".diagra-link-label");
+    // .data(graph.links)
+    // .enter()
+    //   .append("text")
+    //   .attr("class","linklabel")
+    //   .append("textPath")
+    //     .attr("xlink:href",function(d) {return "#link"+d.id;})
+    //     .attr("startOffset","50%")
+    //     .text(function(d) {return d.type.name;});
+
+  var node = svg.append("g")
+      .attr("class", "node-group")
+    .selectAll(".diagram-node")
+    // .data(graph.nodes)
+    // .enter()
+    //   .append("g")
+    //   .attr("class","nodeitem")
+    //   .on("dblclick", dblclick)
+    //   .call(d3.drag()
+    //       .on("start", dragstarted)
+    //       .on("drag", dragged)
+    //       .on("end", dragended));
+
+  // constructNode(node);
 
   // node.append('foreignObject')
   //   .attr("x",0)
@@ -165,13 +118,54 @@
   //     .text(function(d) { return d.name });
 
 
-  simulation
-      .nodes(graph.nodes)
-      .on("tick", ticked);
+  // simulation
+  //     .nodes(graph.nodes)
+  //     .on("tick", ticked);
+  //
+  // simulation.force("link")
+  //     .links(graph.links)
+  //     .distance(function(link){return link.distanceAssoc*5;});
 
-  simulation.force("link")
-      .links(graph.links)
-      .distance(function(link){return link.distanceAssoc*5;});
+  function refresh(graphNodes, graphEdges){
+    node = node.data(graphNodes);
+    node.exit().remove();
+    node = node.enter()
+      .append("g")
+      .attr("class","diagram-node")
+      .on("dblclick", dblclick)
+      .attr("id",function(d) {return "node"+d.id;})
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+
+    constructNode(node);
+
+
+    link = link.data(graphEdges);
+    link.exit().remove();
+    link = link.enter()
+      .append("path")
+      .attr("class","diagram-link")
+      .attr("stroke-width", 1)
+      .attr("id",function(d) {return "link"+d.id;});
+      // .attr("d",function(d) {
+      //   var points = [
+      //     [d.source.x,d.source.y],
+      //     [d.target.x,d.target.y]
+      //   ];
+      //   return connectorGenerator(points);
+      // });;
+
+
+    simulation.nodes(graphNodes);
+    simulation.force("link")
+       .links(graphEdges);
+      // .distance(function(link){return link.distanceAssoc*5;});
+    simulation.alpha(1).restart();
+  }
+
+  //refresh(graph.nodes, graph.links);
 
   function ticked() {
     link
@@ -229,16 +223,17 @@
 
 
 </script>
+<button id="tDump">Dump</button>
 <script>
   class CalypearDiagramComponent {
-    constructor(componentData = null,relationData = null, required = false) {
+    constructor(componentData,includedInDiagram) {
       if (componentData != null) {
         if (componentData.id) {
-          this.id = componentData.id;
+          this.id =componentData.id;
         }
 
         if (componentData.name) {
-          this.id = componentData.name;
+          this.name = componentData.name;
         }
 
         if (componentData.type) {
@@ -250,59 +245,20 @@
             this.type.name = componentData.type.name;
           }
         }
-      }
 
-      if (relationData != null) {
-        if (relationData instanceof Array) {
-          this.addRelationships(relationData);
-        } else {
-          this.addRelationship(relationData);
-        }
-      }
-
-      this._required = required;
-
-    }
-
-    addRelationship(relationData) {
-      if (!this.relationships instanceof Array) {
-        this.relationData = [];
-      }
-
-      if (relationData) {
-        var newRelation = {};
-        if (relationData.id) {
-          newRelation.id = relationData.id;
-        }
-        if (relationData.from) {
-          newRelation.from = relationData.from;
-        }
-        if (relationData.to) {
-          newRelation.to = relationData.to;
-        }
-        if (relationData.type) {
-          newRelation.type = {};
-          if (relationData.type.id) {
-            newRelation.type.id = relationData.type.id;
-          }
-          if (relationData.type.name) {
-            newRelation.type.name = relationData.type.name;
-          }
-        }
-
-        this.relationData.push(newRelation);
-      }
-      return this;
-    }
-
-    addRelationships(relationData) {
-      if (relationData instanceof Array) {
-        relationData.forEach(function(relation){
-          this.addRelationship(relation);
+        this.relationships = componentData.relationships;
+        //Set the Source/Target fields
+        this.relationships.forEach(function(relationship) {
+          relationship.source = relationship.from;
+          relationship.target = relationship.to;
         });
+
       }
-      return this;
+
+      this.includedInDiagram = includedInDiagram;
+
     }
+
 
     pinAt(x,y){
       this.fx = x;
@@ -321,36 +277,37 @@
       return (this.fx != null) || (this.fy != null);
     }
 
-    stored(stored = true) {
-      this._stored = stored
+    included(includedInDiagram = true) {
+      this.includedInDiagram = includedInDiagram
       return this;
     }
 
-    isStored() {
-      return this._stored;
+    isIncludedInDiagram() {
+      return this.includedInDiagram;
+    }
+
+    getForwardRelationships() {
+      return this.relationships.filter(function(relationship){
+        return relationship.inverse == false
+      });
     }
 
     getRelationships() {
-      return this.relationData;
+      return this.relationships;
     }
 
     saveToDiagram(){
       return {
-        archComponentId = this.id,
-        fixedX = this.fx,
-        fixedY = this.fy
+        archComponentId : this.id,
+        fixedX : this.fx,
+        fixedY : this.fy
       };
     }
   }
 
   class CalypearDiagram  {
-    constructor(components = null) {
-      if (components instanceof Array) {
-        this.components = components;
-      } else {
-        this.components = new Array();
-      }
-
+    constructor() {
+      this.diagramComponents = new Array();
       this.diagramName = 'Untitled';
     }
 
@@ -363,29 +320,55 @@
       }
     }
 
-    get nodes() {
-      return this.components;
+    nodes() {
+      return this.diagramComponents;
     }
 
-    get edges() {
+    edges() {
       var edges = [];
-      this.components.forEach(function(component) {
+      var componentIds = [];
+      //Pull out the relationships for all the diagram components
+      this.diagramComponents.forEach(function(component) {
         edges = edges.concat(component.getRelationships());
-      })
+        componentIds.push(component.id);
+      });
+      //Filter out relationships to unknown objects
+      edges = edges.filter(function(relationship,index,relationsArray) {
+        return (componentIds.includes(relationship.to) && (componentIds.includes(relationship.from)));
+      });
+      //Filter out inverse Relationships when a forward relationship exists
       return edges;
     }
 
-    retrieveAndAddComponent(archComponentId){
-      var url = '/archcomponent/'+archComponentId+'?format=JSON';
-      $.getJSON(url, function( data ) {
 
-        /*
-          a) 1 Component with no Relationships
-          b) 1 Component with forward only relationships
-          c) 1 Component with all relationships
-          d) Multiple Components with any of the above.
-        */
+
+    retrieveAndAddComponents(componentIds, refreshOnSuccess = true){
+      var queryParams =  {
+        componentId: componentIds,
+        detailed: true,
+      }
+      var url = '/archcomponents';
+      var current = this;
+      $.ajax({
+        dataType: "json",
+        url: url,
+        data: $.param(queryParams,true),
+        context: {diagram: this},
+        success: function(responseData) {
+          if (responseData.archComponents) {
+            responseData.archComponents.forEach(function(newComponent){
+              diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,true));
+            });
+          }
+          if (refreshOnSuccess) {
+            diagram.updateDiagram();
+          }
+        }
       });
+    }
+
+    updateDiagram(){
+      refresh(this.nodes(), this.edges());
     }
 
     saveToDiagram(){
@@ -402,14 +385,8 @@
 
   }
 
-  class CalypearVisualization {
-
-
-  }
-
-
-
-
+  var diagram = new CalypearDiagram();
+  //diagram.retrieveAndAddComponents([]);
   /*
     Diagram Component Add/Remove/Filter and Save Functions
   */
