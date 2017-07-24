@@ -25,9 +25,9 @@ module.exports = [
               accessor.where({type: request.query.typeId});
               viewParams.filter.typeId = request.query.typeId;
             }
-            if (request.query.Id) {
-              accessor.where({id: request.query.Id});
-              viewParams.filter.Id = request.query.Id;
+            if (request.query.componentId) {
+              accessor.where({id: request.query.componentId});
+              viewParams.filter.Id = request.query.componentId;
             }
             if (request.query.detailed) {
               accessor.populate(['relationships','tags'])
@@ -54,7 +54,7 @@ module.exports = [
             reply.view('archcomponent/archcomponents.hbs',viewParams);
         }
       }).catch(function(err){
-        //TODO: Do something meaningfull here
+        reply(err);
       });
     },
   },
@@ -71,8 +71,7 @@ module.exports = [
         reply.redirect('/archcomponents');
       })
       .catch((err) => {
-        //TODO: Do something more meaningfull here
-        console.error(err);
+        reply(err);
       });
     },
   },
@@ -90,14 +89,8 @@ module.exports = [
       ]).then(()=>{
         reply.redirect('/archcomponents');
       }).catch((err)=>{
-        //TODO: Something meaningfull here
+        reply(err);
       });
-
-      ArchComponent.destroy({id : request.params.id}).then(()=>{
-        reply.redirect('/archcomponents');
-      }).catch((err)=>{
-        //TODO: Something meaningfull here
-      })
     }
   },
   {
@@ -151,15 +144,9 @@ module.exports = [
         })
       ]).then(function(){
         reply.view('archcomponent/archcomponent.hbs',viewParams);
-        // reply.view('archcomponent/archcomponent.hbs',{
-        //   'archComponent': archComponent,
-        //   'componentRelations': componentRelations,
-        //   'allComponents': archComponents,
-        //   'relationTypes': relationTypes,
-        //   'componentTypes': componentTypes
-        // });
+
       }).catch(function(err){
-        //TODO: Do somethign meaningfull here
+        reply(err);
       })
     },
   },
@@ -177,13 +164,10 @@ module.exports = [
         alternativeNames: request.payload.alternativeNames,
         docUrl: request.payload.docUrl
       }
-      )
-      .then(() => {
+      ).then(() => {
         reply.redirect('/archcomponent/'+request.params.id);
-      })
-      .catch((err) => {
-        //TODO: Do something more meaningfull here
-        console.error(err);
+      }).catch((err) => {
+        reply(err);
       });
     },
   },
@@ -291,7 +275,7 @@ module.exports = [
       ComponentRelation.destroy({transaction: request.params.transactionId}).then(function(){
         reply.redirect('/archcomponent/'+request.params.id)
       }).catch(function(err){
-        //TODO: Do somethign more meaningfull here
+        reply(err);
       });
 
     }
@@ -308,7 +292,7 @@ module.exports = [
           layout: false
         }).type('application/json');
       }).catch(function(err) {
-          //TODO: Do somethign meaningfull here
+          reply(err);
       });
     }
   },
@@ -353,13 +337,10 @@ module.exports = [
             });
           }
         });
-        //reply(viewParams);
         //Additional Params for Export Formats
         viewParams.exportData = {
           hostname: request.info.host
         }
-
-        //console.log(request.server);
         switch (request.query.format) {
           case 'csv':
             reply.view('archcomponent/tableCSV.hbs',viewParams,{layout: false})
@@ -373,14 +354,6 @@ module.exports = [
       }).catch((err) => {
         reply(err);
       });
-      //   reply.view('archcomponent/jsonlookup',{
-      //     'archComponents': ac
-      //   },{
-      //     layout: false
-      //   }).type('application/json');
-      // }).catch(function(err) {
-      //     //TODO: Do somethign meaningfull here
-      // });
     }
   }
 ];
