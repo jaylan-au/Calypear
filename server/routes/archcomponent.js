@@ -24,6 +24,18 @@ module.exports = [
               accessor.where({type: request.query.typeId});
               viewParams.filter.typeId = request.query.typeId;
             }
+            if (request.query.Id) {
+              accessor.where({id: request.query.Id});
+              viewParams.filter.Id = request.query.Id;
+            }
+            if (request.query.detailed) {
+              accessor.populate(['relationships','tags'])
+              viewParams.filter.detailed = true;
+            }
+            if (request.query.name) {
+              accessor.where({name: {'like': '%'+request.query.name+'%'}});
+              viewParams.filter.name = request.query.name;
+            }
             accessor.then(function(elements) {
               viewParams.archComponents = elements
               resolve(elements);
@@ -32,7 +44,14 @@ module.exports = [
             });
         })
       ]).then(function(){
-        reply.view('archcomponent/archcomponents.hbs',viewParams);
+        switch (request.query.format) {
+          case 'JSON':
+            //Build the response object
+            reply(viewParams).type('application/JSON');
+          break;
+          default:
+            reply.view('archcomponent/archcomponents.hbs',viewParams);
+        }
       }).catch(function(err){
         //TODO: Do something meaningfull here
       });
