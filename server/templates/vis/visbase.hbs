@@ -127,6 +127,7 @@
   //     .distance(function(link){return link.distanceAssoc*5;});
 
   function refresh(graphNodes, graphEdges){
+
     node = node.data(graphNodes);
     node.exit().remove();
     node = node.enter()
@@ -140,7 +141,7 @@
           .on("end", dragended));
 
     constructNode(node);
-
+    node = svg.selectAll(".diagram-node");
 
     link = link.data(graphEdges);
     link.exit().remove();
@@ -156,7 +157,7 @@
       //   ];
       //   return connectorGenerator(points);
       // });;
-
+    link = svg.selectAll(".diagram-link");
 
     simulation.nodes(graphNodes);
     simulation.force("link")
@@ -355,9 +356,15 @@
         data: $.param(queryParams,true),
         context: {diagram: this},
         success: function(responseData) {
+          var existingComponentIds = diagram.diagramComponents.map(function(ac){
+            return ac.id;
+          });
           if (responseData.archComponents) {
             responseData.archComponents.forEach(function(newComponent){
-              diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,true));
+              //Check if the component already exists if so - ignore it
+              if (!existingComponentIds.includes(newComponent.id)){
+                diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,true));
+              }
             });
           }
           if (refreshOnSuccess) {
