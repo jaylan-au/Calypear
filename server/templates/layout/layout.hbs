@@ -30,17 +30,21 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </head>
 <body>
-  <div class="container">
-    <div class="navbar">
-      <ul>
-        <li><a href="/archcomponents">Components</a></li>
-        <li><a href="/componenttypes">Component Types</a></li>
-        <li><a href="/relationshiptypes">Relationship Types</a></li>
-        <li><a href="/tagtypes">Tag Types</a></li>
-        <li><a href="/vis">Visual</a></li>
-      <ul>
+  {{#unless layout.fullwidth}}
+    <div class="container">
+  {{/unless}}
+      <div class="navbar">
+        <ul>
+          <li><a href="/archcomponents">Components</a></li>
+          <li><a href="/componenttypes">Component Types</a></li>
+          <li><a href="/relationshiptypes">Relationship Types</a></li>
+          <li><a href="/tagtypes">Tag Types</a></li>
+          <li><a href="/vis">Visual</a></li>
+        <ul>
+      </div>
+      {{{content}}}
+    {{#unless layout.fullwidth}}
     </div>
-    {{{content}}}
-  </div>
+    {{/unless}}
 </body>
 </html>
