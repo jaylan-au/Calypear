@@ -25,18 +25,25 @@
 }
 </style>
 <div class="row">
-  <div class="three columns">
+  <div class="two columns">
+    <ul>
+      {{#each components}}
+      <li><span>{{name}}</span> <span>{{type.name}}</span><button class="diagram-component-add" data-componentId="{{id}}">Add</button></li>
+      {{/each}}
+    </ul>
   </div>
   <div class="nine columns">
+    <svg width="100%" height="80%" viewBox="0 0 600 600">
+      <defs>
+        <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
+          <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
+        </marker>
+      </defs>
+    </svg>
+  </div>
+  <div class="two columns">
   </div>
 </div>
-<svg width="100%" height="80%" viewBox="0 0 600 600">
-  <defs>
-    <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
-      <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
-    </marker>
-  </defs>
-</svg>
 <script src="dist/js/d3.js"></script>
 <script>
 
@@ -171,10 +178,7 @@
     d.fx = null;
     d.fy = null;
   }
-
-
 </script>
-<button id="tDump">Dump</button>
 <script>
   class CalypearDiagramComponent {
     constructor(componentData,includedInDiagram) {
@@ -291,8 +295,6 @@
       return edges;
     }
 
-
-
     retrieveAndAddComponents(componentIds, refreshOnSuccess = true){
       var queryParams =  {
         componentId: componentIds,
@@ -324,6 +326,7 @@
       });
     }
 
+
     updateDiagram(){
       refresh(this.nodes(), this.edges());
     }
@@ -347,5 +350,13 @@
   /*
     Diagram Component Add/Remove/Filter and Save Functions
   */
+  $().ready(function(){
+    $('.diagram-component-add').click(function(){
+      diagram.retrieveAndAddComponents([
+          $(this).data('componentid')
+      ]);
+
+    });
+  });
 
 </script>

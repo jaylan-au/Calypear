@@ -12,7 +12,11 @@ module.exports = [
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation
-      var viewParams = {};
+      var viewParams = {
+        layout: {
+          fullwidth: true
+        }
+      };
       Promise.all([
         ArchComponent.find().populate(['type']).then((results)=>{
           viewParams.components = results;
