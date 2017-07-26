@@ -1,0 +1,21 @@
+<h1>Diagrams</h1>
+<table>
+<thead>
+  <tr>
+    <th>Name</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  {{#each diagrams}}
+    <tr>
+      <td>{{name}}</td>
+      <td><a href="/diagram/{{id}}/delete" class="button-primary">Delete</a></td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+<h1>New Component Type</h1>
+<p>
+  Create new diagrams using the vis tools
+</p>
