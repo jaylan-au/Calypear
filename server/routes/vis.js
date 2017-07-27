@@ -1,3 +1,4 @@
+const Accepts = require('accepts');
 module.exports = [
   {
     method: 'GET',
@@ -41,6 +42,41 @@ module.exports = [
         reply.view('vis/diagrams.hbs',{
           diagrams: results
         })
+      }).catch((err) => {
+        reply(err);
+      });
+    }
+  },
+  {
+    method: 'GET',
+    path: '/diagram/{id}',
+    handler: function(request, reply) {
+      //Design to retrieve the shell of a diagram only.
+      //Subsequent calls are really required to get the details
+      const Diagram = request.server.collections().diagram;
+      const ArchComponent = request.server.collections().archcomponent;
+      const ComponentRelation = request.server.collections().componentrelation;
+      var viewParams = {}
+      Promise.all([
+        ArchComponent.find().populate(['type']).then((results)=>{
+          viewParams.components = results;
+        }),
+        ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
+          viewParams.relations = results;
+        }),
+        Diagram.find({id: request.params.id})
+          .populate(['components'])
+          .then((results) => {
+          viewParams.diagram = results;
+        })
+      ]).then(() => {
+        switch (Accepts(request.raw.req).type(['json','html'])) {
+          case 'json':
+            reply(viewParams);
+          break;
+          default:
+            reply.view('vis/visbase.hbs',viewParams);
+        }
       }).catch((err) => {
         reply(err);
       });

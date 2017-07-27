@@ -79,7 +79,7 @@
 
   </div>
 </div>
-<script src="dist/js/d3.js"></script>
+<script src="/dist/js/d3.js"></script>
 <script>
 
   var svg = d3.select("svg");
@@ -136,6 +136,7 @@
       .append("g")
       .attr("class","diagram-node")
       .on("dblclick", dblclick)
+      .on("click",nodeClicked)
       .attr("id",function(d) {return "node"+d.id;})
       .call(d3.drag()
           .on("start", dragstarted)
@@ -186,9 +187,13 @@
 
   function dragged(d) {
     var grid = 10;
+    //Don't lock to the grid until we actually start dragging a bit
+    if ((Math.abs(d.x-d3.event.x) > 5) || (Math.abs(d.y-d3.event.y) > 5)) {
+      //Force items to land on a squared off grid - to avoid finicky positioning
+      d.fx = Math.round(d3.event.x/grid)*grid;
+      d.fy = Math.round(d3.event.y/grid)*grid;
+    }
 
-    d.fx = Math.round(d3.event.x/grid)*grid;
-    d.fy = Math.round(d3.event.y/grid)*grid;
 
   }
 
@@ -212,6 +217,10 @@
     //if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = null;
     d.fy = null;
+  }
+
+  function nodeClicked(d) {
+    console.log(d);
   }
 </script>
 <script>
@@ -427,6 +436,7 @@
     Diagram Component Add/Remove/Filter and Save Functions
   */
   $().ready(function(){
+
     $('.diagram-component-add').click(function(){
       diagram.retrieveAndAddComponents([
           $(this).data('componentid')
@@ -438,6 +448,7 @@
       diagram.name($('#fieldDiagramName').val());
       diagram.saveDiagramToServer();
     });
+
   });
 
 </script>
