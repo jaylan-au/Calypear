@@ -9,9 +9,13 @@
 }
 
 
-.node-group circle {
+.node-group .diagram-node circle {
   stroke: #fff;
   stroke-width: 1.5px;
+}
+
+.node-group .diagram-node.selected circle {
+  stroke: #000;
 }
 
 .node-text {
@@ -26,10 +30,10 @@
 </style>
 <div class="row">
   <div class="two columns">
-    <div class="u-full-width u-max-full-width">
+    <div class="u-full-width u-max-full-width" id="nodeDetailsPanel">
       <div class="row">
         <label for="viewComponenetName">Name</label>
-        <p id="viewComponenetName">Test Component Name</p>
+        <p id="viewComponentName">Test Component Name</p>
       </div>
       <div class="row">
         <label for="viewDescription">Description</label>
@@ -48,17 +52,25 @@
         </label>
       </div>
       <div class="row">
-        <button>Show Relationships</button>
+        <button id="fieldAddRelatedComponents">Show Relationships</button>
+        <button id="fieldIncludeRelatedComponents">Include Relationships</button>
+        <button id="fieldRemoveComponent">Remove</button>
       </div>
     </div>
     <div class="u-full-width u-max-full-width">
-      <form>
         <label for="fieldDiagramName">Diagram Name</label>
         <input id="fieldDiagramName" name="name" />
         <button id="saveDiagramCommand">Save Diagram</button>
-      </form>
     </div>
-    <div class="u-full-width u-max-full-width">
+    <div class="u-full-width u-max-full-width" id="nodeSearchPanel">
+      <div class="row" id="nodeSearchForm">
+          <label for="fieldSearchName">Component Name</label>
+          <input id="fieldSearchName" name="name" />
+          <button id="buttonNameSearch">Search</button>
+      </div>
+      <div class="row" id="nodeSearchResults">
+
+      </div>
       <ul>
         {{#each components}}
         <li><span>{{name}}</span> <span>{{type.name}}</span> <button class="diagram-component-add" data-componentId="{{id}}">Add</button></li>
@@ -129,13 +141,13 @@
     .selectAll(".diagram-node");
 
   function refresh(graphNodes, graphEdges){
-
-    nodeElements = nodeElements.data(graphNodes);
+    console.log(graphEdges);
+    //Key function prevents weird update problems of D3 using array order
+    nodeElements= nodeElements.data(graphNodes,function(d) {return d.id});
     nodeElements.exit().remove();
     nodeEnter  = nodeElements.enter()
       .append("g")
       .attr("class","diagram-node")
-      .on("dblclick", dblclick)
       .on("click",nodeClicked)
       .attr("id",function(d) {return "node"+d.id;})
       .call(d3.drag()
@@ -145,15 +157,18 @@
 
     constructNode(nodeEnter);
     nodeElements = nodeEnter.merge(nodeElements);
+    //constructNode(nodeElements);
 
+    //Key function here doesnt' appear to work as well -
+    //we are still left with floating elements... not sure why
+    linkElements = linkElements.data(graphEdges,function(d) {return d.id});
 
-    linkElements = linkElements.data(graphEdges);
     linkElements.exit().remove();
     linkEnter = linkElements.enter()
       .append("path")
       .attr("class","diagram-link")
       .attr("stroke-width", 1)
-      .attr("id",function(d) {return "link"+d.id;});
+     .attr("id",function(d) {return "link"+d.id;});
     linkElements = linkEnter.merge(linkElements);
 
     simulation.nodes(graphNodes);
@@ -178,7 +193,10 @@
   }
 
   function dragstarted(d) {
-    d3.select(this).classed("fixed",true);
+    d3.select("svg").select(".selected").classed("selected",false);
+    d3.select(this).classed("selected",true);
+
+    nodeClicked(d);
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
@@ -204,7 +222,7 @@
       //If the Shift key is held down then lock the node in position
       //Touching the node again will free it
       //Need to resolve this.
-      if (!d3.event.sourceEvent.shiftKey) {
+      if (!d.pinned) {
         d.fx = null;
         d.fy = null
       }
@@ -212,15 +230,67 @@
 
   }
 
-  function dblclick(d) {
-    d3.select(this).classed("fixed",false);
-    //if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = null;
-    d.fy = null;
-  }
-
   function nodeClicked(d) {
-    console.log(d);
+    //Although this has modifiers the source of truth for diagram data remains
+    //the CalypearDiagramComponent
+    var detailsPanel = d3.selectAll("#nodeDetailsPanel");
+    detailsPanel.attr("data-nodeid",d.id);
+    detailsPanel.select("#viewComponentName")
+      .text(d.name);
+
+    detailsPanel.select("#viewDescription")
+      .text(d.description);
+
+    detailsPanel.select("#fieldComponentIncluded")
+      .attr("data-nodeid",d.id)
+      .property("checked",d.isIncludedInDiagram())
+      .on("change",function(){
+        //If checked pin the node at the current position
+        var changedField = d3.select(this);
+        var nodeid = changedField.attr('data-nodeid');
+        var attachedNode = diagram.nodeById(nodeid);
+        if (attachedNode) {
+            attachedNode.included(changedField.property("checked"));
+         }
+      });
+
+    detailsPanel.select('#fieldIsPinned')
+      .property("checked",d.isPinned())
+      .attr("data-nodeid",d.id)
+      .on("change",function(){
+        //If checked pin the node at the current position
+        var changedField = d3.select(this);
+        var nodeid = changedField.attr('data-nodeid');
+        var attachedNode = diagram.nodeById(nodeid);
+        if (attachedNode) {
+           if (changedField.property("checked")) {
+              attachedNode.pinAtPosition();
+           } else {
+             attachedNode.pinRelease();
+           }
+
+         }
+      });
+
+
+      detailsPanel.select('#fieldAddRelatedComponents')
+        .attr("data-nodeid",d.id)
+        .text("Show "+d.getRelationships().length+" Relationships")
+        .on('click',function(){
+          var changedField = d3.select(this);
+          var nodeid = changedField.attr('data-nodeid')
+          diagram.retrieveAndAddRelatedComponents(nodeid);
+        });
+
+
+      detailsPanel.select('#fieldRemoveComponent')
+        .attr("data-nodeid",d.id)
+        .on('click',function(x){
+          var changedField = d3.select(this);
+          var nodeid = changedField.attr('data-nodeid');
+          diagram.removeComponents(parseInt(nodeid));
+        })
+
   }
 </script>
 <script>
@@ -228,7 +298,7 @@
     constructor(componentData,includedInDiagram) {
       if (componentData != null) {
         if (componentData.id) {
-          this.id =componentData.id;
+          this.id = componentData.id;
         }
 
         if (componentData.name) {
@@ -256,28 +326,34 @@
 
       this.includedInDiagram = includedInDiagram;
 
+      this.pinAt(componentData.fixedX, componentData.fixedY);
     }
 
     pinAtPosition(){
-      this.fx = this.x;
-      this.fy = this.y;
+      this.pinAt(this.x, this.y);
     }
 
     pinAt(x,y){
       this.fx = x;
       this.fy = y;
 
+      if (x || y) {
+        this.pinned = true;
+      } else {
+        this.pinned = false;
+      }
       return this;
     }
 
     pinRelease(){
-      this.pin(null,null);
-
+      this.pinAt(null,null);
       return this;
     }
 
     isPinned(){
-      return (this.fx != null) || (this.fy != null);
+      //No longer relies on the Fx/Fy positions as they are set by the dragging
+      //logic hence may or may not be set.
+      return this.pinned;
     }
 
     included(includedInDiagram = true) {
@@ -338,6 +414,12 @@
       }
     }
 
+    nodeById(nodeId) {
+      return this.diagramComponents.find(function(component){
+        return component.id == nodeId;
+      })
+    }
+
     nodes() {
       return this.diagramComponents;
     }
@@ -358,9 +440,36 @@
       return edges;
     }
 
+    removeComponents(componentIds, refreshOnSuccess = true) {
+      //Force componentIds to be an array so we can process consistently
+      if (!(componentIds instanceof Array)) {
+        componentIds = [componentIds];
+      }
+      //Get a map of the element ids from the components Array
+      var elementsToRemove = [] ;
 
+      this.diagramComponents.forEach(function(element, index){
+        if (componentIds.includes(element.id)) {
+          elementsToRemove.push(index);
+        }
+      })
 
-    retrieveAndAddComponents(componentIds, refreshOnSuccess = true){
+      //sort the elements to remove and reverse it so we work back from the end
+      //of the array
+      //otherwise deleting will alter the indexes
+      elementsToRemove.sort().reverse();
+      console.log(elementsToRemove);
+      elementsToRemove.forEach(function(elemToRemove){
+        this.diagramComponents.splice(elemToRemove,1);
+      },this);
+
+      if (refreshOnSuccess) {
+        this.updateDiagram();
+      }
+
+    }
+
+    retrieveAndAddComponents(componentIds, autoIncludeComponents = false, refreshOnSuccess = true){
       var queryParams =  {
         componentId: componentIds,
         detailed: true,
@@ -372,24 +481,37 @@
         method: "GET",
         url: url,
         data: $.param(queryParams,true),
-        context: {diagram: this},
+        context: {
+          diagram: this,
+          autoInclude: autoIncludeComponents
+        },
         success: function(responseData) {
-          var existingComponentIds = diagram.diagramComponents.map(function(ac){
+          var existingComponentIds = this.diagram.diagramComponents.map(function(ac){
             return ac.id;
           });
           if (responseData.archComponents) {
             responseData.archComponents.forEach(function(newComponent){
               //Check if the component already exists if so - ignore it
+              //TODO: Delete and replace (in case relationships have changed on the server)
               if (!existingComponentIds.includes(newComponent.id)){
-                diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,true));
+                diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,autoIncludeComponents));
               }
             });
           }
           if (refreshOnSuccess) {
-            diagram.updateDiagram();
+            this.diagram.updateDiagram();
           }
         }
       });
+    }
+
+    retrieveAndAddRelatedComponents(componentId, autoIncludeComponents = false, refreshOnSuccess = true) {
+      var component = this.nodeById(componentId);
+      if (component) {
+        var relatedComponentIds = component.getRelatedComponentIds();
+        this.retrieveAndAddComponents(relatedComponentIds,autoIncludeComponents,refreshOnSuccess);
+      }
+
     }
 
 
@@ -425,22 +547,57 @@
         success: function(responseData) {
           console.log(responseData);
         }
-      })
+      });
+    }
+
+    loadDiagramFromObject(diagramObject){
+      this.name(diagramObject.name);
+      this.id = diagramObject.id;
+      this.components = [];
+      var componentIds = diagramObject.components.map(function(diagramComponent){
+        return diagramComponent.component;
+      });
+      //TODO: Need to account for Fixed Position Components?
+      this.retrieveAndAddComponents(componentIds,true,true);
+    }
+
+    retrieveDiagramFromServer(diagramId){
+      var url = "/diagram/"+diagramId;
+      $.ajax({
+        method: "GET",
+        dataType : "json",
+        contentType: "application/json; charset=utf-8",
+        //processData: false,
+        url : url,
+        context: {diagram: this},
+        success: function(responseData) {
+          //Pick out the Diagram from the responseData
+          if (responseData.diagram.length > 0)  {
+            diagram.loadDiagramFromObject(responseData.diagram[0]);
+          }
+
+        }
+      });
     }
 
   }
 
   var diagram = new CalypearDiagram();
-  //diagram.retrieveAndAddComponents([]);
   /*
     Diagram Component Add/Remove/Filter and Save Functions
+
+    This is all to be moved to D3 style for consistency
+    however Jquery will work for now as well.
   */
   $().ready(function(){
+    {{#if diagram}}
+      diagram.retrieveDiagramFromServer({{diagramId}});
+    {{/if}}
 
     $('.diagram-component-add').click(function(){
       diagram.retrieveAndAddComponents([
           $(this).data('componentid')
-      ]);
+      ],true);
 
     });
 

@@ -56,7 +56,12 @@ module.exports = [
       const Diagram = request.server.collections().diagram;
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation;
-      var viewParams = {}
+      var viewParams = {
+        layout: {
+          fullwidth: true
+        },
+        diagramId: request.params.id
+      }
       Promise.all([
         ArchComponent.find().populate(['type']).then((results)=>{
           viewParams.components = results;
