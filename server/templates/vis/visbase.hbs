@@ -52,9 +52,9 @@
         </label>
       </div>
       <div class="row">
-        <button id="fieldAddRelatedComponents">Show Relationships</button>
-        <button id="fieldIncludeRelatedComponents">Include Relationships</button>
-        <button id="fieldRemoveComponent">Remove</button>
+        <button id="fieldAddRelatedComponents" class="u-full-width">Show Relationships</button>
+        <button id="fieldIncludeRelatedComponents" class="u-full-width">Include Relationships</button>
+        <button id="fieldRemoveComponent" class="u-full-width">Remove</button>
       </div>
     </div>
     <div class="u-full-width u-max-full-width">
@@ -141,11 +141,11 @@
     .selectAll(".diagram-node");
 
   function refresh(graphNodes, graphEdges){
-    console.log(graphEdges);
+    //console.log(graphEdges);
     //Key function prevents weird update problems of D3 using array order
-    nodeElements= nodeElements.data(graphNodes,function(d) {return d.id});
+    nodeElements= nodeElements.data(graphNodes,function(d) {return d.id;});
     nodeElements.exit().remove();
-    nodeEnter  = nodeElements.enter()
+    var nodeEnter  = nodeElements.enter()
       .append("g")
       .attr("class","diagram-node")
       .on("click",nodeClicked)
@@ -161,14 +161,13 @@
 
     //Key function here doesnt' appear to work as well -
     //we are still left with floating elements... not sure why
-    linkElements = linkElements.data(graphEdges,function(d) {return d.id});
-
+    linkElements = linkElements.data(graphEdges,function(d) {return 'link'+d.id;});
     linkElements.exit().remove();
-    linkEnter = linkElements.enter()
+    var linkEnter = linkElements.enter()
       .append("path")
       .attr("class","diagram-link")
       .attr("stroke-width", 1)
-     .attr("id",function(d) {return "link"+d.id;});
+      .attr("id",function(d) {return "link"+d.id;});
     linkElements = linkEnter.merge(linkElements);
 
     simulation.nodes(graphNodes);
@@ -428,8 +427,17 @@
       var edges = [];
       var componentIds = [];
       //Pull out the relationships for all the diagram components
+      /**
+        Note: The deep copy is to prevent the issue with removing items
+        creating weird edges that don't connect to things
+        Probably a much more effecient way to do this but will solve tht later
+        TODO: Do this better
+      */
       this.diagramComponents.forEach(function(component) {
-        edges = edges.concat(component.getRelationships());
+        edges = edges.concat(component.getRelationships().map(function(relationship){
+          return JSON.parse(JSON.stringify(relationship))
+        }));
+        // edges = edges.concat(component.getRelationships());
         componentIds.push(component.id);
       });
       //Filter out relationships to unknown objects
@@ -437,6 +445,7 @@
         return (componentIds.includes(relationship.to) && (componentIds.includes(relationship.from)));
       });
       //Filter out inverse Relationships when a forward relationship exists
+      //TODO: this
       return edges;
     }
 
@@ -458,7 +467,6 @@
       //of the array
       //otherwise deleting will alter the indexes
       elementsToRemove.sort().reverse();
-      console.log(elementsToRemove);
       elementsToRemove.forEach(function(elemToRemove){
         this.diagramComponents.splice(elemToRemove,1);
       },this);
@@ -546,6 +554,7 @@
         context: {diagram: this},
         success: function(responseData) {
           console.log(responseData);
+          //TODO: Do something with this
         }
       });
     }
