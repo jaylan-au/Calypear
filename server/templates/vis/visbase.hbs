@@ -29,7 +29,7 @@
 
 }
 #visWorkspace {
-  height: 100vh;
+  height: 99vh;
   width: 100vw;
   position: relative;
 }
@@ -40,14 +40,18 @@
 svg {
   background-color: white;
 }
-#nodeDetailsPanel {
+
+#workspaceControls{
   position: absolute;
-  left: 10px;
-  top: 50px;
+  left: 1em;
+  top: 1em;
   width: 300px;
 }
+#nodeDetailsPanel {
 
-#workspaceControls {
+}
+
+#workspaceMenu {
   position: absolute;
   width: 280px;
   left: -300px;
@@ -55,7 +59,9 @@ svg {
   height: 100%;
   overflow: hidden;
 }
-
+.hidden {
+  display: none;
+}
 .workspace-panel {
   background-color: white;
   padding: 0px;
@@ -98,36 +104,45 @@ svg {
         </defs>
       </svg>
     </div>
-    <div id="nodeDetailsPanel" class="workspace-panel">
+    <div id="workspaceControls" class="workspace-panel">
       <span class="material-icons" id="buttonShowMenu">menu</span>
-      <div class="row">
-        <label for="viewComponenetName">Name</label>
-        <p id="viewComponentName">Test Component Name</p>
-      </div>
-      <div class="row">
-        <label for="viewDescription">Description</label>
-        <p id="viewDescription">More elaborate text goes here abou tthe component</p>
-      </div>
-      <div class="row">
-        <label for="fieldComponentIncluded">
-          <input type="checkbox" name="includedInDiagram" id="fieldComponentIncluded">
-          <span class="label-body">Included in Diagram</span>
-        </label>
-      </div>
-      <div class="row">
-        <label for="fieldIsPinned">
-          <input type="checkbox" name="isPinned" id="fieldIsPinned">
-          <span class="label-body">Pin to Position</span>
-        </label>
-      </div>
-      <div class="row">
-        <button id="fieldAddRelatedComponents" class="u-full-width">Show Relationships</button>
-        <button id="fieldIncludeRelatedComponents" class="u-full-width">Include Relationships</button>
-        <button id="fieldRemoveComponent" class="u-full-width">Remove</button>
+      <div id="nodeDetailsPanel" class="hidden">
+
+        <div class="row">
+          <label for="viewComponenetName">Name</label>
+          <p id="viewComponentName">Test Component Name</p>
+        </div>
+        <div class="row">
+          <label for="viewDescription">Description</label>
+          <p id="viewDescription">More elaborate text goes here abou tthe component</p>
+        </div>
+        <div class="row">
+          <label for="fieldComponentIncluded">
+            <input type="checkbox" name="includedInDiagram" id="fieldComponentIncluded">
+            <span class="label-body">Included in Diagram</span>
+          </label>
+        </div>
+        <div class="row">
+          <label for="fieldIsPinned">
+            <input type="checkbox" name="isPinned" id="fieldIsPinned">
+            <span class="label-body">Pin to Position</span>
+          </label>
+        </div>
+        <div class="row">
+          <button id="fieldAddRelatedComponents" class="u-full-width">Show Relationships</button>
+          <button id="fieldIncludeRelatedComponents" class="u-full-width">Include Relationships</button>
+          <button id="fieldRemoveComponent" class="u-full-width">Remove</button>
+        </div>
       </div>
     </div>
-    <div id="workspaceControls" class="workspace-panel">
-      <button id="buttonHideMenu">Hide</button>
+
+    <div id="workspaceMenu" class="workspace-panel">
+      <div class="row">
+        <a href="/">Exit Workbench</a>
+        <button id="buttonHideMenu">Hide</button>
+      </div>
+
+
       <div class="u-full-width u-max-full-width">
           <label for="fieldDiagramName">Diagram Name</label>
           <input id="fieldDiagramName" name="name" />
@@ -210,7 +225,10 @@ svg {
     var nodeEnter  = nodeElements.enter()
       .append("g")
       .attr("class","diagram-node")
-      .on("click",nodeClicked)
+      .on("click",function(d){
+        nodeClicked(d);
+        d3.event.stopPropagation();
+      })
       .attr("id",function(d) {return "node"+d.id;})
       .call(d3.drag()
           .on("start", dragstarted)
@@ -291,10 +309,21 @@ svg {
 
   }
 
-  function nodeClicked(d) {
+  svg.on("click",function(){
+    deSelectNodes();
+    d3.select("svg").select(".selected").classed("selected",false);
+  })
+
+  function deSelectNodes() {
+    d3.selectAll("#nodeDetailsPanel")
+      .classed("hidden",true);
+  }
+
+  function selectNode(d) {
     //Although this has modifiers the source of truth for diagram data remains
     //the CalypearDiagramComponent
     var detailsPanel = d3.selectAll("#nodeDetailsPanel");
+    detailsPanel.classed("hidden",false);
     detailsPanel.attr("data-nodeid",d.id);
     detailsPanel.select("#viewComponentName")
       .text(d.name);
@@ -352,6 +381,10 @@ svg {
           diagram.removeComponents(parseInt(nodeid));
         })
 
+  }
+
+  function nodeClicked(d) {
+    selectNode(d);
   }
 
   /**
@@ -683,11 +716,11 @@ svg {
     });
 
     $('#buttonShowMenu').click(function(){
-      d3.select("#workspaceControls").transition().style("left","0px");
+      d3.select("#workspaceMenu").transition().style("left","0px");
     })
 
     $('#buttonHideMenu').click(function(){
-      d3.select("#workspaceControls").transition().style("left","-300px");
+      d3.select("#workspaceMenu").transition().style("left","-300px");
     })
 
   });
