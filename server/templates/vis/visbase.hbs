@@ -26,11 +26,80 @@
 .diagram-link-label {
   font-size: 8px;
   text-align: center;
+
+}
+#visWorkspace {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+#workspaceDisplay {
+  width: 100%;
+  height: 100%;
+}
+svg {
+  background-color: white;
+}
+#nodeDetailsPanel {
+  position: absolute;
+  left: 10px;
+  top: 50px;
+  width: 300px;
+}
+
+#workspaceControls {
+  position: absolute;
+  width: 280px;
+  left: -300px;
+  top: 0px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.workspace-panel {
+  background-color: white;
+  padding: 0px;
+  box-shadow: 5px 5px 5px #999;
+  border: 1px solid #ddd;
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
 }
 </style>
 <div class="row">
-  <div class="two columns">
-    <div class="u-full-width u-max-full-width" id="nodeDetailsPanel">
+  <div id="visWorkspace">
+    <div id="workspaceDisplay">
+      <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
+            <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
+          </marker>
+        </defs>
+      </svg>
+    </div>
+    <div id="nodeDetailsPanel" class="workspace-panel">
+      <span class="material-icons" id="buttonShowMenu">menu</span>
       <div class="row">
         <label for="viewComponenetName">Name</label>
         <p id="viewComponentName">Test Component Name</p>
@@ -57,46 +126,39 @@
         <button id="fieldRemoveComponent" class="u-full-width">Remove</button>
       </div>
     </div>
-    <div class="u-full-width u-max-full-width">
-        <label for="fieldDiagramName">Diagram Name</label>
-        <input id="fieldDiagramName" name="name" />
-        <button id="saveDiagramCommand">Save Diagram</button>
-    </div>
-    <div class="u-full-width u-max-full-width" id="nodeSearchPanel">
-      <div class="row" id="nodeSearchForm">
-          <label for="fieldSearchName">Component Name</label>
-          <input id="fieldSearchName" name="name" />
-          <button id="buttonNameSearch">Search</button>
+    <div id="workspaceControls" class="workspace-panel">
+      <button id="buttonHideMenu">Hide</button>
+      <div class="u-full-width u-max-full-width">
+          <label for="fieldDiagramName">Diagram Name</label>
+          <input id="fieldDiagramName" name="name" />
+          <button id="saveDiagramCommand">Save Diagram</button>
       </div>
-      <div class="row" id="nodeSearchResults">
+      <div class="u-full-width u-max-full-width" id="nodeSearchPanel">
+        <div class="row" id="nodeSearchForm">
+            <label for="fieldSearchName">Component Name</label>
+            <input id="fieldSearchName" name="name" />
+            <button id="buttonNameSearch">Search</button>
+        </div>
+        <div class="row" id="nodeSearchResults">
 
+        </div>
+        <ul>
+          {{#each components}}
+          <li><span>{{name}}</span> <span>{{type.name}}</span> <button class="diagram-component-add" data-componentId="{{id}}">Add</button></li>
+          {{/each}}
+        </ul>
       </div>
-      <ul>
-        {{#each components}}
-        <li><span>{{name}}</span> <span>{{type.name}}</span> <button class="diagram-component-add" data-componentId="{{id}}">Add</button></li>
-        {{/each}}
-      </ul>
     </div>
   </div>
-  <div class="nine columns">
-    <svg width="100%" height="80%" viewBox="0 0 600 600">
-      <defs>
-        <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
-          <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
-        </marker>
-      </defs>
-    </svg>
-  </div>
-  <div class="two columns">
 
-  </div>
+
 </div>
 <script src="/dist/js/d3.js"></script>
 <script>
 
   var svg = d3.select("svg");
-  width = 600;
-  height = 600;
+  width = 1000;
+  height = 1000;
       // width = +svg.attr("width"),
       // height = +svg.attr("height");
 
@@ -291,6 +353,11 @@
         })
 
   }
+
+  /**
+    Line Generator Testing
+  */
+
 </script>
 <script>
   class CalypearDiagramComponent {
@@ -614,6 +681,14 @@
       diagram.name($('#fieldDiagramName').val());
       diagram.saveDiagramToServer();
     });
+
+    $('#buttonShowMenu').click(function(){
+      d3.select("#workspaceControls").transition().style("left","0px");
+    })
+
+    $('#buttonHideMenu').click(function(){
+      d3.select("#workspaceControls").transition().style("left","-300px");
+    })
 
   });
 
