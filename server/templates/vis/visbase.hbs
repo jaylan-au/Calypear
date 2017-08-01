@@ -29,7 +29,7 @@
 
 }
 #visWorkspace {
-  height: 99vh;
+  height: 95vh;
   width: 100vw;
   position: relative;
 }
@@ -43,31 +43,61 @@ svg {
 
 #workspaceControls{
   position: absolute;
-  left: 1em;
-  top: 1em;
-  width: 300px;
+  left: 0em;
+  top: 0em;
+  width: 320px;
 }
-#nodeDetailsPanel {
 
+#workspaceSearchBox {
+}
+
+#workspaceSearchBox span {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+#workspaceSearchBox input {
+  padding: 0;
+  padding-left: 1em;
+  margin: 0;
+  border: none;
+  box-sizing: border-box;
+  height: 100%;
+}
+#nodeDetailsPanel #viewComponentName label {
+  display: none;
+}
+#nodeDetailsPanel #viewComponentName p {
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 #workspaceMenu {
   position: absolute;
-  width: 280px;
-  left: -300px;
+  width: 350px;
+  left: -400px;
   top: 0px;
   height: 100%;
   overflow: hidden;
+  background-color: #fff;
+  border-right: 2px solid #ddd;
+
 }
 .hidden {
   display: none;
 }
+
 .workspace-panel {
+  margin-top: 1em;
+  margin-left: 1em;
+  border-radius: 2px;
   background-color: white;
   padding: 0px;
-  box-shadow: 5px 5px 5px #999;
+  box-shadow: 3px 3px 3px #999;
   border: 1px solid #ddd;
+  padding: 0.5em;
 }
+
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -104,17 +134,22 @@ svg {
         </defs>
       </svg>
     </div>
-    <div id="workspaceControls" class="workspace-panel">
-      <span class="material-icons" id="buttonShowMenu">menu</span>
-      <div id="nodeDetailsPanel" class="hidden">
+    <div id="workspaceControls">
+      <div id="workspaceSearchBox" class="workspace-panel">
+        <div>
+          <span class="material-icons" id="buttonShowMenu">menu</span>
+          <input type="text"/>
+        </div>
+      </div>
+      <div id="nodeDetailsPanel" class="workspace-panel hidden">
 
-        <div class="row">
+        <div class="row" id="viewComponentName">
           <label for="viewComponenetName">Name</label>
-          <p id="viewComponentName">Test Component Name</p>
+          <p>Test Component Name</p>
         </div>
         <div class="row">
           <label for="viewDescription">Description</label>
-          <p id="viewDescription">More elaborate text goes here abou tthe component</p>
+          <p id="viewDescription">More elaborate text goes here about the component</p>
         </div>
         <div class="row">
           <label for="fieldComponentIncluded">
@@ -135,8 +170,7 @@ svg {
         </div>
       </div>
     </div>
-
-    <div id="workspaceMenu" class="workspace-panel">
+    <div id="workspaceMenu">
       <div class="row">
         <a href="/">Exit Workbench</a>
         <button id="buttonHideMenu">Hide</button>
@@ -325,7 +359,7 @@ svg {
     var detailsPanel = d3.selectAll("#nodeDetailsPanel");
     detailsPanel.classed("hidden",false);
     detailsPanel.attr("data-nodeid",d.id);
-    detailsPanel.select("#viewComponentName")
+    detailsPanel.select("#viewComponentName p")
       .text(d.name);
 
     detailsPanel.select("#viewDescription")
@@ -703,6 +737,8 @@ svg {
       diagram.retrieveDiagramFromServer({{diagramId}});
     {{/if}}
 
+
+
     $('.diagram-component-add').click(function(){
       diagram.retrieveAndAddComponents([
           $(this).data('componentid')
@@ -720,7 +756,7 @@ svg {
     })
 
     $('#buttonHideMenu').click(function(){
-      d3.select("#workspaceMenu").transition().style("left","-300px");
+      d3.select("#workspaceMenu").transition().style("left","-400px");
     })
 
   });
