@@ -57,19 +57,35 @@ svg {
   height: 100%;
 }
 #workspaceSearchBox input {
-  padding: 0;
+  padding: 1;
   padding-left: 1em;
   margin: 0;
   border: none;
   box-sizing: border-box;
   height: 100%;
 }
+
+
+#nodeDetailsPanel {
+  padding: 0;
+}
+
+#nodeDetailsPanel .row {
+  padding: 0.5em;
+}
+
+
+
 #nodeDetailsPanel #viewComponentName label {
   display: none;
 }
 #nodeDetailsPanel #viewComponentName p {
   font-size: 1.5em;
   font-weight: bold;
+}
+
+#nodeDetailsPanel #viewDescription label {
+  display: none;
 }
 
 #workspaceMenu {
@@ -100,27 +116,24 @@ svg {
 
 .material-icons {
   font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
+  padding: 0;
+  margin: 0;
+}
 
-  /* Support for all WebKit browsers. */
-  -webkit-font-smoothing: antialiased;
-  /* Support for Safari and Chrome. */
-  text-rendering: optimizeLegibility;
+.searchResultItem {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0.5em;
+}
 
-  /* Support for Firefox. */
-  -moz-osx-font-smoothing: grayscale;
+.searchResultItem p {
+  flex-basis: 70%;
+  padding: 0;
+  margin: 0;
+}
 
-  /* Support for IE. */
-  font-feature-settings: 'liga';
+.searchResultItem i {
+  display: block;
 }
 </style>
 <div class="row">
@@ -137,7 +150,7 @@ svg {
     <div id="workspaceControls">
       <div id="workspaceSearchBox" class="workspace-panel">
         <div>
-          <span class="material-icons" id="buttonShowMenu">menu</span>
+          <span id="buttonShowMenu" class="material-icons">menu</span>
           <input type="text" id="searchTermInput" placeholder="Type a component name to add..."/>
         </div>
       </div>
@@ -149,9 +162,9 @@ svg {
           <label for="viewComponenetName">Name</label>
           <p>Test Component Name</p>
         </div>
-        <div class="row">
+        <div class="row" id="viewDescription">
           <label for="viewDescription">Description</label>
-          <p id="viewDescription">More elaborate text goes here about the component</p>
+          <p >More elaborate text goes here about the component</p>
         </div>
         <div class="row">
           <label for="fieldComponentIncluded">
@@ -346,10 +359,11 @@ svg {
     var detailsPanel = d3.selectAll("#nodeDetailsPanel");
     detailsPanel.classed("hidden",false);
     detailsPanel.attr("data-nodeid",d.id);
+
     detailsPanel.select("#viewComponentName p")
       .text(d.name);
 
-    detailsPanel.select("#viewDescription")
+    detailsPanel.select("#viewDescription p")
       .text(d.description);
 
     detailsPanel.select("#fieldComponentIncluded")
@@ -453,15 +467,18 @@ svg {
               .append('div')
               .attr('class','searchResultItem');
 
-          searchResultEnter.append('p')
+          searchResultEnter.append('span')
             .text(function(d){return d.name})
-          searchResultEnter.append('a')
-            .text('Add')
+
+          searchResultEnter.append('i')
+            .attr("class","material-icons")
+            .text('add_box')
             .on('click',function(d){
               diagram.retrieveAndAddComponents(d.id,false);
             })
-          searchResultEnter.append('a')
-            .text('Include')
+          searchResultEnter.append('i')
+            .attr("class","material-icons")
+            .text('library_add')
             .on('click',function(d){
               diagram.retrieveAndAddComponents(d.id,true);
             })
@@ -476,7 +493,11 @@ svg {
   //onblur no used as we want it to stay open if a search result is clicked
   $('svg').focus(function(){
     d3.select('#componentSearchResults').classed('hidden',true);
-  })
+  });
+
+  $('svg').click(function(){
+    console.log('click;');
+  });
 
 </script>
 <script>
@@ -740,8 +761,8 @@ svg {
         url: url,
         context: {diagram: this},
         success: function(responseData) {
-          console.log(responseData);
-          //TODO: Do something with this
+          //Set the ID so we can update the saved diagram
+          diagram.id = responseData.id;
         }
       });
     }
