@@ -138,8 +138,10 @@ svg {
       <div id="workspaceSearchBox" class="workspace-panel">
         <div>
           <span class="material-icons" id="buttonShowMenu">menu</span>
-          <input type="text"/>
+          <input type="text" id="searchTermInput" placeholder="Type a component name to add..."/>
         </div>
+      </div>
+      <div id="componentSearchResults" class="workspace-panel hidden">
       </div>
       <div id="nodeDetailsPanel" class="workspace-panel hidden">
 
@@ -181,21 +183,6 @@ svg {
           <label for="fieldDiagramName">Diagram Name</label>
           <input id="fieldDiagramName" name="name" />
           <button id="saveDiagramCommand">Save Diagram</button>
-      </div>
-      <div class="u-full-width u-max-full-width" id="nodeSearchPanel">
-        <div class="row" id="nodeSearchForm">
-            <label for="fieldSearchName">Component Name</label>
-            <input id="fieldSearchName" name="name" />
-            <button id="buttonNameSearch">Search</button>
-        </div>
-        <div class="row" id="nodeSearchResults">
-
-        </div>
-        <ul>
-          {{#each components}}
-          <li><span>{{name}}</span> <span>{{type.name}}</span> <button class="diagram-component-add" data-componentId="{{id}}">Add</button></li>
-          {{/each}}
-        </ul>
       </div>
     </div>
   </div>
@@ -424,6 +411,72 @@ svg {
   /**
     Line Generator Testing
   */
+
+</script>
+<script>
+  var componentSearchResults = [];
+  //This section gets replaced by a remote query at a later stage
+  {{#each components}}
+    componentSearchResults.push({
+      name: "{{name}}",
+      typeName: "{{type.name}}",
+      id: "{{id}}"
+    })
+  {{/each}}
+
+  var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
+  function getComponentSearchResults(searchTerm) {
+    searchTerm = searchTerm.toLowerCase();
+    var searchResults = componentSearchResults.filter(function(component){
+      return component.name.toLowerCase().indexOf(searchTerm) >= 0;
+    },searchTerm);
+    return searchResults;
+  }
+
+  $('#searchTermInput').keyup(function() {
+      delay(function(){
+        if ($('#searchTermInput').val().length > 2){
+          var matchingComponents = getComponentSearchResults($('#searchTermInput').val());
+          console.log(matchingComponents);
+          var searchResultElements = d3.select('#componentSearchResults').selectAll('.searchResultItem')
+            .data(matchingComponents,function(d) {return d.id;});
+          console.log(searchResultElements);
+          searchResultElements.exit().remove();
+          var searchResultEnter = searchResultElements.enter()
+              .append('div')
+              .attr('class','searchResultItem');
+
+          searchResultEnter.append('p')
+            .text(function(d){return d.name})
+          searchResultEnter.append('a')
+            .text('Add')
+            .on('click',function(d){
+              diagram.retrieveAndAddComponents(d.id,false);
+            })
+          searchResultEnter.append('a')
+            .text('Include')
+            .on('click',function(d){
+              diagram.retrieveAndAddComponents(d.id,true);
+            })
+
+
+          d3.select('#componentSearchResults').classed('hidden',!(matchingComponents.length > 0));
+        }
+      }, 300 );
+  });
+
+  //Hide the Search results when the user clicks away
+  //onblur no used as we want it to stay open if a search result is clicked
+  $('svg').focus(function(){
+    d3.select('#componentSearchResults').classed('hidden',true);
+  })
 
 </script>
 <script>
