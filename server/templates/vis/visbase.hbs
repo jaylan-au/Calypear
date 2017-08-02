@@ -335,7 +335,7 @@ svg {
       //If the Shift key is held down then lock the node in position
       //Touching the node again will free it
       //Need to resolve this.
-      if (!d.pinned) {
+      if (!d.isPinned()) {
         d.fx = null;
         d.fy = null
       }
@@ -535,6 +535,18 @@ svg {
 
     pinAtPosition(){
       this.pinAt(this.x, this.y);
+    }
+
+    /*
+      Hold only sets the fixed position,
+      This generally is to allow nodes to be stopped from exiting to view box
+      while the simulation is running - without actually pinning them.
+      Rather than simply ignoring X/Y movement which would cause the simulation
+      issues.
+    */
+    holdAt(x,y){
+      this.fx = x;
+      this.fy = y;
     }
 
     pinAt(x,y){
