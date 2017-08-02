@@ -49,6 +49,11 @@ svg {
 }
 
 #workspaceSearchBox {
+  /*padding: 0.5em;
+  padding-top: 1em;
+  padding-bottom: 1em;*/
+  display: flex;
+  align-items: center;
 }
 
 #workspaceSearchBox span {
@@ -57,8 +62,8 @@ svg {
   height: 100%;
 }
 #workspaceSearchBox input {
-  padding: 1;
-  padding-left: 1em;
+  flex-grow: 1;
+  padding-left: 0.5em;
   margin: 0;
   border: none;
   box-sizing: border-box;
@@ -126,15 +131,15 @@ svg {
   padding: 0.5em;
 }
 
-.searchResultItem p {
-  flex-basis: 70%;
-  padding: 0;
-  margin: 0;
+.searchResultItem .itemName  {
+  flex-grow: 1;
 }
 
-.searchResultItem i {
-  display: block;
+.searchResultItem .actionItem {
+  flex-shrink: 0;
+  cursor: pointer;
 }
+
 </style>
 <div class="row">
   <div id="visWorkspace">
@@ -149,10 +154,8 @@ svg {
     </div>
     <div id="workspaceControls">
       <div id="workspaceSearchBox" class="workspace-panel">
-        <div>
           <span id="buttonShowMenu" class="material-icons">menu</span>
           <input type="text" id="searchTermInput" placeholder="Type a component name to add..."/>
-        </div>
       </div>
       <div id="componentSearchResults" class="workspace-panel hidden">
       </div>
@@ -468,16 +471,18 @@ svg {
               .attr('class','searchResultItem');
 
           searchResultEnter.append('span')
+            .attr("class","itemName")
             .text(function(d){return d.name})
 
+
           searchResultEnter.append('i')
-            .attr("class","material-icons")
+            .attr("class","material-icons actionItem")
             .text('add_box')
             .on('click',function(d){
               diagram.retrieveAndAddComponents(d.id,false);
             })
           searchResultEnter.append('i')
-            .attr("class","material-icons")
+            .attr("class","material-icons actionItem")
             .text('library_add')
             .on('click',function(d){
               diagram.retrieveAndAddComponents(d.id,true);
