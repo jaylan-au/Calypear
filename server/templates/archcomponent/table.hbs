@@ -7,7 +7,7 @@
       <th>{{name}}</th>
       {{/each}}
       {{#each typeRelationMap}}
-        <th>{{typeId}}-{{#if inverse}}{{relationTypeNameInverse}}{{else}}{{relationTypeName}}{{/if}}</th>
+        <th>{{#if inverse}}{{relationTypeNameInverse}}{{else}}{{relationTypeName}}{{/if}}->{{typeName}}</th>
       {{/each}}
     </tr>
   </thead>

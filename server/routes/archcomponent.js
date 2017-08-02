@@ -302,6 +302,7 @@ module.exports = [
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation;
+      const ComponentType = request.server.collections().componenttype;
       const TagType = request.server.collections().tagtype;
       var viewParams = {};
       Promise.all([
@@ -325,6 +326,10 @@ module.exports = [
               viewParams.interestingTags = results;
             }),
           ]);
+        }),
+        ComponentType.find().then((results) =>{
+          //Just get them all for later processing - there's unlikely to be too many in any db
+          viewParams.componentTypes = results;
         }),
         ComponentRelation.find().populate(['from','to','type']).then((results) => {
           //first we need to find all the Data Types -> Relations -> Inverse/Not we are interested in
@@ -399,8 +404,15 @@ module.exports = [
 
         })
       ]).then(() => {
-        //Map the data onto a row based table
+        //fill the Component Type Names into the typeRelationMap
+        viewParams.typeRelationMap.forEach(function(typeRelation){
+          typeRelation.typeName = viewParams.componentTypes.find(function(testingElement){
+            return (testingElement.id == this)
+          },typeRelation.typeId).name;
+        });
+
         viewParams.components.forEach(function(archComponent){
+          //Map the data onto a row based table
           archComponent.tagRow = [];
           if (archComponent.tags) {
              viewParams.interestingTags.forEach(function(tagType, tagTypeIndex){
@@ -409,6 +421,7 @@ module.exports = [
               });
             });
           }
+
           //Now the fun part - map the relations onto the typeRelationMap
           archComponent.relationRow = [];
           if(archComponent.relationships) {
