@@ -4,7 +4,10 @@
       <th>Name</th>
       <th>Type</th>
       {{#each interestingTags}}
-      <th>{{name}}<th>
+      <th>{{name}}</th>
+      {{/each}}
+      {{#each typeRelationMap}}
+        <th>{{typeId}}-{{#if inverse}}{{relationTypeNameInverse}}{{else}}{{relationTypeName}}{{/if}}</th>
       {{/each}}
     </tr>
   </thead>
@@ -22,7 +25,14 @@
             <div>Present</div>
           {{/if}}
         {{/each}}
+      </td>
+      {{/each}}
+      {{#each relationRow}}
       <td>
+        {{#each this}}
+            <div>{{to.name}}</div>
+        {{/each}}
+      </td>
       {{/each}}
     </tr>
     {{/each}}

@@ -301,6 +301,7 @@ module.exports = [
     path: '/archcomponents/table',
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
+      const ComponentRelation = request.server.collections().componentrelation;
       const TagType = request.server.collections().tagtype;
       var viewParams = {};
       Promise.all([
@@ -324,6 +325,78 @@ module.exports = [
               viewParams.interestingTags = results;
             }),
           ]);
+        }),
+        ComponentRelation.find().populate(['from','to','type']).then((results) => {
+          //first we need to find all the Data Types -> Relations -> Inverse/Not we are interested in
+          var typeRelationMap = [];
+          //This coudl be done much more effeciently but lets get it working for Now
+          //Build the map first
+          var typeRelationMap = results.map(function(element){
+            return {
+                typeId : element.to.type,
+                relationTypeId: element.type.id,
+                relationTypeName: element.type.name,
+                relationTypeNameInverse: element.type.nameInverse,
+                inverse: element.inverse
+              }
+          });
+
+          //Now remove duplicates
+          typeRelationMap = typeRelationMap.reduce(function(accumulator, element){
+            //Find if the item already exists in the accumulator
+            //if so, don't add it (this could be done in a previous step)
+            var existing = accumulator.find(function(searchElement){
+              return (
+                (searchElement.typeId == this.findElement.typeId)
+                &&
+                (searchElement.relationTypeId == this.findElement.relationTypeId)
+                &&
+                (searchElement.inverse == this.findElement.inverse)
+              );
+            },{findElement : element});
+
+            if (!existing) {
+              accumulator.push(element);
+            }
+
+            return accumulator;
+          },[]);
+          //Now sort the map - at the momenet this is numeric - but we will change that
+          typeRelationMap = typeRelationMap.sort(function(a,b){
+            //Order by Type -> RelationType -> Inverse/Not
+            if (a.typeId == b.typeId) {
+              if (a.relationTypeId == b.relationTypeId ) {
+                return a.inverse - b.inverse;
+              } else {
+                return a.relationTypeId - b.relationTypeId;
+              }
+            } else {
+              return a.typeId - b.typeId;
+            }
+          });
+
+          viewParams.typeRelationMap = typeRelationMap;
+          //Now build a map of each component type
+          //Done here instead of above as this will know component types for ALL
+          //components in the set of data we're interested in (included related items)
+
+          var relComponentTypeMap = results.reduce(function(accumulator, element){
+            var existing = accumulator.find(function(searchElement){
+              return (searchElement.componentId == element.to.id);
+            },{findElement: element});
+
+            if (!existing) {
+              accumulator.push({
+                componentId: element.to.id,
+                typeId: element.to.type
+              })
+            }
+            return accumulator;
+          },[]);
+
+          viewParams.relComponentTypeMap = relComponentTypeMap;
+          viewParams.componentRelations = results;
+
         })
       ]).then(() => {
         //Map the data onto a row based table
@@ -336,7 +409,43 @@ module.exports = [
               });
             });
           }
+          //Now the fun part - map the relations onto the typeRelationMap
+          archComponent.relationRow = [];
+          if(archComponent.relationships) {
+            viewParams.typeRelationMap.forEach(function(typeRelation, typeRelationIndex){
+              //Get a list of possible matching component ids
+              //console.log(viewParams);
+              var matchingComponents = viewParams.relComponentTypeMap.filter(function(testingElement){
+                  return (testingElement.typeId == this)
+                },typeRelation.typeId)
+                .map(function(mappingElement){
+                  return mappingElement.componentId;
+                });
+
+              //filter the relations down to the set we're looking for
+              //Build from the full list of relations - as he component list
+              //Doesn't have the related components populated
+              var matchingRelations = viewParams.componentRelations.filter(function(testingElement){
+                return (
+                  //Filter down to the component we are processing relations for
+                  (testingElement.from.id == archComponent.id)
+                  &&
+                  //Does the Relation Type Match
+                  (testingElement.type.id == this.relationTypeId)
+                  &&
+                  //Does the inverse/not match
+                  (testingElement.inverse == this.inverse)
+                  &&
+                  //Is the component type right
+                  (matchingComponents.includes(testingElement.to.id))
+                )
+              },typeRelation)
+              //console.log(matchingRelations);
+              archComponent.relationRow[typeRelationIndex] = matchingRelations;
+            });
+          }
         });
+
         //Additional Params for Export Formats
         viewParams.exportData = {
           hostname: request.info.host
