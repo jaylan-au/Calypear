@@ -3,15 +3,24 @@
 <thead>
   <tr>
     <th>Name</th>
+    <th>Diagram Icon</th>
     <th></th>
   </tr>
 </thead>
 <tbody>
   {{#each componenttypes}}
-    <tr>
+    <tr data-item-id="{{id}}" class="data-view">
       <td>{{name}}</td>
-      <td><a href="/componenttype/{{id}}/delete" class="button-primary">Delete</a></td>
+      <td><svg width="2em" height="2em">{{{diagramIcon}}}</svg></td>
+      <td><button data-item-id="{{id}}" class="editComponentEnable">Edit</button><a href="/componenttype/{{id}}/delete" class="button-primary">Delete</a></td>
     </tr>
+    <form action="/componenttype/{{id}}" method="POST">
+      <tr data-item-id="{{id}}" class="data-edit">
+        <td><input type="text" name="name" value="{{name}}"/></td>
+        <td><input type="text" name="diagramIcon" value="{{diagramIcon}}"/></td>
+        <td><input type="submit" value="Save"/></td>
+      </tr>
+    </form>
   {{/each}}
   </tbody>
 </table>
@@ -25,3 +34,14 @@
 
   </div>
 </form>
+<script>
+  $().ready(function(){
+    $('.data-edit').hide();
+    $('.editComponentEnable').click(function(){
+      var itemId = $(this).data('item-id');
+      console.log(itemId);
+      $('.data-edit[data-item-id="'+itemId+'"]').show();
+      $('.data-view[data-item-id="'+itemId+'"]').hide();
+    });
+  });
+</script>
