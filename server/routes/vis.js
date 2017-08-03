@@ -13,6 +13,7 @@ module.exports = [
     handler: function (request, reply) {
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation
+      const ComponentType = request.server.collections().componenttype;
       var viewParams = {
         layout: {
           fullwidth: true
@@ -24,6 +25,9 @@ module.exports = [
         }),
         ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
           viewParams.relations = results;
+        }),
+        ComponentType.find().then((results) => {
+          viewParams.componentTypes = results;
         })
       ]).then(() => {
         reply.view('vis/visbase.hbs',viewParams);

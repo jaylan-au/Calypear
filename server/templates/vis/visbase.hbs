@@ -145,6 +145,13 @@ svg {
           <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
             <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
           </marker>
+          {{#each componentTypes}}
+            {{#if diagramIcon}}
+              <symbol id="diagramIcon{{id}}" viewbox="0 0 24 24">
+                {{{diagramIcon}}}
+              </symbol>
+            {{/if}}
+          {{/each}}
         </defs>
       </svg>
     </div>
@@ -222,6 +229,11 @@ svg {
       .attr("cy",0)
       .attr("r",6)
       .attr("fill",function(d) {return color(d.type.id)});
+    context.append("use")
+      .attr("href",function(d) {return "#diagramIcon"+d.type.id})
+      .attr("transform","translate(-6,-6)")
+      .attr("width",12)
+      .attr("height",12);
     context.append("foreignObject")
       .attr("x",-40)
       .attr("y",5)
