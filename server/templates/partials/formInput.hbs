@@ -1,16 +1,16 @@
 <div class="row">
   <div class="twelve columns">
-    <label class="{{#if hideView}}data-edit{{/if}} {{#unless fieldValue}}data-edit{{/unless}}"for="acField{{fieldName}}">{{fieldLabel}}</label>
+    <label class="{{#if hideView}}data-edit{{/if}} {{#unless fieldValue}}data-edit{{/unless}}"for="field{{fieldName}}">{{fieldLabel}}</label>
     {{#unless hideView}}
       {{#if fieldValue}}
       {{#switch fieldType}}
         {{#case "url" break=true}}
           <a href="{{fieldValue}}">
-            <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
+            <p class="data-view" id="view{{fieldName}}">{{fieldValue}}</p>
           </a>
         {{/case}}
         {{#default}}
-          <p class="data-view" id="ac{{fieldName}}">{{fieldValue}}</p>
+          <p class="data-view" id="view{{fieldName}}">{{fieldValue}}</p>
         {{/default}}
       {{/switch}}
 
@@ -18,7 +18,7 @@
     {{/unless}}
     {{#switch fieldType}}
       {{#case "textarea" break=true}}
-        <textarea class="u-full-width data-edit" name="{{fieldName}}" id="acField{{fieldName}}" value="{{fieldValue}}"></textarea>
+        <textarea class="u-full-width data-edit" name="{{fieldName}}" id="field{{fieldName}}" value="{{fieldValue}}"></textarea>
       {{/case}}
       {{#case "select" break=true}}
         <select class="u-full-width data-edit" name="{{fieldName}}" required id="ac{{fieldName}}">
@@ -28,7 +28,7 @@
         </select>
       {{/case}}
       {{#default}}
-        <input type="{{#if fieldType}}{{fieldType}}{{else}}text{{/if}}" class="u-full-width data-edit" name="{{fieldName}}" id="acField{{fieldName}}" value="{{fieldValue}}" />
+        <input type="{{#if fieldType}}{{fieldType}}{{else}}text{{/if}}" class="u-full-width data-edit" name="{{fieldName}}" id="field{{fieldName}}" value="{{fieldValue}}" />
       {{/default}}
     {{/switch}}
 
