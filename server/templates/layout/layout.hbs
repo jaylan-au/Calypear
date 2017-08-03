@@ -31,20 +31,23 @@
 </head>
 <body>
   {{#unless layout.fullwidth}}
-    <div class="container">
-      <div class="navbar">
+    <div class="navbar">
+      <div class="container">
         <ul>
-          <li><a href="/archcomponents">Components</a></li>
-          <li><a href="/componenttypes">Component Types</a></li>
-          <li><a href="/relationshiptypes">Relationship Types</a></li>
-          <li><a href="/tagtypes">Tag Types</a></li>
-          <li><a href="/vis">Visual</a></li>
+          <li><a href="/archcomponents"><span class="material-icons">inbox</span><p>Components</p></a></li>
+          <li><a href="/componenttypes"><span class="material-icons">developer_mode</span><p>Component Types</p></a></li>
+          <li><a href="/relationshiptypes"><span class="material-icons">developer_mode</span><p>Relationship Types</p></a></li>
+          <li><a href="/tagtypes"><span class="material-icons">developer_mode</span><p>Tag Types</p></a></li>
+          <li><a href="/vis"><span class="material-icons">format_shapes</span><p>Visual</p></a></li>
         <ul>
       </div>
-    {{/unless}}
+    </div>
+    <div class="container">
+          {{/unless}}
       {{{content}}}
-    {{#unless layout.fullwidth}}
+      {{#unless layout.fullwidth}}
     </div>
     {{/unless}}
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-.navbar {
+/*.navbar {
   display: block;
   position: static;
   width: 100%;
@@ -22,4 +22,54 @@
   padding-right: 3em;
   margin-top: 1em;
   margin-bottom: 1em;
+}*/
+
+.navbar {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: black;
+}
+
+.navbar ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  list-style-position: outside;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar ul li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.navbar ul li a {
+  text-align: center;
+  display: block;
+}
+
+.navbar ul li .material-icons{
+  font-size: 3em;
+  text-align: center;
+}
+
+.navbar ul li p {
+  font-size: 0.75em;
+  padding: 0;
+  text-align: center;
+}
+
+/*
+  Utility Classes
+*/
+.material-icons {
+  font-family: 'Material Icons';
+  padding: 0;
+  margin: 0;
 }
