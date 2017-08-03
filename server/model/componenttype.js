@@ -5,5 +5,8 @@ module.exports = {
     name: {
       type: 'string',
     },
+    diagramIcon: {
+      type: 'string'
+    }
   }
 }

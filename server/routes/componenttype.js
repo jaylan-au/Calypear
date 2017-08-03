@@ -24,6 +24,20 @@ module.exports = [
   },
   {
     method: 'POST',
+    path: '/componenttype/{id}',
+    handler: function (request, reply){
+      const ComponentType = request.server.collections().componenttype;
+
+      ComponentType.update({id:request.params.id},{
+        name: request.payload.name,
+        diagramIcon: request.payload.diagramIcon,
+      }).then((result) => {
+        reply.redirect('/componenttypes')
+      });
+    }
+  },
+  {
+    method: 'POST',
     path: '/componenttype/new',
     handler: function (request, reply){
       const ComponentType = request.server.collections().componenttype;
