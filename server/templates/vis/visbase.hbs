@@ -1,33 +1,6 @@
 <style>
 
-.link-group path {
-  stroke: #999;
-  stroke-opacity: 0.6;
-  fill: none;
-  /*marker-end: url(#markerArrow);
-  marker-mid: url(#markerArrow);*/
-}
 
-
-.node-group .diagram-node circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-.node-group .diagram-node.selected circle {
-  stroke: #000;
-}
-
-.node-text {
-  font-size: 8px;
-  text-align: center;
-}
-
-.diagram-link-label {
-  font-size: 8px;
-  text-align: center;
-
-}
 #visWorkspace {
   height: 95vh;
   width: 100vw;
@@ -145,6 +118,36 @@ svg {
           <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
             <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
           </marker>
+          <style>
+            .link-group path {
+              stroke: #999;
+              stroke-opacity: 0.6;
+              fill: none;
+              /*marker-end: url(#markerArrow);
+              marker-mid: url(#markerArrow);*/
+            }
+
+
+            .node-group .diagram-node circle {
+              stroke: #fff;
+              stroke-width: 1.5px;
+            }
+
+            .node-group .diagram-node.selected circle {
+              stroke: #000;
+            }
+
+            .node-text {
+              font-size: 8px;
+              text-align: center;
+            }
+
+            .diagram-link-label {
+              font-size: 8px;
+              text-align: center;
+
+            }
+          </style>
           {{#each componentTypes}}
             {{#if diagramIcon}}
               <symbol id="diagramIcon{{id}}" viewbox="0 0 24 24">
@@ -193,13 +196,15 @@ svg {
       </div>
     </div>
     <div id="workspaceMenu">
-      <div class="row">
+      <div class="row workspace-menu-block">
         <a href="/">Exit Workbench</a>
         <button id="buttonHideMenu">Hide</button>
       </div>
-
-
-      <div class="u-full-width u-max-full-width">
+      <div class="row workspace-menu-block">
+        <button id="workspaceExportSVGCommand">Export as SVG</button>
+        <button id="workspaceExportPNGCommand">Export as PNG</button>
+      </div>
+      <div class="row workspace-menu-block">
           <label for="fieldDiagramName">Diagram Name</label>
           <input id="fieldDiagramName" name="name" />
           <button id="saveDiagramCommand">Save Diagram</button>
@@ -210,7 +215,11 @@ svg {
 
 </div>
 <script src="/dist/js/d3.js"></script>
+<script src="/dist/js/FileSaver.js"></script>
+<script src="/dist/js/canvas-toBlob.js"></script>
 <script src="/dist/js/calypearDiagram.js"></script>
+<script src="/dist/js/diagramExporter.js"></script>
+
 <script>
 
   var svg = d3.select("svg");
@@ -511,6 +520,8 @@ svg {
   });
 
 
+
+
 </script>
 <script>
   var diagram = new CalypearDiagram();
@@ -546,6 +557,22 @@ svg {
     $('#buttonHideMenu').click(function(){
       d3.select("#workspaceMenu").transition().style("left","-400px");
     })
+
+    $('#workspaceExportSVGCommand').click(function(){
+      exporter = new SVGDiagramExporter();
+      saveAs(exporter.generateData(svg.node()),diagram.name() + '.svg');
+      //console.log(exporter.generateData(svg.node()));
+    });
+
+    $('#workspaceExportPNGCommand').click(function(){
+      exporter = new PNGDiagramExporter();
+      exporter.generateData(svg.node(),{
+        width: 2000,
+        height: 2000
+      }).then((imageBlob) => {
+          saveAs(imageBlob,diagram.name() + '.png');
+      });
+    });
 
   });
 

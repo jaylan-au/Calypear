@@ -14,6 +14,8 @@ gulp.task('scripts',function(){
   gulp.src([
     'node_modules/d3/build/d3.js',
     'node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.js',
+    'node_modules/file-saver/FileSaver.js',
+    'node_modules/canvas-toBlob/canvas-toBlob.js',
     'server/www/js/*'
   ])
   .pipe(gulp.dest('server/dist/js'));
