@@ -21,7 +21,7 @@ class SVGDiagramExporter extends DiagramExporter {
     var exportDataBlob = new Blob([this.flattenSVGData(svgElement)],{
       type: 'image/svg+xml'
     });
-    return exportDataBlob;
+    return Promise.resolve(exportDataBlob);
   }
 }
 

@@ -119,6 +119,11 @@ svg {
             <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
           </marker>
           <style>
+            text, p {
+              font-family: "arial", sans-serif;
+              font: arial;
+            }
+
             .link-group path {
               stroke: #999;
               stroke-opacity: 0.6;
@@ -560,8 +565,9 @@ svg {
 
     $('#workspaceExportSVGCommand').click(function(){
       exporter = new SVGDiagramExporter();
-      saveAs(exporter.generateData(svg.node()),diagram.name() + '.svg');
-      //console.log(exporter.generateData(svg.node()));
+      exporter.generateData(svg.node()).then((imageBlob) => {
+          saveAs(imageBlob,diagram.name() + '.svg');
+      })
     });
 
     $('#workspaceExportPNGCommand').click(function(){
