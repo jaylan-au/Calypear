@@ -21,6 +21,14 @@ module.exports = {
     relationPopulationHops: {
       type: 'integer',
       defaultsTo: 0
+    },
+    displayWidth: {
+      type: 'integer',
+      defaultsTo: 0
+    },
+    displayRotation: {
+      type: 'integer',
+      defaultsTo: 0
     }
   }
 }

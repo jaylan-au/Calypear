@@ -1,5 +1,5 @@
 class CalypearDiagramComponent {
-  constructor(componentData,includedInDiagram) {
+  constructor(componentData,diagramComponentData = {}) {
     if (componentData != null) {
       if (componentData.id) {
         this.id = componentData.id;
@@ -28,8 +28,34 @@ class CalypearDiagramComponent {
 
     }
 
-    this.includedInDiagram = includedInDiagram;
+    if (diagramComponentData.includedInDiagram) {
+      this.includedInDiagram = diagramComponentData.includedInDiagram;
+    } else {
+      this.includedInDiagram = false;
+    }
 
+
+    /**
+      Set defaults for display
+    */
+    this.display = {
+      //<=0: Automatic (Diagam specifics will determine this)
+      //>0: Use the specific size
+      width: 0,
+      //-1 = Automatic/Use defaults
+      //>-1 - Use the specified angle
+      //0 = 3 O'Clock position and proceeds clockwise
+      rotation: 0
+    }
+
+    if (diagramComponentData.display) {
+      this.display.width = diagramComponentData.display.width;
+      this.displau.rotation = diagramComponentData.display.rotation;
+    }
+
+
+    //Currently this effectively unpins the component
+    //Waiting here until we are supplied with further Diagram Specifics for the component
     this.pinAt(componentData.fixedX, componentData.fixedY);
   }
 
@@ -219,7 +245,10 @@ class CalypearDiagram  {
             //Check if the component already exists if so - ignore it
             //TODO: Delete and replace (in case relationships have changed on the server)
             if (!existingComponentIds.includes(newComponent.id)){
-              diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,autoIncludeComponents));
+              var componentDiagramData = {
+                includedInDiagram: autoIncludeComponents
+              }
+              diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,componentDiagramData));
             }
           });
         }

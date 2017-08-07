@@ -242,7 +242,14 @@ svg {
     context.append("circle")
       .attr("cx",0)
       .attr("cy",0)
-      .attr("r",function(d) {return 2*d.relationships.length})
+      .attr("r",function(d) {
+        //Check if we need to apply a specific width 
+        if (d.display.width <= 0) {
+          return 2*d.relationships.length;
+        } else {
+          return d.display.width;
+        }
+      })
       .attr("fill",function(d) {return color(d.type.id)});
     context.append("use")
       .attr("href",function(d) {return "#diagramIcon"+d.type.id})
