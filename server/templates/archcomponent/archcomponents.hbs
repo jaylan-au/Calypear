@@ -1,15 +1,21 @@
 <h1>Architecture Components List</h1>
+<form method="GET" action="/archcomponents" id="filterForm">
 <div class="row">
-  <div class="twelve columns">
-    <label for="filterFormComponentTypeId">Filter by Type</label>
-    <select name="typeId" id="filterFormComponentTypeId">
+  <div class="six columns">
+    <label for="filterFormTypeId">Type</label>
+    <select class="u-full-width" name="typeId" id="filterFormTypeId">
       <option value="" default>No Filter</option>
       {{#each componentTypes}}
       <option value="{{id}}" {{#isEqual id ../filter.typeId}}selected{{/isEqual}}>{{name}}</option>
       {{/each}}
     </select>
   </div>
+  <div class="six columns">
+    <label for="filterFormName">Name</label>
+    <input  class="u-full-width" type="text" name="name" value="{{filter.name}}"placeholder="Type a component name to search"/>
+  </div>
 </div>
+</form>
 <table class="u-full-width">
 <thead>
   <tr>
@@ -53,8 +59,18 @@
 
 <script>
   $().ready(function(){
-    $('#filterFormComponentTypeId').change(function(){
-      window.location = "archcomponents?typeId="+this.value;
-    })
+    $('#filterFormTypeId').change(function(){
+      $('#filterForm').submit();
+    });
+
+    $('#filterFormName').change(function(){
+      $('#filterForm').submit();
+    });
+
+    // $("#filterFormName").on('keyup', function (e) {
+    //     if (e.keyCode == 13) {
+    //         $('#filterForm').submit();
+    //     }
+    // });
   });
 </script>
