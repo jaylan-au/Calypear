@@ -1,3 +1,23 @@
+
+<h1>Create new component</h1>
+<form method="POST" action="/archcomponent">
+  <div class="row">
+    <div class="six columns">
+      <label for="componentName">Component Name</label>
+      <input class="u-full-width" type="text" placeholder="New Component" id="componentName" name="name" required />
+    </div>
+    <div class="six columns">
+      <label for="componentType">Type</label>
+      <select class="u-full-width" name="typeId" required id="componentType">
+        {{#each componentTypes}}
+        <option value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <input type="hidden" name="forwardToEdit" value="true"/>
+    <input type="submit" class="button-primary" value="Create"/>
+  </div>
+</form>
 <h1>Architecture Components List</h1>
 <form method="GET" action="/archcomponents" id="filterForm">
 <div class="row">
@@ -37,25 +57,6 @@
 </tbody>
 </table>
 
-<h1>Create new component</h1>
-<form method="POST" action="/archcomponent">
-  <div class="row">
-    <div class="six columns">
-      <label for="componentName">Component Name</label>
-      <input class="u-full-width" type="text" placeholder="New Component" id="componentName" name="name" required />
-    </div>
-    <div class="six columns">
-      <label for="componentType">Type</label>
-      <select class="u-full-width" name="typeId" required id="componentType">
-        {{#each componentTypes}}
-        <option value="{{id}}">{{name}}</option>
-        {{/each}}
-      </select>
-    </div>
-    <input type="hidden" name="forwardToEdit" value="true"/>
-    <input type="submit" class="button-primary" value="Create"/>
-  </div>
-</form>
 
 <script>
   $().ready(function(){
