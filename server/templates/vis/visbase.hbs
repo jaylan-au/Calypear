@@ -144,7 +144,7 @@ svg {
 
             .node-text {
               font-size: 8px;
-              text-align: center;
+              text-align: left;
             }
 
             .diagram-link-label {
@@ -252,17 +252,19 @@ var zoom = d3.zoom()
 
 
   function constructNode(context) {
+
+    function getNodeSize(d) {
+      if (d.display.width <= 0) {
+        return 2*d.relationships.length;
+      } else {
+        return d.display.width;
+      }
+    }
+
     context.append("circle")
       .attr("cx",0)
       .attr("cy",0)
-      .attr("r",function(d) {
-        //Check if we need to apply a specific width
-        if (d.display.width <= 0) {
-          return 2*d.relationships.length;
-        } else {
-          return d.display.width;
-        }
-      })
+      .attr("r",getNodeSize)
       .attr("fill",function(d) {return color(d.type.id)});
     context.append("use")
       .attr("href",function(d) {return "#diagramIcon"+d.type.id})
@@ -270,8 +272,10 @@ var zoom = d3.zoom()
       .attr("width",12)
       .attr("height",12);
     context.append("foreignObject")
-      .attr("x",-40)
-      .attr("y",5)
+      .attr("x",function(d){
+        return getNodeSize(d) + 5;
+      })
+      .attr("y","-0.5em")
       .attr("width",80)
       .attr("height",40)
       .attr("class","node-text")
@@ -301,8 +305,7 @@ var zoom = d3.zoom()
     .selectAll(".diagram-node");
 
   function refresh(graphNodes, graphEdges){
-    //console.log(graphEdges);
-    //Key function prevents weird update problems of D3 using array order
+
     nodeElements= nodeElements.data(graphNodes,function(d) {return d.id;});
     nodeElements.exit().remove();
     var nodeEnter  = nodeElements.enter()
@@ -508,10 +511,8 @@ var zoom = d3.zoom()
       delay(function(){
         if ($('#searchTermInput').val().length > 2){
           var matchingComponents = getComponentSearchResults($('#searchTermInput').val());
-          console.log(matchingComponents);
           var searchResultElements = d3.select('#componentSearchResults').selectAll('.searchResultItem')
             .data(matchingComponents,function(d) {return d.id;});
-          console.log(searchResultElements);
           searchResultElements.exit().remove();
           var searchResultEnter = searchResultElements.enter()
               .append('div')
