@@ -232,12 +232,14 @@ var zoom = d3.zoom()
     .on("zoom", zoomed);
 
   function zoomed() {
-    svg.attr("transform", d3.event.transform);
+    svgWorkspace.attr("transform", d3.event.transform);
   }
 
-  var svg = d3.select("svg").append("g")
-    .attr("class","drawingWorkSpace")
+  var svg = d3.select("svg")
     .call(zoom);
+
+  var svgWorkspace = svg.append("g")
+    .attr("class","drawingWorkSpace");
 
   width = 1000;
   height = 1000;
@@ -286,15 +288,15 @@ var zoom = d3.zoom()
       }))
       .on("tick",ticked);
 
-  var linkElements = svg.append("g")
+  var linkElements = svgWorkspace.append("g")
       .attr("class", "link-group")
     .selectAll(".diagram-link");
 
-  var linkLabels = svg.append("g")
+  var linkLabels = svgWorkspace.append("g")
       .attr("class","link-label-group")
     .selectAll(".diagra-link-label");
 
-  var nodeElements = svg.append("g")
+  var nodeElements = svgWorkspace.append("g")
     .attr("class", "node-group")
     .selectAll(".diagram-node");
 
@@ -353,7 +355,7 @@ var zoom = d3.zoom()
   }
 
   function dragstarted(d) {
-    d3.select("svg").select(".selected").classed("selected",false);
+    d3.select("svgWorkspace").select(".selected").classed("selected",false);
     d3.select(this).classed("selected",true);
 
     nodeClicked(d);
@@ -392,6 +394,7 @@ var zoom = d3.zoom()
 
   svg.on("click",function(){
     deSelectNodes();
+    //TODO: this appears broken now as it onyl des-select one at a time?
     d3.select("svg").select(".selected").classed("selected",false);
   })
 
