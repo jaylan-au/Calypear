@@ -18,7 +18,7 @@
     {{/unless}}
     {{#switch fieldType}}
       {{#case "textarea" break=true}}
-        <textarea class="u-full-width data-edit" name="{{fieldName}}" id="field{{fieldName}}" value="{{fieldValue}}"></textarea>
+        <textarea class="u-full-width data-edit" name="{{fieldName}}" id="field{{fieldName}}">{{fieldValue}}</textarea>
       {{/case}}
       {{#case "select" break=true}}
         <select class="u-full-width data-edit" name="{{fieldName}}" required id="ac{{fieldName}}">
