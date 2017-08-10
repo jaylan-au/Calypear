@@ -20,16 +20,20 @@ module.exports = [
         }
       };
       Promise.all([
+        //This stays for now as we need it for search - to be replacd by a proper search later
         ArchComponent.find().populate(['type']).then((results)=>{
           viewParams.components = results;
         }),
-        ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
-          viewParams.relations = results;
-        }),
+        // ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
+        //   viewParams.relations = results;
+        // }),
         ComponentType.find().then((results) => {
           viewParams.componentTypes = results;
         })
       ]).then(() => {
+        if (request.query.componentId) {
+          viewParams.componentId = request.query.componentId;
+        }
         reply.view('vis/visbase.hbs',viewParams);
       }).catch((err) =>{
         reply(err);

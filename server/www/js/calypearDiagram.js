@@ -227,36 +227,43 @@ class CalypearDiagram  {
     }
     var url = '/archcomponents';
     var current = this;
-    $.ajax({
-      dataType: "json",
-      method: "GET",
-      url: url,
-      data: $.param(queryParams,true),
-      context: {
-        diagram: this,
-        autoInclude: autoIncludeComponents
-      },
-      success: function(responseData) {
-        var existingComponentIds = this.diagram.diagramComponents.map(function(ac){
-          return ac.id;
-        });
-        if (responseData.archComponents) {
-          responseData.archComponents.forEach(function(newComponent){
-            //Check if the component already exists if so - ignore it
-            //TODO: Delete and replace (in case relationships have changed on the server)
-            if (!existingComponentIds.includes(newComponent.id)){
-              var componentDiagramData = {
-                includedInDiagram: autoIncludeComponents
-              }
-              diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,componentDiagramData));
-            }
+    var returnPromise = new Promise(function(resolve, reject){
+      $.ajax({
+        dataType: "json",
+        method: "GET",
+        url: url,
+        data: $.param(queryParams,true),
+        context: {
+          diagram: current,
+          autoInclude: autoIncludeComponents
+        },
+        success: function(responseData) {
+          var existingComponentIds = this.diagram.diagramComponents.map(function(ac){
+            return ac.id;
           });
+          if (responseData.archComponents) {
+            responseData.archComponents.forEach(function(newComponent){
+              //Check if the component already exists if so - ignore it
+              //TODO: Delete and replace (in case relationships have changed on the server)
+              if (!existingComponentIds.includes(newComponent.id)){
+                var componentDiagramData = {
+                  includedInDiagram: autoIncludeComponents
+                }
+                diagram.diagramComponents.push(new CalypearDiagramComponent(newComponent,componentDiagramData));
+              }
+            });
+            resolve("Components Loaded");
+          } else {
+            reject("No component received");
+          }
+          if (refreshOnSuccess) {
+            this.diagram.updateDiagram();
+          }
+
         }
-        if (refreshOnSuccess) {
-          this.diagram.updateDiagram();
-        }
-      }
-    });
+      });
+    },this);
+    return returnPromise;
   }
 
   retrieveAndAddRelatedComponents(componentId, autoIncludeComponents = false, refreshOnSuccess = true) {
@@ -267,6 +274,7 @@ class CalypearDiagram  {
     }
 
   }
+
 
 
   updateDiagram(){

@@ -564,6 +564,12 @@ var zoom = d3.zoom()
       diagram.retrieveDiagramFromServer({{diagramId}});
     {{/if}}
 
+    {{#if componentId}}
+      diagram.retrieveAndAddComponents([{{componentId}}]).then(()=>{
+          diagram.retrieveAndAddRelatedComponents([{{componentId}}]);
+      })
+    {{/if}}
+
 
 
     $('.diagram-component-add').click(function(){
