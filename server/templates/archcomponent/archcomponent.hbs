@@ -7,9 +7,17 @@
 {{> formInput fieldName="alternativeNames" fieldLabel="Alternative Names" fieldValue=alternativeNames}}
 {{> formInput fieldType="textarea" fieldName="description" fieldLabel="Description" fieldValue=description}}
 {{> formInput fieldType="url" fieldName="docUrl" fieldLabel="Documentation Url" fieldValue=docUrl}}
-<div class="row">
-  <div class="twelve columns">
-    <label for="name data-view">Last Updated</label>
+<div class="row data-view">
+  <div class="two columns">
+    <label>ID</label>
+    <p class="data-view">{{id}}</p>
+  </div>
+  <div class="five columns">
+    <label>Permalink</label>
+    <p class="data-view"><a href="/archcomponent/{{id}}">/archcomponent/{{id}}</a></p>
+  </div>
+  <div class="five columns">
+    <label>Last Updated</label>
     <p class="data-view">{{updatedAt}}</p>
   </div>
 </div>
