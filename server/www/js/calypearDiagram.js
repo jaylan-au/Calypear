@@ -270,7 +270,9 @@ class CalypearDiagram  {
     var component = this.nodeById(componentId);
     if (component) {
       var relatedComponentIds = component.getRelatedComponentIds();
-      this.retrieveAndAddComponents(relatedComponentIds,autoIncludeComponents,refreshOnSuccess);
+      return this.retrieveAndAddComponents(relatedComponentIds,autoIncludeComponents,refreshOnSuccess);
+    } else {
+      return Promise.reject("Component not loaded");
     }
 
   }
