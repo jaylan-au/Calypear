@@ -285,7 +285,7 @@ var zoom = d3.zoom()
       .attr("width",80)
       //Let the object figure out height on its own
       //This needs to be added back in for the export (otherwise text dissapears)
-      //.attr("height",20)
+      .attr("height","2em")
       .attr("class","node-text")
       .append("xhtml:p")
         .text(function(d) {return d.name});
@@ -619,6 +619,7 @@ var zoom = d3.zoom()
       });
 
     });
+
 
     //Keyboard Shortcuts for exploring
     $('svg').keypress(function(keyEvent){
