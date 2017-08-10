@@ -114,49 +114,49 @@ svg {
   <div id="visWorkspace">
     <div id="workspaceDisplay">
       <svg width="100%" height="100%" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+      <style>
+        text, p {
+          font-family: "arial", sans-serif;
+          font: arial;
+        }
+
+        .link-group path {
+          stroke: #999;
+          stroke-opacity: 0.6;
+          fill: none;
+          /*marker-end: url(#markerArrow);
+          marker-mid: url(#markerArrow);*/
+        }
+
+
+        .node-group .diagram-node circle {
+          stroke: #fff;
+          stroke-width: 1.5px;
+        }
+
+        .node-group .diagram-node.selected circle {
+          stroke: #000;
+        }
+
+        .node-text {
+          font-size: 8px;
+          text-align: left;
+        }
+        .node-text p {
+          margin: 0;
+          padding: 0;
+        }
+
+        .diagram-link-label {
+          font-size: 8px;
+          text-align: center;
+
+        }
+      </style>
         <defs>
           <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
             <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
           </marker>
-          <style>
-            text, p {
-              font-family: "arial", sans-serif;
-              font: arial;
-            }
-
-            .link-group path {
-              stroke: #999;
-              stroke-opacity: 0.6;
-              fill: none;
-              /*marker-end: url(#markerArrow);
-              marker-mid: url(#markerArrow);*/
-            }
-
-
-            .node-group .diagram-node circle {
-              stroke: #fff;
-              stroke-width: 1.5px;
-            }
-
-            .node-group .diagram-node.selected circle {
-              stroke: #000;
-            }
-
-            .node-text {
-              font-size: 8px;
-              text-align: left;
-            }
-            .node-text p {
-              margin: 0;
-              padding: 0;
-            }
-
-            .diagram-link-label {
-              font-size: 8px;
-              text-align: center;
-
-            }
-          </style>
           {{#each componentTypes}}
             {{#if diagramIcon}}
               <symbol id="diagramIcon{{id}}" viewbox="0 0 24 24">
@@ -230,7 +230,7 @@ svg {
 <script src="/dist/js/diagramExporter.js"></script>
 
 <script>
-
+  var selectedNode = null;
 var zoom = d3.zoom()
     .scaleExtent([-20, 20])
     .on("zoom", zoomed);
@@ -284,7 +284,8 @@ var zoom = d3.zoom()
       // need atleast one dimension
       .attr("width",80)
       //Let the object figure out height on its own
-      //.attr("height",40)
+      //This needs to be added back in for the export (otherwise text dissapears)
+      //.attr("height",20)
       .attr("class","node-text")
       .append("xhtml:p")
         .text(function(d) {return d.name});
@@ -419,6 +420,7 @@ var zoom = d3.zoom()
     var detailsPanel = d3.selectAll("#nodeDetailsPanel");
     detailsPanel.classed("hidden",false);
     detailsPanel.attr("data-nodeid",d.id);
+    selectedNode = d.id;
 
     detailsPanel.select("#viewComponentName p")
       .text(d.name);
@@ -615,6 +617,19 @@ var zoom = d3.zoom()
       }).then((imageBlob) => {
           saveAs(imageBlob,diagram.name() + '.png');
       });
+
+    });
+
+    //Keyboard Shortcuts for exploring
+    $('svg').keypress(function(keyEvent){
+      switch (keyEvent.charCode) {
+          case 120:
+            console.log("pressed X");
+            if (selectedNode) {
+                diagram.retrieveAndAddRelatedComponents([selectedNode]);
+            }
+          break;
+      }
     });
 
   });
