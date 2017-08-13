@@ -237,7 +237,7 @@ svg {
 
 <script>
   var selectedNode = null;
-var zoom = d3.zoom()
+  var zoom = d3.zoom()
     .scaleExtent([-20, 20])
     .on("zoom", zoomed);
 
@@ -583,7 +583,7 @@ var zoom = d3.zoom()
     {{#if componentId}}
       diagram.retrieveAndAddComponents([{{componentId}}]).then(()=>{
           diagram.retrieveAndAddRelatedComponents([{{componentId}}]);
-      })
+      });
     {{/if}}
 
 
