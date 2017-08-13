@@ -373,7 +373,8 @@ svg {
   }
 
   function dragstarted(d) {
-    d3.select("svgWorkspace").select(".selected").classed("selected",false);
+    // d3.select("svgWorkspace").select(".selected").classed("selected",false);
+    deSelectNodes();
     d3.select(this).classed("selected",true);
 
     nodeClicked(d);
@@ -413,10 +414,11 @@ svg {
   svg.on("click",function(){
     deSelectNodes();
     //TODO: this appears broken now as it onyl des-select one at a time?
-    d3.select("svg").select(".selected").classed("selected",false);
+
   })
 
   function deSelectNodes() {
+    d3.selectAll(".selected").classed("selected",false);
     d3.selectAll("#nodeDetailsPanel")
       .classed("hidden",true);
   }
