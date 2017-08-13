@@ -55,7 +55,6 @@ class PNGDiagramExporter extends DiagramExporter {
         canvas.toBlobHD( function(blob) {
         // 	// var filesize = Math.round( blob.length/1024 ) + ' KB';
         // 	// if ( callback ) callback( blob, filesize );
-
           resolve(blob);
         });
       };
