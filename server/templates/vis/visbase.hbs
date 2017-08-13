@@ -637,11 +637,36 @@ svg {
 
     //Keyboard Shortcuts for exploring
     $('svg').keypress(function(keyEvent){
-      switch (keyEvent.charCode) {
-          case 120:
-            console.log("pressed X");
+      console.log(keyEvent.keyCode);
+      switch (keyEvent.keyCode) {
+          //e = Expand
+          case 101:
             if (selectedNode) {
                 diagram.retrieveAndAddRelatedComponents([selectedNode]);
+            }
+          //E = Expand and Include
+          case 69:
+            if (selectedNode) {
+                diagram.retrieveAndAddRelatedComponents([selectedNode],true);
+            }
+          break;
+          //f = Flourish
+          case 102:
+                diagram.flourishAll();
+          break;
+          //x = Remove
+          case 120:
+            if (selectedNode) {
+                diagram.removeComponents([selectedNode]);
+            }
+          break;
+          //p = pinAtPosition
+          case 112:
+            if (selectedNode) {
+              var node = diagram.nodeById(selectedNode);
+              if (node) {
+                node.pinAtPosition();
+              }
             }
           break;
       }
