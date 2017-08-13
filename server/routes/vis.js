@@ -138,12 +138,24 @@ module.exports = [
 
             if (mergeTo) {
               //Update the properties for MergeTO
+              if (mergeComponent.fixedX) {
+                mergeTo.fixedX = mergeComponent.fixedX;
+              }
+
+              if (mergeComponent.fixedY) {
+                mergeTo.fixedY = mergeComponent.fixedY;
+              }
+
             } else {
               //Add the item into the component list
               serverDiagram.components.add({
-                component: mergeComponent.component
+                component: mergeComponent.component,
+                fixedX: mergeComponent.fixedX,
+                fixedY: mergeComponent.fixedY
               })
             }
+
+            //Need to remember to remove components we aren't merging
           });
           serverDiagram.save();
           //result.components.push()

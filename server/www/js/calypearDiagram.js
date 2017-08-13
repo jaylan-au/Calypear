@@ -365,7 +365,10 @@ class CalypearDiagram  {
       id: this.id
     };
     this.diagramComponents.forEach(function(diagramComponent) {
-      returnObj.components.push(diagramComponent.getDiagramSaveObject());
+      if (diagramComponent.includedInDiagram) {
+        returnObj.components.push(diagramComponent.getDiagramSaveObject());
+      }
+
     });
 
     return returnObj;
@@ -401,12 +404,25 @@ class CalypearDiagram  {
   loadDiagramFromObject(diagramObject){
     this.name(diagramObject.name);
     this.id = diagramObject.id;
-    this.components = [];
+    this.diagramComponents = [];
     var componentIds = diagramObject.components.map(function(diagramComponent){
       return diagramComponent.component;
     });
     //TODO: Need to account for Fixed Position Components?
-    this.retrieveAndAddComponents(componentIds,true,true);
+    //Retrieve the components from the server (this ensures we get all the data we want consistently)
+    this.retrieveAndAddComponents(componentIds,true,true).then(() => {
+    //   this.components
+      diagramObject.components.forEach((requestedComponent) => {
+        if ((requestedComponent.fixedX) || (requestedComponent.fixedY)) {
+          console.log(requestedComponent);
+          var activeComponent = this.nodeById(requestedComponent.component);
+          console.log(activeComponent);
+          if (activeComponent) {
+            activeComponent.pinAt(requestedComponent.fixedX,requestedComponent.fixedY);
+          }
+        }
+      });
+    },this);
   }
 
   retrieveDiagramFromServer(diagramId){
