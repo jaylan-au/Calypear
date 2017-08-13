@@ -203,17 +203,21 @@ class CalypearDiagram  {
     Will run the expand function on each component connected to the supplied
     component id, Flourishing null will be interpreted as ALL components
 
-    Returns a promise from deeper down.
+    Returns a promise for consistency
   */
   flourishAll(iterations = 1, refreshOnSuccess = true) {
     var  componentIdsToFlourish = this.getDiagramComponentIds();
 
     //Recursive flourish - warning - dangerous
-    if (iterations > 1) {
-      return this.flourishAll(iterations,refreshOnSuccess);
-    } else {
-      return this.retrieveAndAddRelatedComponents(componentIdsToFlourish);
-    }
+    return this.retrieveAndAddRelatedComponents(componentIdsToFlourish).then(() => {
+      if (iterations > 1) {
+        //Recursion
+        return diagram.flourishAll(iterations-1,refreshOnSuccess);
+      } else {
+        //Caller is expecting a Promise -
+        return Promise.resolve("Retrieved");
+      }
+    },{diagram: this});
   }
 
   /*
