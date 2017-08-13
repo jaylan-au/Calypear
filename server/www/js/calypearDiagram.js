@@ -193,6 +193,29 @@ class CalypearDiagram  {
     return edges;
   }
 
+  getDiagramComponentIds(){
+    return this.diagramComponents.map((component) => {
+      return component.id;
+    });
+  }
+
+  /*
+    Will run the expand function on each component connected to the supplied
+    component id, Flourishing null will be interpreted as ALL components
+
+    Returns a promise from deeper down.
+  */
+  flourishAll(iterations = 1, refreshOnSuccess = true) {
+    var  componentIdsToFlourish = this.getDiagramComponentIds();
+
+    //Recursive flourish - warning - dangerous
+    if (iterations > 1) {
+      return this.flourishAll(iterations,refreshOnSuccess);
+    } else {
+      return this.retrieveAndAddRelatedComponents(componentIdsToFlourish);
+    }
+  }
+
   /*
     Removes all components that do not have atleast X links to other components
     Note: A forward and inverse link between objects count as 2,
@@ -292,10 +315,32 @@ class CalypearDiagram  {
     return returnPromise;
   }
 
-  retrieveAndAddRelatedComponents(componentId, autoIncludeComponents = false, refreshOnSuccess = true) {
-    var component = this.nodeById(componentId);
-    if (component) {
-      var relatedComponentIds = component.getRelatedComponentIds();
+  retrieveAndAddRelatedComponents(componentIds, autoIncludeComponents = false, refreshOnSuccess = true) {
+    //This could be done quicker and faster using a D3 nest but trying not to introduce depednancies here
+    //Function accepts a single component or an array
+    if (!(componentIds instanceof Array)) {
+      componentIds = [componentIds];
+    }
+    //Get the components
+    var componetsToExpand = [];
+    componentIds.forEach((componentId) => {
+      var thisComponent = this.nodeById(componentId);
+      if (thisComponent) {
+        componetsToExpand.push(thisComponent);
+      }
+    })
+    //Get an array of related components
+    var relatedComponentIds = componetsToExpand.reduce((accumulator,component) =>{
+
+      return accumulator.concat(component.getRelatedComponentIds());
+    },[]);
+    //Remove duplicates here
+    var relatedComponentIds = relatedComponentIds.filter((element, index, relatedComponentArray) => {
+      return relatedComponentArray.indexOf(element) == index;
+    });
+
+
+    if (relatedComponentIds) {
       return this.retrieveAndAddComponents(relatedComponentIds,autoIncludeComponents,refreshOnSuccess);
     } else {
       return Promise.reject("Component not loaded");

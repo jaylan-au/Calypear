@@ -222,6 +222,7 @@ svg {
       </div>
       <div class="row workspace-menu-block">
         <button id="removeOrphanComponentsCommand">Remove Unconnected</button>
+        <button id="flourishAllCommand">Flourish All</button>
       </div>
     </div>
   </div>
@@ -602,6 +603,10 @@ var zoom = d3.zoom()
     $('#removeOrphanComponentsCommand').click(function(){
       diagram.removeOrphanComponents();
     });
+
+    $('#flourishAllCommand').click(function(){
+      diagram.flourishAll();
+    })
 
     $('#buttonShowMenu').click(function(){
       d3.select("#workspaceMenu").transition().style("left","0px");
