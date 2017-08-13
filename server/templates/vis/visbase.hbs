@@ -240,7 +240,7 @@ svg {
             <label for="fieldDiagramName">Diagram Name</label>
             <input class="u-full-width" id="fieldDiagramName" name="name" required placeholder="Enter a diagram name"/>
           </div>
-          <input class="text" id="fieldDiagramId" name="id"/>
+          <input class="hidden" id="fieldDiagramId" name="id"/>
           <button id="saveDiagramCommand">Save Diagram</button>
           <button id="saveNewDiagramCommand">Save as New Diagram</button>
         </form>
@@ -649,6 +649,16 @@ svg {
 
     $('#saveDiagramCommand').click(function(){
       diagram.name($('#fieldDiagramName').val());
+      diagram.saveDiagramToServer().then(()=>{
+        updateDiagramPropertiesForm(diagram);
+      });
+      return false;
+    });
+
+    $('#saveNewDiagramCommand').click(function(){
+      diagram.name($('#fieldDiagramName').val());
+      //Removing the ID will foce a new Diagram
+      diagram.id = null;
       diagram.saveDiagramToServer().then(()=>{
         updateDiagramPropertiesForm(diagram);
       });
