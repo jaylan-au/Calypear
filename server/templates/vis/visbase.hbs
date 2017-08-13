@@ -213,18 +213,27 @@ svg {
     <div id="workspaceMenu">
       <div class="row workspace-menu-block">
         <a href="/">Exit Workbench</a>
-        <button id="buttonHideMenu">Hide</button>
+        <a href="#" id="buttonHideMenu"><i class="material-icons">close</i>Hide</a>
       </div>
       <div class="row workspace-menu-block">
+        <h1>Export</h1>
         <button id="workspaceExportSVGCommand">Export as SVG</button>
         <button id="workspaceExportPNGCommand">Export as PNG</button>
       </div>
-      <div class="row workspace-menu-block">
-          <label for="fieldDiagramName">Diagram Name</label>
-          <input id="fieldDiagramName" name="name" />
+      <div class="row workspace-menu-block" id="diagramPropertiesBlock">
+        <h1>Diagram Properties</h1>
+        <form>
+          <div class="row">
+            <label for="fieldDiagramName">Diagram Name</label>
+            <input class="u-full-width" id="fieldDiagramName" name="name" required placeholder="Enter a diagram name"/>
+          </div>
+          <input class="text" id="fieldDiagramId" name="id"/>
           <button id="saveDiagramCommand">Save Diagram</button>
+          <button id="saveNewDiagramCommand">Save as New Diagram</button>
+        </form>
       </div>
       <div class="row workspace-menu-block">
+        <h1>Actions</h1>
         <button id="removeOrphanComponentsCommand">Remove Unconnected</button>
         <button id="flourishAllCommand">Flourish All</button>
       </div>
@@ -499,6 +508,25 @@ svg {
     selectNode(d);
   }
 
+  function updateDiagramPropertiesForm(diagram) {
+    //diagramPropertiesBlock
+    var diagramPropertiesBlock = d3.select('#diagramPropertiesBlock');
+    console.log(diagram.name());
+    if (diagram.id) {
+      //This is a known diagram
+      diagramPropertiesBlock.select('#fieldDiagramName')
+        .attr("value",diagram.name())
+      diagramPropertiesBlock.select('#fieldDiagramId')
+        .attr("value",diagram.id)
+    } else {
+      //Unknown diagram
+      diagramPropertiesBlock.select('#fieldDiagramName')
+        .attr("value",null)
+      diagramPropertiesBlock.select('#fieldDiagramId')
+        .attr("value",null)
+    }
+  }
+
   /**
     Line Generator Testing
   */
@@ -586,11 +614,13 @@ svg {
   */
   $().ready(function(){
     {{#if diagram}}
-      diagram.retrieveDiagramFromServer({{diagramId}});
+      diagram.retrieveDiagramFromServer({{diagramId}}).then(() => {
+        updateDiagramPropertiesForm(diagram);
+      });
     {{/if}}
 
     {{#if componentId}}
-      diagram.retrieveAndAddComponents([{{componentId}}]).then(()=>{
+      diagram.retrieveAndAddComponents([{{componentId}}]).then(() => {
           diagram.retrieveAndAddRelatedComponents([{{componentId}}]);
       });
     {{/if}}
@@ -606,7 +636,10 @@ svg {
 
     $('#saveDiagramCommand').click(function(){
       diagram.name($('#fieldDiagramName').val());
-      diagram.saveDiagramToServer();
+      diagram.saveDiagramToServer().then(()=>{
+        updateDiagramPropertiesForm(diagram);
+      });
+      return false;
     });
 
     $('#removeOrphanComponentsCommand').click(function(){
@@ -675,6 +708,8 @@ svg {
               var node = diagram.nodeById(selectedNode);
               if (node) {
                 node.pinAtPosition();
+                //Update the display
+                selectNode(node);
               }
             }
           break;

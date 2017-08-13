@@ -119,13 +119,35 @@ module.exports = [
       const Diagram = request.server.collections().diagram;
       const DiagramComponent = request.server.collections().diagram;
       var payloadDiagram = request.payload.diagram;
+      console.log(payloadDiagram);
       if (payloadDiagram.id) {
         //Updating Existing
         //Fetch the existing object first so we can compare
-        Diagram.find(payloadDiagram.id).then((result) => {
+        Diagram.findOne({id: payloadDiagram.id}).populate(['components']).then((serverDiagram) => {
           //Update main body
           //Update components
-          reply({"action": "updating attempted"});
+          console.log(serverDiagram);
+          console.log(serverDiagram.components);
+          //Merge the components together
+          serverDiagram.name = payloadDiagram.name;
+          payloadDiagram.components.forEach((mergeComponent) => {
+            //Find the component in the result
+            var mergeTo = serverDiagram.components.find((serverDiagComponent) => {
+              return serverDiagComponent.component == this.mergeId;
+            },{mergeId: mergeComponent.component});
+
+            if (mergeTo) {
+              //Update the properties for MergeTO
+            } else {
+              //Add the item into the component list
+              serverDiagram.components.add({
+                component: mergeComponent.component
+              })
+            }
+          });
+          serverDiagram.save();
+          //result.components.push()
+          reply.redirect('/diagram/'+payloadDiagram.id);
         }).catch((err) => {
           reply(err);
         })

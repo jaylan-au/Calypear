@@ -362,6 +362,7 @@ class CalypearDiagram  {
     var returnObj = {
       components: [],
       name: this.diagramName,
+      id: this.id
     };
     this.diagramComponents.forEach(function(diagramComponent) {
       returnObj.components.push(diagramComponent.getDiagramSaveObject());
@@ -375,19 +376,26 @@ class CalypearDiagram  {
       diagram: this.getDiagramSaveObject()
     }
     var url = "/diagram"
-    $.ajax({
-      method: "POST",
-      dataType : "json",
-      contentType: "application/json; charset=utf-8",
-      //processData: false,
-      data: JSON.stringify(saveObject),
-      url: url,
-      context: {diagram: this},
-      success: function(responseData) {
-        //Set the ID so we can update the saved diagram
-        diagram.id = responseData.id;
-      }
-    });
+    return new Promise((resolve,reject) => {
+      $.ajax({
+        method: "POST",
+        dataType : "json",
+        contentType: "application/json; charset=utf-8",
+        //processData: false,
+        data: JSON.stringify(saveObject),
+        url: url,
+        context: {diagram: this},
+        success: function(responseData) {
+          //Set the ID so we can update the saved diagram
+          diagram.id = responseData.diagram[0].id;
+          resolve(diagram);
+        },
+        error: function(){
+          reject("Error saving diagram");
+        }
+      });
+    },this)
+
   }
 
   loadDiagramFromObject(diagramObject){
@@ -403,21 +411,27 @@ class CalypearDiagram  {
 
   retrieveDiagramFromServer(diagramId){
     var url = "/diagram/"+diagramId;
-    $.ajax({
-      method: "GET",
-      dataType : "json",
-      contentType: "application/json; charset=utf-8",
-      //processData: false,
-      url : url,
-      context: {diagram: this},
-      success: function(responseData) {
-        //Pick out the Diagram from the responseData
-        if (responseData.diagram.length > 0)  {
-          diagram.loadDiagramFromObject(responseData.diagram[0]);
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        method: "GET",
+        dataType : "json",
+        contentType: "application/json; charset=utf-8",
+        //processData: false,
+        url : url,
+        context: {diagram: this},
+        success: function(responseData) {
+          //Pick out the Diagram from the responseData
+          if (responseData.diagram.length > 0)  {
+            diagram.loadDiagramFromObject(responseData.diagram[0]);
+          }
+          resolve(this);
+        },
+        error: function(){
+          reject("Error loading Diagram");
         }
+      });
+    },this);
 
-      }
-    });
   }
 
 }
