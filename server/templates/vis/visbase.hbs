@@ -128,7 +128,9 @@ svg {
           marker-mid: url(#markerArrow);*/
         }
 
-
+        .diagram-node foreignObject p {
+          overflow: visible;
+        }
         .node-group .diagram-node circle {
           stroke: #fff;
           stroke-width: 1.5px;
@@ -217,6 +219,9 @@ svg {
           <label for="fieldDiagramName">Diagram Name</label>
           <input id="fieldDiagramName" name="name" />
           <button id="saveDiagramCommand">Save Diagram</button>
+      </div>
+      <div class="row workspace-menu-block">
+        <button id="removeOrphanComponentsCommand">Remove Unconnected</button>
       </div>
     </div>
   </div>
@@ -592,6 +597,10 @@ var zoom = d3.zoom()
     $('#saveDiagramCommand').click(function(){
       diagram.name($('#fieldDiagramName').val());
       diagram.saveDiagramToServer();
+    });
+
+    $('#removeOrphanComponentsCommand').click(function(){
+      diagram.removeOrphanComponents();
     });
 
     $('#buttonShowMenu').click(function(){

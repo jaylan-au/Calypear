@@ -166,6 +166,7 @@ class CalypearDiagram  {
     return this.diagramComponents;
   }
 
+
   edges() {
     var edges = [];
     var componentIds = [];
@@ -190,6 +191,31 @@ class CalypearDiagram  {
     //Filter out inverse Relationships when a forward relationship exists
     //TODO: this
     return edges;
+  }
+
+  /*
+    Removes all components that do not have atleast X links to other components
+    Note: A forward and inverse link between objects count as 2,
+          An object with a link to itself counts as linked
+  */
+  removeOrphanComponents(minimumLinks = 1, refreshOnSuccess = true) {
+    //Get a list of all component id's in the diagram
+    var diagramComponentIds = this.diagramComponents.reduce((accumulator,component) => {
+      accumulator.push(component.id);
+      return accumulator;
+    },[])
+    //Find the components that aren't linked to anything above
+    var componentsToRemove = this.diagramComponents.reduce((accumulator, component) => {
+      var thisComponentLinks = component.getRelationships().filter((relationship) => {
+        return (diagramComponentIds.includes(relationship.to) && diagramComponentIds.includes(relationship.from));
+      });
+      if (thisComponentLinks < minimumLinks) {
+        accumulator.push(component.id);
+      }
+      return accumulator;
+    },[]);
+
+    this.removeComponents(componentsToRemove,refreshOnSuccess);
   }
 
   removeComponents(componentIds, refreshOnSuccess = true) {
