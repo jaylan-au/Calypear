@@ -67,8 +67,12 @@ module.exports = [
         name: request.payload.name,
         type: request.payload.typeId,
       })
-      .then(() => {
-        reply.redirect('/archcomponents');
+      .then((createdComponent) => {
+        if (request.payload.forwardToEdit) {
+          reply.redirect('/archcomponent/'+createdComponent.id);
+        } else {
+          reply.redirect('/archcomponents');
+        }
       })
       .catch((err) => {
         reply(err);
