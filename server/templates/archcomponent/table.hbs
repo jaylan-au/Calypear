@@ -3,6 +3,10 @@
     <tr>
       <th>Name</th>
       <th>Type</th>
+      <th>Alternative Names</th>
+      <th>Description</th>
+      <th>Documentation URL</th>
+      <th>Last Updated</th>
       {{#each interestingTags}}
       <th>{{name}}</th>
       {{/each}}
@@ -26,6 +30,10 @@
           {{/if}}
         {{/each}}
       </td>
+      <th>{{alternativeNames}}</th>
+      <th>{{description}}</th>
+      <th>{{docUrl}}</th>
+      <th>{{updatedAt}}</th>
       {{/each}}
       {{#each relationRow}}
       <td>
