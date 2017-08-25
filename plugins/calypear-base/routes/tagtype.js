@@ -4,7 +4,7 @@ module.exports = [
     method: 'GET',
     path: '/tagtypes',
     handler: function (request, reply) {
-      const TagType = request.server.collections().tagtype;
+      const TagType = request.server.collections(true).tagtype;
 
       TagType.find().then(function(types){
         switch (Accepts(request.raw.req).type(['json','html'])) {
@@ -27,7 +27,7 @@ module.exports = [
     method: 'POST',
     path: '/tagtype/new',
     handler: function (request, reply){
-      const TagType = request.server.collections().tagtype;
+      const TagType = request.server.collections(true).tagtype;
       TagType.create({
         name: request.payload.name,
         category: request.payload.category
@@ -45,7 +45,7 @@ module.exports = [
     method: 'GET',
     path: '/tagtype/{id}/delete',
     handler: function (request, reply){
-      const TagType = request.server.collections().tagtype;
+      const TagType = request.server.collections(true).tagtype;
       //Prevent empty ID
       if (request.params.id) {
         TagType.destroy({id: request.params.id}).then(() => {

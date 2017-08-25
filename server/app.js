@@ -4,9 +4,6 @@ const Path = require('path');
 const Hapi = require('hapi');
 const Hoek = require('hoek');
 
-const ArchComponent = require('./model/archcomponent');
-
-
 
 const server = new Hapi.Server({
   connections: {
@@ -75,6 +72,22 @@ server.route(routes);
 /*
   Calypear Plugins
 */
+server.register({
+    register: require('../plugins/calypear-base'),
+    options: {
+      globalTemplates: {
+        layout: '../../server/templates/layout',
+        partials: '../../server/templates/partials',
+        helpers: '../../server/templates/helpers'
+      }
+    }
+  },
+  {
+  },
+  (err) => {
+    Hoek.assert(!err,err);
+});
+
 server.register({
     register: require('../plugins/calypear-vis'),
     options: {

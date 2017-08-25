@@ -6,8 +6,8 @@ module.exports = [
     method: 'GET',
     path: '/archcomponents',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentType = request.server.collections().componenttype;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentType = request.server.collections(true).componenttype;
 
       var viewParams = {};
       viewParams.filter = {};
@@ -62,7 +62,7 @@ module.exports = [
     method: 'POST',
     path: '/archcomponent',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
+      const ArchComponent = request.server.collections(true).archcomponent;
       ArchComponent.create({
         name: request.payload.name,
         type: request.payload.typeId,
@@ -83,8 +83,8 @@ module.exports = [
     method: 'GET',
     path: '/archcomponent/{id}/delete',
     handler: function(request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentRelation = request.server.collections().componentrelation;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentRelation = request.server.collections(true).componentrelation;
 
       Promise.all([
         ArchComponent.destroy({id : request.params.id}),
@@ -101,12 +101,12 @@ module.exports = [
     method: 'GET',
     path: '/archcomponent/{id}',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
-      const RelationshipType = request.server.collections().relationshiptype;
-      const ComponentRelation = request.server.collections().componentrelation;
-      const ComponentType = request.server.collections().componenttype;
-      const ComponentTag = request.server.collections().componenttag;
-      const TagType = request.server.collections().tagtype;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const RelationshipType = request.server.collections(true).relationshiptype;
+      const ComponentRelation = request.server.collections(true).componentrelation;
+      const ComponentType = request.server.collections(true).componenttype;
+      const ComponentTag = request.server.collections(true).componenttag;
+      const TagType = request.server.collections(true).tagtype;
 
       var relationTypes = [];
       var archComponents = [];
@@ -158,7 +158,7 @@ module.exports = [
     method: 'POST',
     path: '/archcomponent/{id}',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
+      const ArchComponent = request.server.collections(true).archcomponent;
       ArchComponent.update({
         id: request.params.id
       },{
@@ -179,7 +179,7 @@ module.exports = [
     method: 'POST',
     path: '/archcomponent/{id}/tag',
     handler: function (request, reply) {
-      const ComponentTag = request.server.collections().componenttag;
+      const ComponentTag = request.server.collections(true).componenttag;
 
       ComponentTag.create({
         component: request.params.id,
@@ -196,7 +196,7 @@ module.exports = [
     method: 'GET',
     path: '/archcomponent/{id}/tag/{tagId}/delete',
     handler: function (request, reply) {
-      const ComponentTag = request.server.collections().componenttag;
+      const ComponentTag = request.server.collections(true).componenttag;
 
       ComponentTag.destroy({id: request.params.tagId}).then(() => {
         reply.redirect('/archcomponent/'+request.params.id);
@@ -209,8 +209,8 @@ module.exports = [
     method: 'POST',
     path: '/archcomponent/{id}/relation',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentRelation = request.server.collections().componentrelation;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentRelation = request.server.collections(true).componentrelation;
       var transactionId = uuidv4();
       var relationComponentId = null;
 
@@ -274,7 +274,7 @@ module.exports = [
     method: 'GET',
     path: '/archcomponent/{id}/relation/{transactionId}/delete',
     handler: function (request, reply) {
-      const ComponentRelation = request.server.collections().componentrelation;
+      const ComponentRelation = request.server.collections(true).componentrelation;
 
       ComponentRelation.destroy({transaction: request.params.transactionId}).then(function(){
         reply.redirect('/archcomponent/'+request.params.id)
@@ -288,7 +288,7 @@ module.exports = [
     method: 'GET',
     path: '/archcomponent/search/{namesearch}',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
+      const ArchComponent = request.server.collections(true).archcomponent;
       ArchComponent.find({name: {'like': '%'+request.params.namesearch+'%'}}).then(function(ac){
         reply.view('archcomponent/jsonlookup',{
           'archComponents': ac
@@ -304,10 +304,10 @@ module.exports = [
     method: 'GET',
     path: '/archcomponents/table',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentRelation = request.server.collections().componentrelation;
-      const ComponentType = request.server.collections().componenttype;
-      const TagType = request.server.collections().tagtype;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentRelation = request.server.collections(true).componentrelation;
+      const ComponentType = request.server.collections(true).componenttype;
+      const TagType = request.server.collections(true).tagtype;
       var viewParams = {};
       Promise.all([
         ArchComponent.find().populate(['type','tags','relationships']).then((results) => {

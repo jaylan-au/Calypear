@@ -4,10 +4,10 @@ module.exports = [
     path: '/admin/exportdb/{format}',
     handler: function (request, reply) {
       //Export the Database in a readable format
-      const ArchComponent = request.server.collections().archcomponent;
-      const TagType = request.server.collections().tagtype;
-      const RelationshipType = request.server.collections().relationshiptype;
-      const ComponentType = request.server.collections().componenttype;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const TagType = request.server.collections(true).tagtype;
+      const RelationshipType = request.server.collections(true).relationshiptype;
+      const ComponentType = request.server.collections(true).componenttype;
       var viewParams = {};
       Promise.all([
         ArchComponent.find()
@@ -55,12 +55,12 @@ module.exports = [
     },
     handler: function (request, reply) {
       //Export the Database in a readable format
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentTag = request.server.collections().componenttag;
-      const ComponentRelation = request.server.collections().componentrelation;
-      const TagType = request.server.collections().tagtype;
-      const RelationshipType = request.server.collections().relationshiptype;
-      const ComponentType = request.server.collections().componenttype;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentTag = request.server.collections(true).componenttag;
+      const ComponentRelation = request.server.collections(true).componentrelation;
+      const TagType = request.server.collections(true).tagtype;
+      const RelationshipType = request.server.collections(true).relationshiptype;
+      const ComponentType = request.server.collections(true).componenttype;
       var  loadedData = JSON.parse(request.payload.toString());
       /* Trim out the ID's in objects connected to the archComponents
       to allow the create statement to automatically reconnect them for us

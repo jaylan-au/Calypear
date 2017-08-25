@@ -4,7 +4,7 @@ module.exports = [
     method: 'GET',
     path: '/componenttypes',
     handler: function (request, reply) {
-      const ComponentType = request.server.collections().componenttype;
+      const ComponentType = request.server.collections(true).componenttype;
 
       ComponentType.find().then(function(types){
         switch (Accepts(request.raw.req).type(['json','html'])){
@@ -26,7 +26,7 @@ module.exports = [
     method: 'POST',
     path: '/componenttype/{id}',
     handler: function (request, reply){
-      const ComponentType = request.server.collections().componenttype;
+      const ComponentType = request.server.collections(true).componenttype;
 
       ComponentType.update({id:request.params.id},{
         name: request.payload.name,
@@ -40,7 +40,7 @@ module.exports = [
     method: 'POST',
     path: '/componenttype/new',
     handler: function (request, reply){
-      const ComponentType = request.server.collections().componenttype;
+      const ComponentType = request.server.collections(true).componenttype;
       ComponentType.create({name: request.payload.name})
         .then(() => {
             reply.redirect('/componenttypes');
@@ -54,7 +54,7 @@ module.exports = [
     method: 'GET',
     path: '/componenttype/{id}/delete',
     handler: function (request, reply){
-      const ComponentType = request.server.collections().componenttype;
+      const ComponentType = request.server.collections(true).componenttype;
       //Prevent empty ID
       if (request.params.id) {
         ComponentType.destroy({id: request.params.id}).then(() => {
