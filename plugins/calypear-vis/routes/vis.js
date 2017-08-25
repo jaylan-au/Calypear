@@ -11,9 +11,9 @@ module.exports = [
     method: 'GET',
     path: '/vis',
     handler: function (request, reply) {
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentRelation = request.server.collections().componentrelation
-      const ComponentType = request.server.collections().componenttype;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentRelation = request.server.collections(true).componentrelation
+      const ComponentType = request.server.collections(true).componenttype;
       var viewParams = {
         layout: {
           fullwidth: true
@@ -62,8 +62,8 @@ module.exports = [
       //Design to retrieve the shell of a diagram only.
       //Subsequent calls are really required to get the details
       const Diagram = request.server.collections(true).diagram;
-      const ArchComponent = request.server.collections().archcomponent;
-      const ComponentRelation = request.server.collections().componentrelation;
+      const ArchComponent = request.server.collections(true).archcomponent;
+      const ComponentRelation = request.server.collections(true).componentrelation;
       var viewParams = {
         layout: {
           fullwidth: true
