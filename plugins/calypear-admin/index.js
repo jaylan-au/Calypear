@@ -11,6 +11,10 @@ var calypearadmin = {
         models: require('./model')
       });
 
+      var viewContext = {
+        routePrefix: options.routePrefix
+      }
+
       ///Register Views for this plugin
       server.views({
            engines: {
@@ -22,7 +26,8 @@ var calypearadmin = {
            layoutPath: options.globalTemplates.layout,
            layout: true,
            partialsPath: options.globalTemplates.partials,
-           helpersPath: options.globalTemplates.helpers
+           helpersPath: options.globalTemplates.helpers,
+           context: viewContext
        });
 
       next();

@@ -33,13 +33,19 @@
   {{#unless layout.fullwidth}}
     <div class="navbar">
       <div class="container">
-        <ul>
-          <li><a href="/archcomponents"><p><span class="material-icons">inbox</span>Components</p></a></li>
-          <li><a href="/componenttypes"><p><span class="material-icons">developer_mode</span>Component Types</p></a></li>
-          <li><a href="/relationshiptypes"><p><span class="material-icons">developer_mode</span>Relationship Types</p></a></li>
-          <li><a href="/tagtypes"><p><span class="material-icons">developer_mode</span>Tag Types</p></a></li>
-          <li><a href="/diagrams"><p><span class="material-icons">format_shapes</span>Visual</p></a></li>
-        <ul>
+        <div class="quickSearchActions menuBlock">
+          <form method="GET" action="/archcomponents">
+            <input type="text" name="name" id="fieldSearchName" placeholder="Enter a component name to search"/>
+            <button class="button-primary"><span class="material-icons">search</span></button>
+          </form>
+        </div>
+        <div class="primaryActions menuBlock">
+          <ul>
+            <li><a href="/archcomponents"><p><span class="material-icons">inbox</span>Components</p></a></li>
+            <li><a href="/diagrams"><p><span class="material-icons">format_shapes</span>Visual Workbench</p></a></li>
+            <li><a href="/admin"><p><span class="material-icons">developer_mode</span>Admin</p></a></li>
+          <ul>
+        </div>
       </div>
     </div>
     <div class="container">
@@ -49,5 +55,10 @@
     </div>
     {{/unless}}
 
+    <script>
+      $().ready(function(){
+        $('#fieldSearchName')
+      });
+    </script>
 </body>
 </html>
