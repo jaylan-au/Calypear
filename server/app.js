@@ -89,6 +89,23 @@ server.register({
 });
 
 server.register({
+    register: require('../plugins/calypear-admin'),
+    options: {
+      globalTemplates: {
+        layout: '../../server/templates/layout',
+        partials: '../../server/templates/partials',
+        helpers: '../../server/templates/helpers'
+      }
+    }
+  },
+  {
+  },
+  (err) => {
+    Hoek.assert(!err,err);
+});
+
+
+server.register({
     register: require('../plugins/calypear-vis'),
     options: {
       globalTemplates: {
