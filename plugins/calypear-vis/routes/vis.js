@@ -44,7 +44,7 @@ module.exports = [
     method: 'GET',
     path: '/diagrams',
     handler: function(request, reply) {
-      const Diagram = request.server.collections().diagram;
+      const Diagram = request.server.collections(true).diagram;
 
       Diagram.find().then((results) => {
         reply.view('vis/diagrams.hbs',{
@@ -61,7 +61,7 @@ module.exports = [
     handler: function(request, reply) {
       //Design to retrieve the shell of a diagram only.
       //Subsequent calls are really required to get the details
-      const Diagram = request.server.collections().diagram;
+      const Diagram = request.server.collections(true).diagram;
       const ArchComponent = request.server.collections().archcomponent;
       const ComponentRelation = request.server.collections().componentrelation;
       var viewParams = {
@@ -99,8 +99,8 @@ module.exports = [
     method: 'GET',
     path: '/diagram/{id}/delete',
     handler: function(request, reply) {
-      const Diagram = request.server.collections().diagram;
-      const DiagramComponent = request.server.collections().diagram;
+      const Diagram = request.server.collections(true).diagram;
+      const DiagramComponent = request.server.collections(true).diagram;
       Promise.all([
         Diagram.destroy({id: request.params.id}),
         DiagramComponent.destroy({diagram: request.params.id})
@@ -116,8 +116,8 @@ module.exports = [
     path: '/diagram',
 
     handler: function(request,reply) {
-      const Diagram = request.server.collections().diagram;
-      const DiagramComponent = request.server.collections().diagram;
+      const Diagram = request.server.collections(true).diagram;
+      const DiagramComponent = request.server.collections(true).diagram;
       var payloadDiagram = request.payload.diagram;
       console.log(payloadDiagram);
       if (payloadDiagram.id) {

@@ -72,6 +72,25 @@ server.register({
 var routes = require('./routes');
 server.route(routes);
 
+/*
+  Calypear Plugins
+*/
+server.register({
+    register: require('../plugins/calypear-vis'),
+    options: {
+      globalTemplates: {
+        layout: '../../server/templates/layout',
+        partials: '../../server/templates/partials',
+        helpers: '../../server/templates/helpers'
+      }
+    }
+  },
+  {
+  },
+  (err) => {
+    Hoek.assert(!err,err);
+});
+
 
 server.start((err) => {
 

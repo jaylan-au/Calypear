@@ -4,7 +4,5 @@ module.exports = [
   require('./relationshiptype'),
   require('./componentrelation'),
   require('./componenttag'),
-  require('./tagtype'),
-  require('./diagram'),
-  require('./diagramcomponent')
+  require('./tagtype')
 ]

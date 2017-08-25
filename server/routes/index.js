@@ -3,7 +3,6 @@ module.exports = [].concat(
   require('./componenttype'),
   require('./relationshiptype'),
   require('./dist'),
-  require('./vis'),
   require('./tagtype'),
   require('./admin'),
   {
