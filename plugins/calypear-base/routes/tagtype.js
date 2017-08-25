@@ -3,6 +3,9 @@ module.exports = [
   {
     method: 'GET',
     path: '/tagtypes',
+    config: {
+      tags: ['admin']
+    },
     handler: function (request, reply) {
       const TagType = request.server.collections(true).tagtype;
 

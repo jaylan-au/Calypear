@@ -50,8 +50,9 @@ module.exports = [
     method: 'POST',
     path: '/admin/importdb/{format}',
     config: {
-    payload: {
-      output: 'data'
+      payload: {
+        output: 'data'
+      }
     },
     handler: function (request, reply) {
       //Export the Database in a readable format
@@ -101,11 +102,13 @@ module.exports = [
       })
 
     }
-  }
   },
   {
     method: 'GET',
     path: '/admin',
+    config: {
+      tags: ['primary']
+    },
     handler: function(request, reply) {
       reply.view('admin/index.hbs');
     }

@@ -3,6 +3,9 @@ module.exports = [
   {
     method: 'GET',
     path: '/componenttypes',
+    config: {
+      tags: ['admin']
+    },
     handler: function (request, reply) {
       const ComponentType = request.server.collections(true).componenttype;
 

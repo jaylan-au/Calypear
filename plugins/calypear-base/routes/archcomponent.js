@@ -5,6 +5,9 @@ module.exports = [
   {
     method: 'GET',
     path: '/archcomponents',
+    config: {
+      tags: ['primary']
+    },
     handler: function (request, reply) {
       const ArchComponent = request.server.collections(true).archcomponent;
       const ComponentType = request.server.collections(true).componenttype;

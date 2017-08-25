@@ -3,6 +3,9 @@ module.exports = [
   {
     method: 'GET',
     path: '/relationshiptypes',
+    config: {
+      tags: ['admin']
+    },
     handler: function (request, reply) {
       const RelationshipType = request.server.collections(true).relationshiptype;
 
