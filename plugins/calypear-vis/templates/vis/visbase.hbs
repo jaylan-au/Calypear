@@ -163,6 +163,7 @@ svg {
         .node-text p {
           margin: 0;
           padding: 0;
+
         }
 
         .diagram-link-label {
@@ -290,7 +291,7 @@ svg {
     if (d.display.width <= 0) {
       //Scales nodes using Log from 1 to 5 - then multiples by 5 for radius
 
-      return Math.min(Math.max(1,Math.log(d.relationships.length)),5)*5;
+      return Math.min(Math.max(1,Math.log(d.relationships.length)),5)*5+10;
     } else {
       return d.display.width;
     }
@@ -312,15 +313,15 @@ svg {
     context.append("foreignObject")
       //To the left of the object
       .attr("x",function(d){
-        return calculateNodeSize(d) + 5;
+        return (calculateNodeSize(d)+5);
       })
       //Align the text in the middle (0,0 is the middle of the object)
       .attr("y","-0.5em")
       // need atleast one dimension
-      .attr("width",80)
+      .attr("width","10em")
       //Let the object figure out height on its own
       //This needs to be added back in for the export (otherwise text dissapears)
-      .attr("height",1)
+      .attr("height","1")
       .attr("class","node-text")
       .append("xhtml:p")
         .text(function(d) {return d.name});
@@ -331,7 +332,7 @@ svg {
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collide", d3.forceCollide(10).radius(function(d){
-          return calculateNodeSize(d)*1.25; //Add a bit for padding
+          return calculateNodeSize(d)*1.1; //Add a bit for padding
       }))
       .on("tick",ticked);
 
@@ -381,8 +382,8 @@ svg {
 
     simulation.nodes(graphNodes);
     simulation.force("link")
-       .links(graphEdges);
-      // .distance(function(link){return link.distanceAssoc*5;});
+       .links(graphEdges)
+       .distance(function(link){return 200});
     simulation.alpha(1).restart();
   }
 
