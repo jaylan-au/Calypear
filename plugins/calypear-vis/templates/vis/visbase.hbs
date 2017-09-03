@@ -253,6 +253,8 @@ svg {
         <h1>Actions</h1>
         <button id="removeOrphanComponentsCommand">Remove Unconnected</button>
         <button id="flourishAllCommand">Flourish All</button>
+        <button id="pinAllCommand">Pin All</button>
+        <button id="pinReleaseAllCommand">Pin Release All</button>
       </div>
     </div>
   </div>
@@ -751,7 +753,16 @@ svg {
 
     $('#flourishAllCommand').click(function(){
       diagram.flourishAll();
-    })
+    });
+
+    $('#pinAllCommand').click(function(){
+      diagram.pinAll();
+    });
+
+
+    $('#pinReleaseAllCommand').click(function(){
+      diagram.pinReleaseAll();
+    });
 
     $('#buttonShowMenu').click(function(){
       d3.select("#workspaceMenu").transition().style("left","0px");
@@ -767,6 +778,8 @@ svg {
           saveAs(imageBlob,diagram.name() + '.svg');
       })
     });
+
+
 
     $('#workspaceExportPNGCommand').click(function(){
       exporter = new PNGDiagramExporter();

@@ -452,4 +452,20 @@ class CalypearDiagram  {
 
   }
 
+  /*
+    Pins all components in the diagram
+  */
+  pinAll(){
+    this.diagramComponents.forEach((diagramComponent) => {
+      diagramComponent.pinAtPosition();
+    });
+  }
+  /*
+    Pin Releases all components in the diagram
+  */
+  pinReleaseAll(){
+    this.diagramComponents.forEach((diagramComponent) => {
+      diagramComponent.pinRelease();
+    });
+  }
 }
