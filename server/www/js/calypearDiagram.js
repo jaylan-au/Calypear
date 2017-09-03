@@ -189,7 +189,9 @@ class CalypearDiagram  {
       return (componentIds.includes(relationship.to) && (componentIds.includes(relationship.from)));
     });
     //Filter out inverse Relationships when a forward relationship exists
-    //TODO: this
+    edges = edges.filter(function(relationship,index,relationsArray) {
+      return (relationship.inverse == false);
+    });
     return edges;
   }
 

@@ -136,6 +136,7 @@ svg {
         .link-group path {
           stroke: #999;
           stroke-opacity: 0.6;
+          stroke-width: 3px;
           fill: none;
           /*marker-end: url(#markerArrow);
           marker-mid: url(#markerArrow);*/
@@ -159,17 +160,19 @@ svg {
         .node-text {
           font-size: 8px;
           text-align: center;
+
         }
         .node-text p {
           margin: 0;
           padding: 0;
-
+          background: rgba(255,255,255,0.5);
         }
 
         .diagram-link-label {
-          font-size: 8px;
+          font-size: 6px;
           text-align: center;
-
+          stroke: none;
+          fill: #666;
         }
       </style>
         <defs>
@@ -441,10 +444,13 @@ svg {
     var linkLabelEnter = linkLabels.enter()
       .append("text")
       .attr("class","diagram-link-label")
+      .attr('dy',"-4px")
       .attr("id",function(d) {return "link-label"+d.id;});
 
     linkLabelEnter.append('textPath')
         .attr('xlink:href',function(d,i) {return '#link'+d.id})
+        .attr('startOffset',function(d) {return "40%";})
+
         .text(function(d,i){return getRelationTypeName(d.type,d.inverse);});
 
     linkElements = linkEnter.merge(linkElements);
