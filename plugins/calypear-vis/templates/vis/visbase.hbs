@@ -810,7 +810,12 @@ svg {
             if (selectedNode) {
               var node = diagram.nodeById(selectedNode);
               if (node) {
-                node.pinAtPosition();
+                if (node.isPinned){
+                  node.pinAtPosition();
+                } else {
+                  node.pinRelease();
+                }
+
                 //Update the display
                 selectNode(node);
               }
