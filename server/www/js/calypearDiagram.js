@@ -5,9 +5,14 @@ class CalypearDiagramComponent {
         this.id = componentData.id;
       }
 
-      if (componentData.name) {
-        this.name = componentData.name;
-      }
+      /**
+        TODO: copy these properties over more efficiently.
+      **/
+      this.name = componentData.name;
+      this.description = componentData.description;
+      this.docUrl = componentData.docUrl;
+      this.alternativeNames = componentData.alternativeNames;
+
 
       if (componentData.type) {
         this.type = {};
