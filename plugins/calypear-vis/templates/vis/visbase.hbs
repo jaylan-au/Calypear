@@ -263,6 +263,31 @@ svg {
 <script src="/dist/js/diagramExporter.js"></script>
 
 <script>
+  //Add in a variable with relation types and names
+  var relationTypes = [];
+  {{#each relationTypes}}
+    relationTypes.push({
+      id: {{id}},
+      name: "{{name}}",
+      nameInverse: "{{nameInverse}}"
+    });
+  {{/each}}
+
+  function getRelationTypeName(id,inverse){
+    var foundItem = relationTypes.find((relationType)=>{
+      return (relationType.id == id);
+    });
+    if (foundItem) {
+      if (inverse)
+        return foundItem.nameInverse;
+      else
+        return foundItem.name;
+    } else {
+      return '';
+    }
+
+  }
+
   var selectedNode = null;
   var zoom = d3.zoom()
     .scaleExtent([-20, 20])
@@ -373,7 +398,7 @@ svg {
 
   var linkLabels = svgWorkspace.append("g")
       .attr("class","link-label-group")
-    .selectAll(".diagra-link-label");
+    .selectAll(".diagram-link-label");
 
   var nodeElements = svgWorkspace.append("g")
     .attr("class", "node-group")
@@ -411,11 +436,26 @@ svg {
       .attr("id",function(d) {return "link"+d.id;});
     linkElements = linkEnter.merge(linkElements);
 
+    linkLabels = linkLabels.data(graphEdges,function(d) {return 'link'+d.id;});
+    linkLabels.exit().remove();
+    var linkLabelEnter = linkLabels.enter()
+      .append("text")
+      .attr("class","diagram-link-label")
+      .attr("id",function(d) {return "link-label"+d.id;});
+
+    linkLabelEnter.append('textPath')
+        .attr('xlink:href',function(d,i) {return '#link'+d.id})
+        .text(function(d,i){return getRelationTypeName(d.type,d.inverse);});
+
+    linkElements = linkEnter.merge(linkElements);
+
+
     simulation.nodes(graphNodes);
     simulation.force("link")
        .links(graphEdges);
        //.distance(function(link){return 200});
     simulation.alpha(1).restart();
+
   }
 
   function ticked() {

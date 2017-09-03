@@ -12,7 +12,7 @@ module.exports = [
     path: '/vis',
     handler: function (request, reply) {
       const ArchComponent = request.server.collections(true).archcomponent;
-      const ComponentRelation = request.server.collections(true).componentrelation
+      const RelationType = request.server.collections(true).relationshiptype;
       const ComponentType = request.server.collections(true).componenttype;
       var viewParams = {
         layout: {
@@ -24,9 +24,9 @@ module.exports = [
         ArchComponent.find().populate(['type']).then((results)=>{
           viewParams.components = results;
         }),
-        // ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
-        //   viewParams.relations = results;
-        // }),
+        RelationType.find().then((results) => {
+          viewParams.relationTypes = results;
+        }),
         ComponentType.find().then((results) => {
           viewParams.componentTypes = results;
         })
@@ -63,6 +63,7 @@ module.exports = [
       //Subsequent calls are really required to get the details
       const Diagram = request.server.collections(true).diagram;
       const ArchComponent = request.server.collections(true).archcomponent;
+      const RelationType = request.server.collections(true).relationshiptype;
       const ComponentRelation = request.server.collections(true).componentrelation;
       var viewParams = {
         layout: {
@@ -73,6 +74,9 @@ module.exports = [
       Promise.all([
         ArchComponent.find().populate(['type']).then((results)=>{
           viewParams.components = results;
+        }),
+        RelationType.find().then((results) => {
+          viewParams.relationTypes = results;
         }),
         ComponentRelation.find({inverse: false}).populate(['type']).then((results) => {
           viewParams.relations = results;
