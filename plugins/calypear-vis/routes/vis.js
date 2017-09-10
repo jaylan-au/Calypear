@@ -1,5 +1,5 @@
 const Accepts = require('accepts');
-const DiagramController = require('../controller/diagramcontroler');
+const DiagramController = require('../controller/diagramcontroller');
 
 module.exports = [
   {
@@ -94,18 +94,7 @@ module.exports = [
   {
     method: 'GET',
     path: '/diagram/{id}/delete',
-    handler: function(request, reply) {
-      const Diagram = request.server.collections(true).diagram;
-      const DiagramComponent = request.server.collections(true).diagram;
-      Promise.all([
-        Diagram.destroy({id: request.params.id}),
-        DiagramComponent.destroy({diagram: request.params.id})
-      ]).then(() => {
-        reply.redirect('/diagrams');
-      }).catch((err) => {
-        reply(err);
-      });
-    }
+    handler: DiagramController.deleteDiagram
   },
   {
     method: 'POST',
