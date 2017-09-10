@@ -1,4 +1,6 @@
 const Accepts = require('accepts');
+const DiagramController = require('../controller/diagramcontroler');
+
 module.exports = [
   {
     method: 'GET',
@@ -43,17 +45,7 @@ module.exports = [
   {
     method: 'GET',
     path: '/diagrams',
-    handler: function(request, reply) {
-      const Diagram = request.server.collections(true).diagram;
-
-      Diagram.find().then((results) => {
-        reply.view('vis/diagrams.hbs',{
-          diagrams: results
-        })
-      }).catch((err) => {
-        reply(err);
-      });
-    }
+    handler: DiagramController.searchDiagrams,
   },
   {
     method: 'GET',
