@@ -186,13 +186,6 @@ svg {
           <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
             <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
           </marker>
-          {{#each componentTypes}}
-            {{#if diagramIcon}}
-              <symbol id="diagramIcon{{id}}" viewbox="0 0 24 24">
-                {{{diagramIcon}}}
-              </symbol>
-            {{/if}}
-          {{/each}}
         </defs>
 
       </svg>
@@ -279,13 +272,10 @@ svg {
 <script>
   //Add in a variable with relation types and names
   var relationTypes = [];
-  {{#each relationTypes}}
-    relationTypes.push({
-      id: {{id}},
-      name: "{{name}}",
-      nameInverse: "{{nameInverse}}"
-    });
-  {{/each}}
+  d3.json("/relationshiptypes",function(data){
+    relationTypes = data;
+  })
+
 
   function getRelationTypeName(id,inverse){
     var foundItem = relationTypes.find((relationType)=>{
@@ -642,13 +632,15 @@ svg {
 <script>
   var componentSearchResults = [];
   //This section gets replaced by a remote query at a later stage
-  {{#each components}}
-    componentSearchResults.push({
-      name: "{{name}}",
-      typeName: "{{type.name}}",
-      id: "{{id}}"
-    })
-  {{/each}}
+  d3.json("/archcomponents", function(data) {
+    data.archComponents.forEach((archComponent) => {
+      componentSearchResults.push({
+        id: archComponent.id,
+        name: archComponent.name,
+        typeName: archComponent.type.name
+      })
+    });
+  });
 
   var delay = (function(){
     var timer = 0;

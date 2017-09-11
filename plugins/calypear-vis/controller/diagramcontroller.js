@@ -1,3 +1,5 @@
+const Accepts = require('accepts');
+
 module.exports = {
   searchDiagrams: function(request, reply) {
     const Diagram = request.server.collections(true).diagram;
