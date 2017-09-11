@@ -385,7 +385,12 @@ class CalypearDiagram  {
     var saveObject = {
       diagram: this.getDiagramSaveObject()
     }
+    //If the ID is known then we will update a diagram rather than create
     var url = "/diagram"
+    if (saveObject.diagram.id) {
+      url = url + '/' + saveObject.diagram.id;
+    }
+
     return new Promise((resolve,reject) => {
       $.ajax({
         method: "POST",

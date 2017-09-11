@@ -99,74 +99,12 @@ module.exports = [
   {
     method: 'POST',
     path: '/diagram',
-
-    handler: function(request,reply) {
-      const Diagram = request.server.collections(true).diagram;
-      const DiagramComponent = request.server.collections(true).diagram;
-      var payloadDiagram = request.payload.diagram;
-      console.log(payloadDiagram);
-      if (payloadDiagram.id) {
-        //Updating Existing
-        //Fetch the existing object first so we can compare
-        Diagram.findOne({id: payloadDiagram.id}).populate(['components']).then((serverDiagram) => {
-          //Update main body
-          //Update components
-          console.log(serverDiagram);
-          console.log(serverDiagram.components);
-          //Merge the components together
-          serverDiagram.name = payloadDiagram.name;
-          payloadDiagram.components.forEach((mergeComponent) => {
-            //Find the component in the result
-            var mergeTo = serverDiagram.components.find((serverDiagComponent) => {
-              return serverDiagComponent.component == this.mergeId;
-            },{mergeId: mergeComponent.component});
-
-            if (mergeTo) {
-              //Update the properties for MergeTO
-              if (mergeComponent.fixedX) {
-                mergeTo.fixedX = mergeComponent.fixedX;
-              }
-
-              if (mergeComponent.fixedY) {
-                mergeTo.fixedY = mergeComponent.fixedY;
-              }
-
-            } else {
-              //Add the item into the component list
-              serverDiagram.components.add({
-                component: mergeComponent.component,
-                fixedX: mergeComponent.fixedX,
-                fixedY: mergeComponent.fixedY
-              })
-            }
-
-            //Need to remember to remove components we aren't merging
-          });
-          serverDiagram.save();
-          //result.components.push()
-          reply.redirect('/diagram/'+payloadDiagram.id);
-        }).catch((err) => {
-          reply(err);
-        })
-
-
-
-      } else {
-        //New
-        var newDiagram = {
-          name: payloadDiagram.name,
-          components: payloadDiagram.components
-        }
-
-        Diagram.create(newDiagram).then((createdObject) => {
-          reply(createdObject);
-        }).error((err)=>{
-          reply(err);
-        });
-      }
-
-    }
-
-
+    handler: DiagramController.createDiagram
+  },
+  {
+    method: 'POST',
+    path: '/diagram/{id}',
+    handler: DiagramController.updateDiagram
   }
+
 ]

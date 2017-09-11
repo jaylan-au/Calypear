@@ -53,7 +53,69 @@ module.exports = {
       reply(err);
     });
   },
-  updateDiagram: {},
+  updateDiagram: function(request, reply) {
+    const Diagram = request.server.collections(true).diagram;
+    const DiagramComponent = request.server.collections(true).diagram;
+    var payloadDiagram = request.payload.diagram;
+
+    Diagram.find({id: request.params.id}).populate(['components']).then((dbDiagram) => {
+      //Set the Diagram Properties
+      dbDiagram.name = payloadDiagram.name;
+
+      //Merge the components
+
+      payloadDiagram.components.forEach((mergeComponent) => {
+        //Find the component in the result
+        var mergeTo = dbDiagram.components.find((dbDiagComponentLink) => {
+          return dbDiagComponentLink.component == mergeComponent.component;
+        });
+
+        if (mergeTo) {
+          //Update the properties for MergeTO
+          if (mergeComponent.fixedX) {
+            mergeTo.fixedX = mergeComponent.fixedX;
+          }
+
+          if (mergeComponent.fixedY) {
+            mergeTo.fixedY = mergeComponent.fixedY;
+          }
+
+        } else {
+          //Add the item into the component list
+          serverDiagram.components.add({
+            component: mergeComponent.component,
+            fixedX: mergeComponent.fixedX,
+            fixedY: mergeComponent.fixedY
+          });
+        }
+      });
+
+      //Now remove any Components on the server thate aren't on the payload
+      //do this the safe way in case the collection updates
+      var componentIdsInPayload = payloadDiagram.components.map((mergeComponent) => {
+        return mergeComponent.component;
+      });
+
+      //Return an array of all items linking to Components not in the diagram
+      var componentLinksToRemove = dbDiagram.components.filter((dbDiagComponentLink) => {
+        return !(componentIdsInPayload.incudes(dbDiagComponentLink.component));
+      });
+
+      componentLinksToRemove.forEach((linkToRemove) => {
+        dbDiagram.components.remove(linkToRemove.id);
+      });
+
+      //Dedupe
+
+      dbDiagram.save().then(()=>{
+        reply(dbDiagram);
+      }).error((err) => {
+        reply(err);
+      });
+    }).error((err)=>{
+      reply(err);
+    });
+  },
   deleteDiagram: function(request, reply) {
     //Delete a diagram and all of its links
     const Diagram = request.server.collections(true).diagram;
