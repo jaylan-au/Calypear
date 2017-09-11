@@ -426,9 +426,7 @@ class CalypearDiagram  {
     //   this.components
       diagramObject.components.forEach((requestedComponent) => {
         if ((requestedComponent.fixedX) || (requestedComponent.fixedY)) {
-          console.log(requestedComponent);
           var activeComponent = this.nodeById(requestedComponent.component);
-          console.log(activeComponent);
           if (activeComponent) {
             activeComponent.pinAt(requestedComponent.fixedX,requestedComponent.fixedY);
           }
