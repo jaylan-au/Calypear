@@ -16,7 +16,8 @@ gulp.task('scripts',function(){
     'node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.js',
     'node_modules/file-saver/FileSaver.js',
     'node_modules/canvas-toBlob/canvas-toBlob.js',
-    'server/www/js/*'
+    'server/www/js/*',
+    'plugins/calypear-vis/www/js/*'
   ])
   .pipe(gulp.dest('server/dist/js'));
 });
@@ -25,6 +26,7 @@ gulp.task('watch',function(){
   //Only need to watch calypear specific files
   gulp.watch('server/www/css/*',['styles']);
   gulp.watch('server/www/js/*',['scripts']);
+  gulp.watch('plugins/calypear-vis/www/js/*',['scripts']);
 });
 
 
