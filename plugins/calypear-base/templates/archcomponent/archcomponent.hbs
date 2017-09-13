@@ -88,11 +88,12 @@
 
       <form method="post" action="/archcomponent/{{archComponent.id}}/relation">
             <tr>
-        <td rowspan="2">
+        <td>
           <input type="hidden" name="fromId" id="fromId" value="{{archComponent.id}}"/>
           {{archComponent.name}}
         </td>
-        <td rowspan="2">
+        <td>
+          <label for="relationTypeId">Relation Type</label>
           <select class="u-full-width" name="relationTypeId" id="relationTypeId">
             {{#each relationTypes}}
             <option value="{{id}}">{{name}}</option>
@@ -100,6 +101,7 @@
           </select>
         </td>
         <td>
+          <label for="relationTypeId">Component</label>
           <select class="u-full-width" name="toId" id="toId">
             <option selected value>Select existing Component</option>
             {{#each allComponents}}
@@ -107,29 +109,46 @@
             {{/each}}
           </select>
         </td>
-        <td rowspan="2">
+        <td>
           <input type="submit" value="Create"/>
         </td>
         </tr>
-          <tr>
-      <td>
-        <div class="row">
-          <div class="six columns">
-            <label for="componentName">Component Name</label>
-            <input class="u-full-width" type="text" placeholder="New Component name" id="componentName" name="componentName"  />
-          </div>
-          <div class="six columns">
-            <label for="componentType">Type</label>
-            <select class="u-full-width" name="compoenntTypeId" id="componentType">
-              {{#each componentTypes}}
-              <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-      </td>
-      </tr>
   </form>
+  <form method="post" action="/archcomponent/{{archComponent.id}}/relation">
+        <tr>
+    <td>
+      <input type="hidden" name="fromId" id="fromId" value="{{archComponent.id}}"/>
+      {{archComponent.name}}
+    </td>
+    <td>
+      <label for="relationTypeId">Relation Type</label>
+      <select class="u-full-width" name="relationTypeId" id="relationTypeId">
+        {{#each relationTypes}}
+        <option value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </td>
+    <td>
+      <div class="row">
+        <div class="six columns">
+          <label for="componentName">Component Name</label>
+          <input class="u-full-width" type="text" placeholder="New Component name" id="componentName" name="componentName"  />
+        </div>
+        <div class="six columns">
+          <label for="componentType">Type</label>
+          <select class="u-full-width" name="compoenntTypeId" id="componentType">
+            {{#each componentTypes}}
+            <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </td>
+    <td>
+      <input type="submit" value="Create"/>
+    </td>
+    </tr>
+</form>
   </tbody>
 </table>
 
