@@ -53,7 +53,6 @@ module.exports = {
       } else {
         reply(Boom.notFound('No profile with requested id found'));
       }
-      console.log(userProfile);
       //Dont' return these to the renderer for safety unless its an API user
 
     }).catch((err) => {
