@@ -1,0 +1,44 @@
+<h1>Create User</h1>
+<form action="/admin/profile" method="post">
+  <div class="row">
+    <div class="six columns">
+      <label for="fieldUsername">Username</label>
+      <input type="text" class="u-full-width" id="fieldUsername" name="username" placeholder="Login Name" value="{{username}}" required/>
+    </div>
+    <div class="six columns">
+      <label for="fieldUserType">Type</label>
+      <select class="u-full-width" id="fieldUserType" name="userType" placeholder="Select User Type" required >
+        <option value="real" selected>Real</option>
+        <option value="api">Api</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <input type="submit" name="submit" value="create"/>
+    </div>
+  </div>
+</form>
+<h1>User Profiles</h1>
+<table>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Username</th>
+    <th>Type</th>
+    <th>Expires</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+  {{#each userProfiles}}
+    <tr>
+      <td>{{id}}</td>
+      <td><a href="/admin/profile/{{id}}">{{username}}</a></td>
+      <td>{{userType}}</td>
+      <td>{{expires}}</td>
+      <td><a href="/admin/profile/{{id}}/delete">Delete</a></td>
+    </tr>
+  {{/each}}
+</tbody>
+</table>

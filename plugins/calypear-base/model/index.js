@@ -4,5 +4,6 @@ module.exports = [
   require('./componenttype'),
   require('./relationshiptype'),
   require('./componenttag'),
-  require('./tagtype')
+  require('./tagtype'),
+  require('./appuser')
 ]
