@@ -64,11 +64,55 @@ server.register({
 });
 
 /*
+  Register Error Handler
+*/
+const config = {
+  statusCodes: {
+    "401": { // if the statusCode is 401
+      "redirect": "/login" // redirect to /login page/endpoint
+    }
+  }
+}
+server.register({
+    register: require('hapi-error'),
+    options: config // pass in your redirect configuration in options
+  }, (err) =>{
+    Hoek.assert(!err,err);
+  });
+/*
+  Register Authentication Plugin
+*/
+var jwtTokenValidate = function (decoded, request, callback) {
+
+    //Fix this - we need to actually check properly
+    if (decoded.username == '') {
+      return callback(null, false);
+    }
+    else {
+      return callback(null, true);
+    }
+};
+
+server.register(require('hapi-auth-jwt2'), function (err) {
+
+    if(err){
+      console.log(err);
+    }
+
+    server.auth.strategy('jwt', 'jwt', {
+      key: 'ReplaceMeWithAnActualKey',
+      validateFunc: jwtTokenValidate,
+      verifyOptions: { algorithms: [ 'HS256' ] }
+    });
+
+    server.auth.default('jwt');
+
+});
+/*
   Register routes
 */
 var routes = require('./routes');
 server.route(routes);
-
 /*
   Calypear Plugins
 */

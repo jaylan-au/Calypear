@@ -1,0 +1,21 @@
+<h1>Login</h1>
+<form method="POST" action="/login">
+  <input type="hidden" name="redirectSuccess" value="{{redirectSuccess}}"/>
+  <div class="row">
+    <div class="twelve columns">
+      <label for="fieldUsername">Username</label>
+      <input class="u-full-width" type="text" name="username" id="fieldUsername" placeholder="Username" value="{{username}}"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <label for="fieldPassword">Password</label>
+      <input class="u-full-width" type="text" name="password" id="fieldPassword" placeholder="Password" value=""/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="twelve columns">
+      <input type="submit" value="Login" name="submit"/>
+    </div>
+  </div>
+</form>
