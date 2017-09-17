@@ -47,7 +47,7 @@ module.exports = {
           'userProfile': userProfile,
           'userTypes': [
             {id: 'real', name: 'real'},
-            {id: 'api', name: 'api'}
+            //{id: 'api', name: 'api'} - Removed API until implemented
           ]
         });
       } else {
