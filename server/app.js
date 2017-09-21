@@ -14,8 +14,8 @@ const server = new Hapi.Server({
     }
   },
   debug: {
-    log: ['error'],
-    request: ['error']
+    log: ['error','calypear'],
+    request: ['error','calypear']
   }
 });
 
@@ -165,6 +165,13 @@ server.register({
     Hoek.assert(!err,err);
 });
 
+//Register Quick start that can be used to create a startup db for the user
+server.register({
+    register: require('../plugins/calypear-quickstart'),
+    options: {}
+  },{},(err) => {
+    Hoek.assert(!err,err);
+});
 
 server.start((err) => {
 
@@ -172,18 +179,16 @@ server.start((err) => {
         throw err;
     }
 
-    // const ComponentType = server.collections().componenttype;
-    // ComponentType.create([
-    //   {name: 'System'},
-    //   {name: 'Data'}
-    // ]).then(() => {
-    //
-    //         console.log(`Go find some dogs at ${server.info.uri}`);
-    //     })
-    //     .catch((err) => {
-    //
-    //         console.error(err);
-    //     });
+
+    //Perform the quickstart check
+    server.methods.quickstart.isRequired((err, result) => {
+      if (result == true){
+        server.methods.quickstart.execute((err, result) => {
+          Hoek.assert(!err,err);
+        });
+      }
+    });
+
 
     console.log(`Server running at: ${server.info.uri}`);
 });
