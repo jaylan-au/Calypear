@@ -1,3 +1,4 @@
 module.exports = [].concat(
-  require('./archcomponent')
+  require('./archcomponent'),
+  require('./login')
 );

@@ -41,23 +41,5 @@ module.exports = [
       tags: []
     },
     handler: ProfileController.deleteUserProfile,
-  },
-  {
-    method: "GET",
-    path: '/login',
-    config: {
-      tags: [],
-      auth: false
-    },
-    handler: ProfileController.loginRequest,
-  },
-  {
-    method: "POST",
-    path: '/login',
-    config: {
-      tags: [],
-      auth: false
-    },
-    handler: ProfileController.attemptLogin,
   }
 ];
