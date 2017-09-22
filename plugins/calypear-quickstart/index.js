@@ -5,7 +5,7 @@ const usersExist = function(next) {
   //next(Err,result,ttl)
   AppUser.find().limit(1).then((result) => {
     if (result.length > 0) {
-      this.log(['calypear','database','read','quickstart'],'Quickstart Detected atleast 1 user in the database - this will likely mean quickstart will not run');
+      this.log(['app','database','read','quickstart'],'Quickstart Detected atleast 1 user in the database - this will likely mean quickstart will not run');
       next(null, false);
     } else {
       this.log(['app','database','read','quickstart'],'Quickstart Detected no users in the database - this will probably result in a default user being created');
