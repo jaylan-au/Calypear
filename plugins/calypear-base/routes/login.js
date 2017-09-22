@@ -20,5 +20,14 @@ module.exports = [
       auth: false
     },
     handler: LoginController.attemptLogin,
+  },
+  {
+    method: "GET",
+    path: '/logout',
+    config: {
+      tags: []
+    },
+    handler: LoginController.logout,
   }
+
 ];
