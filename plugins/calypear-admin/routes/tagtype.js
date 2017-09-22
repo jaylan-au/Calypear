@@ -35,7 +35,8 @@ module.exports = [
         name: request.payload.name,
         category: request.payload.category
       })
-        .then(() => {
+        .then((result) => {
+          request.log(['schema-change','app'], {message: 'Tag Type Created', object: result});
             reply.redirect('/tagtypes');
           })
           .catch((err) => {
@@ -53,9 +54,10 @@ module.exports = [
       if (request.params.id) {
         TagType.destroy({id: request.params.id}).then(() => {
           //all good
+          request.log(['schema-change','app'], {message: 'Tag Type Deleted', object: request.params.id});
           reply.redirect('/tagtypes');
         }).catch((err) => {
-          //TODO: Handle
+          reply(err);
         });
       } else {
         //TODO: Reply with some kind of error

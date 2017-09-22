@@ -33,7 +33,8 @@ module.exports = [
         nameInverse: request.payload.nameInverse,
         distance: request.payload.distance
       })
-        .then(() => {
+        .then((result) => {
+          request.log(['schema-change','app'], {message: 'Relationship Type Created', object: result});
             reply.redirect('/relationshiptypes');
           })
           .catch((err) => {
@@ -50,6 +51,7 @@ module.exports = [
       //Prevent empty ID
       if (request.params.id) {
         RelationshipType.destroy({id: request.params.id}).then(() =>{
+          request.log(['schema-change','app'], {message: 'Relationship Type Deleted', object: request.params.id});
           reply.redirect('/relationshiptypes');
         }).catch((err) => {
           //TODO: Handle this

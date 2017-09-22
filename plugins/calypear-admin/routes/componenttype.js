@@ -35,6 +35,7 @@ module.exports = [
         name: request.payload.name,
         diagramIcon: request.payload.diagramIcon,
       }).then((result) => {
+        request.log(['schema-change','app'], {message: 'Component Type Updated', object: result});
         reply.redirect('/componenttypes')
       });
     }
@@ -44,8 +45,8 @@ module.exports = [
     path: '/componenttype/new',
     handler: function (request, reply){
       const ComponentType = request.server.collections(true).componenttype;
-      ComponentType.create({name: request.payload.name})
-        .then(() => {
+      ComponentType.create({name: request.payload.name}).then((result) => {
+            request.log(['schema-change','app'], {message: 'Component Type Created', object: result});
             reply.redirect('/componenttypes');
           })
           .catch((err) => {
@@ -62,9 +63,10 @@ module.exports = [
       if (request.params.id) {
         ComponentType.destroy({id: request.params.id}).then(() => {
           //all good
+          request.log(['schema-change','app'], {message: 'Component Type Deleted', object: request.params.id});
           reply.redirect('/componenttypes');
         }).catch((err) => {
-          //TODO: Handle
+          reply(err);
         });
       } else {
         //TODO: Reply with some kind of error
