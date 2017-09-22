@@ -14,8 +14,8 @@ const server = new Hapi.Server({
     }
   },
   debug: {
-    log: ['error','calypear'],
-    request: ['error','calypear']
+    log: ['error','app'],
+    request: ['error','app']
   }
 });
 

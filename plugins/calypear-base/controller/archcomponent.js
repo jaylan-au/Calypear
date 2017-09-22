@@ -61,6 +61,7 @@ module.exports = {
       type: request.payload.typeId,
     })
     .then((createdComponent) => {
+      request.log(['data-change','app'], {message: 'ArchComponent created', object: createdComponent.id});
       if (request.payload.forwardToEdit) {
         reply.redirect('/archcomponent/'+createdComponent.id);
       } else {
@@ -135,7 +136,8 @@ module.exports = {
       alternativeNames: request.payload.alternativeNames,
       docUrl: request.payload.docUrl
     }
-    ).then(() => {
+  ).then((updatedComponent) => {
+      request.log(['data-change','app'], {message: 'ArchComponent updated', object: updatedComponent});
       reply.redirect('/archcomponent/'+request.params.id);
     }).catch((err) => {
       reply(err);
@@ -150,6 +152,7 @@ module.exports = {
       ComponentRelation.destroy({from: request.params.id}),
       ComponentRelation.destroy({to: request.params.id})
     ]).then(()=>{
+      request.log(['data-change','app'], {message: 'ArchComponent deleted', object: request.params.id});
       reply.redirect('/archcomponents');
     }).catch((err)=>{
       reply(err);
@@ -167,6 +170,7 @@ module.exports = {
           name: request.payload.componentName,
           type: request.payload.compoenntTypeId
         }).then((component)=> {
+          request.log(['data-change','app'], {message: 'ArchComponent Created', object: component});
           ComponentRelation.create([
             {
               from: request.payload.fromId,
@@ -182,7 +186,8 @@ module.exports = {
               inverse: true,
               transaction: transactionId
             }
-          ]).then(() => {
+          ]).then((createdRelationship) => {
+            request.log(['data-change','app'], {message: 'Relationship Created', object: createdRelationship});
             reply.redirect('/archcomponent/'+request.params.id);
           })
           .catch((err) => {
@@ -207,7 +212,8 @@ module.exports = {
           inverse: true,
           transaction: transactionId
         }
-      ]).then(() => {
+      ]).then((createdRelationship) => {
+        request.log(['data-change','app'], {message: 'Relationship Created', object: createdRelationship});
         reply.redirect('/archcomponent/'+request.params.id);
       })
       .catch((err) => {
@@ -220,6 +226,7 @@ module.exports = {
     const ComponentRelation = request.server.collections(true).componentrelation;
 
     ComponentRelation.destroy({transaction: request.params.transactionId}).then(function(){
+      request.log(['data-change','app'], {message: 'Relationship deleted', transactionId: request.params.transactionId});
       reply.redirect('/archcomponent/'+request.params.id)
     }).catch(function(err){
       reply(err);
@@ -233,7 +240,8 @@ module.exports = {
       component: request.params.id,
       tag: request.payload.tagTypeId,
       value: request.payload.value
-    }).then(() => {
+    }).then((createdTag) => {
+      request.log(['data-change','app'], {message: 'Tag created', object: createdTag});
       reply.redirect('/archcomponent/'+request.params.id);
     }).catch((err) => {
       reply(err);
@@ -243,6 +251,7 @@ module.exports = {
     const ComponentTag = request.server.collections(true).componenttag;
 
     ComponentTag.destroy({id: request.params.tagId}).then(() => {
+      request.log(['data-change','app'], {message: 'Tag deleted', object: request.params.tagId});
       reply.redirect('/archcomponent/'+request.params.id);
     }).catch((err) => {
       reply(err);

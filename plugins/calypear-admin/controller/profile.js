@@ -95,6 +95,7 @@ module.exports = {
           newAppUser.expires = null;
         }
         AppUser.create(newAppUser).then((result) => {
+          request.log(['schema-change','app'], {message: 'User Created', object: result});
           reply.redirect('/admin/profile/'+result.id)
         }).catch((err)=>{
           reply(err);
@@ -130,6 +131,7 @@ module.exports = {
         }
 
         result.save().then(() => {
+          request.log(['schema-change','app'], {message: 'User Modified', object: {id: request.params.id, username: result.username}});
           reply.redirect('/admin/profile/'+request.params.id);
         }).catch((err)=>{
           reply(err);
@@ -149,6 +151,7 @@ module.exports = {
       const AppUser = request.server.collections(true).appuser;
 
       AppUser.destroy({id: request.params.id}).then((result) => {
+        request.log(['schema-change','app'], {message: 'User Deleted', object: request.params.id});
         reply.redirect('/admin/profiles');
       }).catch((err)=>{
         reply(err);
