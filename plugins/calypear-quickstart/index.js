@@ -8,7 +8,7 @@ const usersExist = function(next) {
       this.log(['calypear','database','read','quickstart'],'Quickstart Detected atleast 1 user in the database - this will likely mean quickstart will not run');
       next(null, false);
     } else {
-      this.log(['calypear','database','read','quickstart'],'Quickstart Detected no users in the database - this will probably result in a default user being created');
+      this.log(['app','database','read','quickstart'],'Quickstart Detected no users in the database - this will probably result in a default user being created');
       next(null, true);
     }
   }).catch((err) => {
@@ -29,7 +29,7 @@ const createDefaultUser = function(next) {
   }
   //next(Err,result,ttl)
   AppUser.create(defaultUser).then((result) => {
-    this.log(['calypear','database','write','quickstart'],'Default Admin user created, username: '+result.username+', Password: '+result.username);
+    this.log(['app','database','write','quickstart'],'Default Admin user created, username: '+result.username+', Password: '+result.username);
     next(null, result, 0);
   }).catch((err) => {
     //Respond with just the error
