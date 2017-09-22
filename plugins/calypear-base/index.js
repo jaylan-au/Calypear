@@ -25,6 +25,8 @@ var calypearbase = {
            helpersPath: options.globalTemplates.helpers
        });
 
+      server.expose('serverTokenKey', options.tokenKey);
+      //server.app['calypear-base'].serverTokenKey = options.tokenKey;
       next();
   },
 }

@@ -3,6 +3,7 @@
 const Path = require('path');
 const Hapi = require('hapi');
 const Hoek = require('hoek');
+const uuidv4 = require('uuid/v4');
 
 
 const server = new Hapi.Server({
@@ -102,6 +103,10 @@ var jwtTokenValidate = function (decoded, request, callback) {
     }
 };
 
+//Set the secret key to a random UUID value when the server starts
+//This invalidates any existing tokens
+//This is temporary - at this is quite limiting
+var serverTokenKey = uuidv4();
 server.register(require('hapi-auth-jwt2'), function (err) {
 
     if(err){
@@ -109,7 +114,7 @@ server.register(require('hapi-auth-jwt2'), function (err) {
     }
 
     server.auth.strategy('jwt', 'jwt', {
-      key: 'ReplaceMeWithAnActualKey',
+      key: serverTokenKey,
       validateFunc: jwtTokenValidate,
       verifyOptions: { algorithms: [ 'HS256' ] }
     });
@@ -117,6 +122,8 @@ server.register(require('hapi-auth-jwt2'), function (err) {
     server.auth.default('jwt');
 
 });
+
+
 /*
   Register routes
 */
@@ -132,7 +139,8 @@ server.register({
         layout: '../../server/templates/layout',
         partials: '../../server/templates/partials',
         helpers: '../../server/templates/helpers'
-      }
+      },
+      tokenKey: serverTokenKey
     }
   },
   {

@@ -29,7 +29,8 @@ module.exports = {
               "expires": result.expires,
               "sessionip": request.info.remoteAddress
             }; // object/info you want to sign
-            var token = JWT.sign(obj, "ReplaceMeWithAnActualKey",{ algorithm: 'HS256' });
+            console.log(request.server.plugins['calypear-base'].serverTokenKey);
+            var token = JWT.sign(obj, request.server.plugins['calypear-base'].serverTokenKey,{ algorithm: 'HS256' });
 
             var cookie_options = {
               ttl: null, // expires a year from today
