@@ -71,6 +71,7 @@ module.exports = {
       strictHeader: true, // don't allow violations of RFC 6265
       path: '/' //rc
     };
+    request.log(['app','security','logout'],{message: "Requested logout", user: request.auth.credentials});
     reply.redirect('/').unstate('token', cookie_options);
   }
 }
