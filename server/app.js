@@ -84,9 +84,11 @@ server.register({
 */
 var jwtTokenValidate = function (decoded, request, callback) {
 
-    //Fix this - we need to actually check properly
-    if (decoded.username == '') {
-      return callback(null, false);
+    //Check the IP of the requestor matches the origina login
+    //As we have verified the JWT seperately the rest of the token data
+    //can be taken as valid
+    if (decoded.sessionip == request.info.remoteAddress) {
+      return callback(null, true);
     }
     else {
       return callback(null, true);

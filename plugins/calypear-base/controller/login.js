@@ -26,7 +26,8 @@ module.exports = {
             var obj   = {
               "id": result.id,
               "username": result.username,
-              "expires": result.expires
+              "expires": result.expires,
+              "sessionip": request.info.remoteAddress
             }; // object/info you want to sign
             var token = JWT.sign(obj, "ReplaceMeWithAnActualKey",{ algorithm: 'HS256' });
 
