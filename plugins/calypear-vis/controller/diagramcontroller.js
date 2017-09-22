@@ -22,6 +22,7 @@ module.exports = {
     }
 
     Diagram.create(newDiagram).then((createdObject) => {
+      request.log(['data-change','app'], {message: 'Diagram Created', object: createdObject});
       reply(createdObject);
     }).error((err)=>{
       reply(err);
@@ -110,6 +111,7 @@ module.exports = {
       //Dedupe
 
       dbDiagram.save().then(()=>{
+        request.log(['data-change','app'], {message: 'Diagram Updated', object: dbDiagram.id});
         reply(dbDiagram);
       }).error((err) => {
         reply(err);
@@ -126,6 +128,7 @@ module.exports = {
       Diagram.destroy({id: request.params.id}),
       DiagramComponent.destroy({diagram: request.params.id})
     ]).then(() => {
+      request.log(['data-change','app'], {message: 'Diagram Deleted', object: request.params.id});
       reply.redirect('/diagrams');
     }).catch((err) => {
       reply(err);
