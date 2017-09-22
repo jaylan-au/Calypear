@@ -38,6 +38,11 @@ module.exports = {
       },
       diagramId: request.params.id
     }
+
+    //If a component id was passed then pass this to the view (which will load and expand the component)
+    if (request.query.componentId) {
+      viewParams.componentId = request.query.componentId;
+    }
     Promise.all([
       Diagram.find({id: request.params.id})
         .populate(['components'])
