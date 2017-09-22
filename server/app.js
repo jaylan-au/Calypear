@@ -91,7 +91,14 @@ var jwtTokenValidate = function (decoded, request, callback) {
       return callback(null, true);
     }
     else {
-      return callback(null, true);
+      request.log(['app','security','login-failed'],{
+        message: "Invalid JWT session match",
+        object: {
+          required: decoded,
+          requested: request.info.remoteAddress
+        }
+      });
+      return callback(null, false);
     }
 };
 

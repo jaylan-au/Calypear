@@ -44,13 +44,16 @@ module.exports = {
             if (request.payload.redirectSuccess) {
               forwardToUrl = request.payload.redirectSuccess;
             }
+            request.log(['app','security','login-success'],{message: "User Logged in", object: obj});
             reply.redirect(forwardToUrl).state("token",token,cookie_options);
           } else {
             //Password invalid - be grumpy
+            request.log(['app','security','login-failed'],{message: "Failed login - invalid password", user: request.payload.username});
             reply.redirect('/login');
           }
         } else {
           //usernot found
+          request.log(['app','security','login-failed'],{message: "Failed login - unknown or expired user", user: request.payload.username});
           reply.redirect('/login');
         }
       }).catch((err) => {
