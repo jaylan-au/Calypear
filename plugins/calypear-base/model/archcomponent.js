@@ -24,6 +24,9 @@ module.exports = {
     relationships: {
       collection: 'componentrelation',
       via: 'from',
+    },
+    tranche: {
+      model: 'tranche'
     }
   }
 }
