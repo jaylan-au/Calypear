@@ -3,5 +3,6 @@ module.exports = [].concat(
   require('./relationshiptype'),
   require('./tagtype'),
   require('./profile'),
+  require('./tranche'),
   require('./admin')
 );
