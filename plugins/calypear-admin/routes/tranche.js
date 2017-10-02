@@ -36,7 +36,7 @@ module.exports = [
   },
   {
     method: "GET",
-    path: '/admin/profile/{id}/delete',
+    path: '/admin/tranche/{id}/delete',
     config: {
       tags: []
     },
