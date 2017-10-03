@@ -15,7 +15,7 @@ module.exports = {
   getTranche: function(request, reply) {
     const Tranche = request.server.collections(true).tranche;
 
-    Trance.find({id: request.params.id}).then((result) => {
+    Tranche.findOne({id: request.params.id}).then((result) => {
       reply.view('tranche/show.hbs',{tranche: result});
     }).catch((err) => {
       reply(err);
@@ -28,7 +28,7 @@ module.exports = {
       Tranche.create({
         name: request.payload.name
       }).then((result) => {
-        reply.redirect('admin/tranche/'+result.id);
+        reply.redirect('/admin/tranche/'+result.id);
       }).catch((err)=>{
         reply(err);
       })
@@ -45,7 +45,7 @@ module.exports = {
     },{
       name: request.payload.name
     }).then((result)=>{
-      reply.redirect('/admin/tranche/'+result.id)
+      reply.redirect('/admin/tranche/'+request.params.id)
     }).catch((err) => {
       reply(err);
     })
