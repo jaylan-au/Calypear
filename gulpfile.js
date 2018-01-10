@@ -13,6 +13,7 @@ gulp.task('styles',function(){
 
 gulp.task('scripts',function(){
   gulp.src([
+    'node_modules/jquery/dist/jquery.min.js',
     'node_modules/d3/build/d3.js',
     'node_modules/easy-autocomplete/dist/jquery.easy-autocomplete.js',
     'node_modules/file-saver/FileSaver.js',

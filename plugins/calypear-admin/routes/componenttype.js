@@ -71,8 +71,6 @@ module.exports = [
       } else {
         //TODO: Reply with some kind of error
       }
-
-
     }
   },
 ]
