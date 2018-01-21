@@ -9,8 +9,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -18,7 +18,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 //Application event logger
 
@@ -43,6 +43,9 @@ const odmModule = require('./modules/calypear-odm').initialize(app);
 const calypearBaseModule = require('./modules/calypear-base').initialize(app,'/');
 let calypearODM = app.get('odm');
 
+app.use('/app',express.static(path.join(__dirname, '../frontend/src/html/index.html')));
+app.use('/static',express.static(path.join(__dirname, '../frontend/dist')));
+
 calypearODM.define({
   docType: 'archcomponent',
   attributes: {
@@ -61,10 +64,7 @@ calypearODM.models.archcomponent.create({
 
 //app.use('/static',express.static('public'));
 
-app.get('/app',function(req,res,next) {
-  res.render('calypear-base/arch-component');
-});
-
+//
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
