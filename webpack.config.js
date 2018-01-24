@@ -54,7 +54,8 @@ module.exports = {
   resolve: {
     alias: {
       'vue': 'vue/dist/vue.js',
-      'vuex': 'vuex/dist/vuex.js'
+      'vuex': 'vuex/dist/vuex.js',
+      'axios': 'axios/dist/axios.js',
     }
   },
   plugins

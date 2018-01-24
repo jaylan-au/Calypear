@@ -41,7 +41,7 @@ class CalypearModel {
     return calypearModel;
   }
 
-  all(options) {
+  all() {
     return this._db.find({
       selector: {
         docType: this.docType
@@ -54,20 +54,18 @@ class CalypearModel {
     })
   }
 
-  find(selector, options) {
+  find(selector) {
     //FIXME: set this properly - at the moment it won't use indexes properly
     let queryStatement = Object.assign({},{'selector': selector},options);
     //Push selector to
     queryStatement.selector.docType = this.docType;
     return this._db.find(queryStatement).then((dbresponse) => {
       return dbresponse.docs;
-    }).catch((err) => {
-      return err;
     });
   }
 
   //Create the document in the datebase
-  create(doc, options) {
+  create(doc) {
     //Validate the document first
     let schema = this.validationSchema;
     //Will throw an error if supplied doc doesn't match schema
@@ -94,29 +92,30 @@ class CalypearModel {
         _id : dbresponse.id,
         _rev: dbresponse.rev
       });
-    }).catch((err) => {
-      return err;
     });
     //FIXME: Handle this and return a better error;
   }
 
   //Get a document purely by its ID
   get(docId, options) {
-    return db.get(docId, options).then((dbresponse) => {
+
+    return this._db.get(docId).then((dbresponse) => {
       //FIXME: Check the document is of the correct type
       //FIXME: Validate the document here - the documents don't validate themselves
       return dbresponse;
-    }).catch((err) => {
-      //FIXME: What to do if we get here?
-      return err;
     });
+    // .catch((err) => {
+    //   //FIXME: What to do if we get here?
+    //   return err;
+    // });
   }
 
-  update(docId, changeAttributes, options) {
+  update(docId, changeAttributes) {
     //FIXME: we don't actually need to handle the catch statements as this is only a very thin wrapper around PouchDB
     //Retrieve the referenced document
     //FIXME: Should actually check if _rev is being supplied, to check if the object we are updating is actually the same as it was when we looked at it
-    return this.get(docId,options).then((dbDoc) => {
+    return this.get(docId).then((dbDoc) => {
+      console.log(dbDoc);
       //Copy the object and alter the properties
       //Force DocType to match this model
       //Don't need to set _id or _rev as these are already supplied
@@ -128,19 +127,19 @@ class CalypearModel {
       //save back to the Database
       //doc._rev should already be setup - otherwise this should fail anyway
       //Return the same as create to the caller
-      return this.create(doc, options);
+      return this.create(updateObj);
 
-    }).catch((err) => {
-      return err;
     });
   }
 
   delete(docId) {
-    return this._db.delete(docId).then((dbresponse) => {
-      return dbresponse;
-    }).catch((err) => {
-      return err;
-    })
+    //Get the document first (to get the revId)
+    return this.get(docId).then((dbDoc) => {
+      //remove it
+      return this._db.remove(dbDoc).then((dbresponse) => {
+        return dbresponse;
+      });
+    });
   }
 
   get docType(){

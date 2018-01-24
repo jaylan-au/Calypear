@@ -26,12 +26,18 @@ export default {
     componentTypeItem,
     newComponentType,
   },
+  created: function() {
+    this.loadComponentTypes();
+  },
   computed: {
     componentTypes() {
       return this.$store.state.componentTypes;
     }
   },
   methods: {
+    loadComponentTypes(){
+      this.$store.dispatch('loadComponentTypes');
+    },
     deleteComponentType(componentTypeId) {
       this.$store.dispatch('deleteComponentType',componentTypeId);
     },
