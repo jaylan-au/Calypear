@@ -53,14 +53,14 @@ calypearODM.define({
   }
 });
 console.log('Models Loaded');
-calypearODM.models.archcomponent.create({
-  componentName: 'Test1',
-  docType: 'test'
-}).then((result) => {
-  console.log('Creation Result:',result);
-}).catch((err) => {
-  console.log('Creation Error',err);
-});
+// calypearODM.models.archcomponent.create({
+//   componentName: 'Test1',
+//   docType: 'test'
+// }).then((result) => {
+//   console.log('Creation Result:',result);
+// }).catch((err) => {
+//   console.log('Creation Error',err);
+// });
 
 //app.use('/static',express.static('public'));
 

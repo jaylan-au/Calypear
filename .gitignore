@@ -1,7 +1,7 @@
 #######################################################################
 # Calypear Specific
 
-server/dist/*
+frontend/dist/*
 .tmp
 .DS_Store
 *.db
