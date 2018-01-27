@@ -1,29 +1,43 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
+import Logger from './lib/logger';
 import store from './store/calypear-store.js';
-import componentTypeList from './component-type-list.vue';
-import archComponent from './arch-component/arch-component.vue';
+
+import simpleTypeList from './simple-type/simple-type-list.vue';
+import archComponentSearch from './pages/arch-component-search.vue';
+import archComponentView from './pages/arch-component-view.vue';
 //import store from './calypear-store.js';
 
 Vue.use(VueRouter);
+Vue.use(Logger);
 
 const router = new VueRouter({
   routes: [
     {
-      path: '/component-type',
-      component: componentTypeList
+      path: '/admin/simple-type/:typeClass',
+      component: simpleTypeList
     },
     {
-      path: '/arch-component/:id',
-      component: archComponent
+      path: '/arch-component',
+      name: 'arch-component-search',
+      component: archComponentSearch
+    },
+    {
+      path: '/arch-component/view/:componentId',
+      name: 'arch-component-view',
+      component: archComponentView,
+      props: (route) => ({"componentId": route.params.componentId})
     }
   ]
 })
 
 const app = new Vue({
   router: router,
-  store
+  store,
+  created: function() {
+    this.$store.dispatch('reloadAllTypes');
+  }
 }).$mount('#vueapp');
 // new Vue({
 //   el: '#vueapp',

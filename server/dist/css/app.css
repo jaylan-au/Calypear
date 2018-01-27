@@ -1,0 +1,115 @@
+.navbar {
+  display: block;
+  position: static;
+  width: 100%;
+  border-bottom-width: thin;
+  border-bottom-color: #bbb;
+  border-bottom-style: solid;
+  margin-bottom: 3em;
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.5em;
+}
+
+.navbar .container div {
+  padding:  0;
+  margin: 0;
+}
+
+.navbar form {
+  padding: 0;
+  margin: 0;
+}
+
+.navbar input {
+  padding: 0;
+  margin: 0;
+}
+
+
+
+.navbar .material-icons {
+  font-size: 1em;
+  text-align: center;
+  display: inline-block;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+}
+
+.navbar .primaryActions ul {
+  list-style-type: none;
+  list-style-position: outside;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar .primaryActions ul li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+.navbar .primaryActions ul li p {
+  margin-bottom: 0;
+}
+
+/*
+.navbar {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: black;
+}
+
+.navbar ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  list-style-position: outside;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar ul li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.navbar ul li a {
+  text-align: center;
+  display: block;
+}
+
+.navbar ul li .material-icons{
+  font-size: 3em;
+  text-align: center;
+}
+
+.navbar ul li p {
+  font-size: 0.75em;
+  padding: 0;
+  text-align: center;
+}*/
+
+/*
+  Utility Classes
+*/
+.material-icons {
+  font-family: 'Material Icons';
+  padding: 0;
+  margin: 0;
+}
+
+.material-icons a {
+  text-decoration: none;
+}

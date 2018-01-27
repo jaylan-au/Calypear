@@ -32,6 +32,7 @@
     "bcrypt": "^1.0.3",
     "body-parser": "~1.18.2",
     "canvas-toBlob": "^1.0.0",
+    "celebrate": "^7.0.4",
     "cookie-parser": "~1.4.3",
     "css-loader": "^0.28.9",
     "d3": "^4.10.2",

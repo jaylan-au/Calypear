@@ -1,0 +1,116 @@
+<template>
+  <div class="ui segment">
+    <div class="ui segment">
+      <div class="content">
+        <h1 class="header" >
+          {{archComponent.componentName}}
+        </h1>
+        <div class="ui items">
+          <div class="item">
+            <div class="content" v-show="!isEditing">
+              {{ typeNameByTypeId('componenttype',archComponent.componentType) }}
+            </div>
+            <div class="content" v-show="isEditing">
+              <simple-type-select
+                v-bind:typeClassName="'componenttype'"
+                v-bind:selected="archComponent.componentType"
+                ref="componentType" >
+              </simple-type-select>
+            </div>
+          </div>
+          <div class="item">
+            <div class="content" v-show="!isEditing">
+              {{ archComponent.description }}
+            </div>
+          </div>
+          <div class="item">
+            <div class="content" v-show="isEditing">
+                <textarea
+                  placeholder="Component Description"
+                  :value="archComponent.description"
+                  ref="description" >
+                </textarea>
+              </div>
+          </div>
+        </div>
+        <button class="ui primary button" v-show="!isEditing" v-on:click="showEditForm">Edit</button>
+        <button class="ui primary button" v-show="isEditing" v-on:click="saveEditForm">Save</button>
+      </div>
+    </div>
+    <div class="ui segment">
+      <div class="content">
+        <h1 class="header" >
+          Relations
+        </h1>
+        <component-relation-list
+          v-bind:componentRelations="archComponent.relations"
+          v-bind:componentId="archComponent._id" >
+        </component-relation-list>
+      </div>
+    </div>
+  </div>
+
+</template>
+<script>
+import Axios from 'axios';
+import simpleTypeSelect  from '../components/simple-type/simple-type-select.vue';
+import componentRelationList from '../components/component-relation/component-relation-list.vue';
+
+export default {
+  props: ['componentId'],
+  components: {
+    simpleTypeSelect,
+    componentRelationList,
+  },
+  data(){
+    return {
+      archComponent: {},
+      isEditing: false,
+    }
+  },
+  created: function(){
+    this.fetchArchComponent(this.componentId)
+  },
+  methods: {
+    fetchArchComponent(componentId) {
+      //just load the full list for now
+      Axios.get('/arch-component/'.concat(componentId)).then((response) => {
+        this.archComponent = response.data;
+      }).catch((err) => {
+        //FIXME: Handle this?
+      })
+    },
+    typeNameByTypeId(typeClassName,id) {
+      let typeData = this.$store.getters.typeByID(typeClassName,id);
+      if (typeData) {
+        return typeData.typeName;
+      }
+      return '';
+    },
+    showEditForm() {
+      this.isEditing = true;
+    },
+    saveEditForm() {
+      this.isEditing = false;
+
+      this.archComponent = Object.assign(this.archComponent,{
+        componentType: this.$refs.componentType.selectedType,
+        description: this.$refs.description.value,
+      });
+
+      console.log(this.$refs.componentType.selectedType);
+      //console.log(this.$refs);
+    },
+    cancelEditForm() {
+      this.isEditing = false;
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      // react to route changes...
+      //this.componentId = componentId;
+      this.fetchArchComponent(to.param.componentId)
+    }
+  },
+}
+</script>

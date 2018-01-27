@@ -12,11 +12,11 @@
     <div id="vueapp">
       <!-- <component-type-list></component-type-list> -->
       <div class="ui menu horizontal attached top">
-          <router-link class="item" to="/component-type">Component Types</router-link>
-          <router-link class="item" to="/arch-component">Arch Component</router-link>
-
+          <router-link class="item" to="/admin/simple-type/componenttype">Component Types</router-link>
+          <router-link class="item" to="/admin/simple-type/relationtype">Relation Types</router-link>
+          <router-link class="item" to="/admin/simple-type/tagtype">Tag Types</router-link>
+          <router-link class="item" :to="{name: 'arch-component-search'}">Arch Component</router-link>
       </div>
-
       <router-view></router-view>
     </div>
     <script src="/static/js/app.js"></script>

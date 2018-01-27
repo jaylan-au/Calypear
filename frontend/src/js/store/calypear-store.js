@@ -7,68 +7,91 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
-    componentTypes: [],
+    componenttype: [],
+    relationtype: [],
+    tagtype: [],
   },
   mutations: {
-    loadComponentTypes (state, payload) {
-      state.componentTypes = [].concat(payload);
+    loadClassTypes (state, payload) {
+      Vue.set(state,payload.classTypeName,payload.classTypeData);
     },
-    createComponentType (state, newComponentType) {
-      state.componentTypes.push(newComponentType);
+    createSimpleType( state, payload) {
+      state[payload.typeClassName].push(payload.data);
     },
-    updateComponentType (state, newComponentType) {
-      const componentTypeIndex = state.componentTypes.findIndex((currType) => {
-        return currType._id == newComponentType._id;
+    updateSimpleType(state, payload) {
+      const simpleTypeIndex = state[payload.typeClassName].findIndex((currType) => {
+        return currType._id == payload.data._id;
       });
-      if (componentTypeIndex >= 0) {
+      if (simpleTypeIndex >= 0) {
         //Vue.set(array,index,value) will also work
-        state.componentTypes.splice(componentTypeIndex, 1, newComponentType);
+        state[payload.typeClassName].splice(simpleTypeIndex, 1, payload.data);
       }
     },
-    deleteComponentType (state, typeToDeleteId) {
-      const componentTypeIndex = state.componentTypes.findIndex((currType) => {
-        return currType._id == typeToDeleteId;
+    deleteSimpleType(state, payload) {
+      const simpleTypeIndex = state[payload.typeClassName].findIndex((currType) => {
+        return currType._id == payload.id;
       });
 
-      if (componentTypeIndex >= 0) {
-        state.componentTypes.splice(componentTypeIndex, 1);
+      if (simpleTypeIndex >= 0) {
+        state[payload.typeClassName].splice(simpleTypeIndex, 1);
       }
-
     }
   },
   actions: {
-    loadComponentTypes({commit}) {
-      return Axios.get('/component-type').then((response) => {
-        commit('loadComponentTypes',response.data);
+    loadClassTypes({commit},payload) {
+      return Axios.get('/admin/simple-type/'.concat(payload.typeClassName)).then((response) => {
+        commit('loadClassTypes',{
+          classTypeName: payload.typeClassName,
+          classTypeData: response.data
+        });
+
       });
     },
-    createComponentType({commit},componentType) {
-      Axios.post('/component-type',componentType).then((response) => {
-        commit('createComponentType',response.data);
+    createSimpleType({commit},createProps) {
+      Axios.post('/admin/simple-type/'.concat(createProps.typeClassName),{
+        typeName: createProps.typeName
+      }).then((response) => {
+        commit('createSimpleType',{
+          typeClassName: createProps.typeClassName,
+          data: response.data
+        });
       }).catch((err) => {
         //FIXME: Handle this - error popup?
         console.log(err);
       });
-
     },
-    updateComponentType({commit},componentType) {
-      //Decide ? Push to DB first and on success do the commit
-      //OR commit first then try the DB and pus back later?
-      Axios.put('/component-type/'.concat(componentType._id),componentType).then((response) => {
-        commit('updateComponentType',componentType);
+    updateSimpleType({commit},updateProps) {
+      Axios.put('/admin/simple-type/'.concat(updateProps.typeClassName).concat('/').concat(updateProps.data._id),updateProps.data).then((response) => {
+        commit('updateSimpleType',{
+          typeClassName: updateProps.typeClassName,
+          data: response.data
+        });
       }).catch((err) => {
         console.log(err);
       });
-
-
     },
-    deleteComponentType({commit},typeToDeleteId) {
-      Axios.delete('/component-type/'.concat(typeToDeleteId)).then((response) => {
-        commit('deleteComponentType',typeToDeleteId);
+    deleteSimpleType({commit},deleteProps) {
+      Axios.delete('/admin/simple-type/'.concat(deleteProps.typeClassName).concat('/').concat(deleteProps.id)).then((response) => {
+        commit('deleteSimpleType',{
+          typeClassName: deleteProps.typeClassName,
+          id: deleteProps.id
+        });
       }).catch((err) => {
         console.log(err);
       });
-
+    },
+    reloadAllTypes({commit, dispatch}){
+      let typeClassNames = ['componenttype','relationtype','tagtype'];
+      typeClassNames.forEach((typeClassName) => {
+        dispatch('loadClassTypes',{typeClassName: typeClassName});
+      });
+    }
+  },
+  getters: {
+    typeByID: (state) => (typeClassName,id) => {
+      return state[typeClassName].find((currType) => {
+        return currType._id == id;
+      });
     }
   }
 });
