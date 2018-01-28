@@ -8,7 +8,10 @@
           </router-link>
         </div>
         <div class="description">
-          {{archComponent.componentType}}
+          {{typeNameByTypeId('componenttype',archComponent.componentType)}}
+        </div>
+        <div class="meta">
+          <a v-on:click="deleteComponent">Delete</a>
         </div>
       </div>
     </div>
@@ -19,5 +22,18 @@ import Axios from 'axios';
 
 export default {
   props: ['archComponents'],
+  methods: {
+    typeNameByTypeId(typeClassName,id) {
+      let typeData = this.$store.getters.typeByID(typeClassName,id);
+      if (typeData) {
+        return typeData.typeName;
+      }
+      return '';
+    },
+    deleteComponent() {
+      //FIXME: add confirmation
+      //TODO: Add function here (Do it via the store and update the results)
+    }
+  }
 }
 </script>

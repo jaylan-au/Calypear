@@ -2,8 +2,11 @@
   <div class="ui segment">
     <div class="ui segment">
       <div class="content">
-        <h1 class="header" >
+        <h1 class="header" v-show="!isEditing">
           {{archComponent.componentName}}
+        </h1>
+        <h1 class="header" v-show="isEditing">
+          <input v-bind:value="archComponent.componentName" placeholder="Component Name..." ref="componentName"/>
         </h1>
         <div class="ui items">
           <div class="item">
@@ -13,7 +16,7 @@
             <div class="content" v-show="isEditing">
               <simple-type-select
                 v-bind:typeClassName="'componenttype'"
-                v-bind:selected="archComponent.componentType"
+                :selectedType="archComponent.componentType"
                 ref="componentType" >
               </simple-type-select>
             </div>
@@ -85,7 +88,7 @@ export default {
       Axios.get('/component-relation/component/'.concat(componentId)).then((response) => {
         this.componentRelations = response.data;
       });
-      
+
     },
     typeNameByTypeId(typeClassName,id) {
       let typeData = this.$store.getters.typeByID(typeClassName,id);
@@ -100,10 +103,11 @@ export default {
     saveEditForm() {
       this.isEditing = false;
 
-      let updateData = Object.assign(this.archComponent,{
+      let updateData = {
+        componentName: this.$refs.componentName.value,
         componentType: this.$refs.componentType.selectedType,
         description: this.$refs.description.value,
-      });
+      };
 
       Axios.put('/arch-component/'.concat(this.archComponent._id),updateData).then((response) => {
         this.archComponent = response.data;
@@ -112,7 +116,6 @@ export default {
         console.log(err);
       })
 
-      console.log(this.$refs.componentType.selectedType);
       //console.log(this.$refs);
     },
     cancelEditForm() {
