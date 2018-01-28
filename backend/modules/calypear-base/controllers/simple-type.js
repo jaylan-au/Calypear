@@ -33,10 +33,10 @@ module.exports = {
       res.sendStatus(500).send(err);
     });
   },
-  delete: function(req, res, next) {
+  destroy: function(req, res, next) {
     const odm = req.app.get('odm');
     const ObjectModel = odm.models[req.params.typeClass];
-    ObjectModel.delete(req.params.typeId).then((dbresponse) => {
+    ObjectModel.destroy(req.params.typeId).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);

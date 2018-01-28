@@ -3,4 +3,5 @@ module.exports = [].concat([
   require('./relation-type'),
   require('./tag-type'),
   require('./arch-component'),
+  require('./component-relation'),
 ]);

@@ -49,7 +49,6 @@
       </div>
     </div>
   </div>
-
 </template>
 <script>
 import Axios from 'axios';
@@ -93,10 +92,17 @@ export default {
     saveEditForm() {
       this.isEditing = false;
 
-      this.archComponent = Object.assign(this.archComponent,{
+      let updateData = Object.assign(this.archComponent,{
         componentType: this.$refs.componentType.selectedType,
         description: this.$refs.description.value,
       });
+
+      Axios.put('/arch-component/'.concat(this.archComponent._id),updateData).then((response) => {
+        this.archComponent = response.data;
+      }).catch((err) => {
+        //FIXME: handle this
+        console.log(err);
+      })
 
       console.log(this.$refs.componentType.selectedType);
       //console.log(this.$refs);

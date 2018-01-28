@@ -44,6 +44,6 @@ router.route('/:typeClass/:typeId')
     }
   )
 ).put(simpleTypeController.update)
-  .delete(simpleTypeController.delete);
+  .delete(simpleTypeController.destroy);
 
 module.exports = router;

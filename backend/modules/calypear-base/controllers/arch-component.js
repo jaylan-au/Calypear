@@ -36,10 +36,10 @@ module.exports = {
       res.sendStatus(500).send(err);
     });
   },
-  delete: function(req, res, next) {
+  destroy: function(req, res, next) {
     const odm = req.app.get('odm');
     const ArchComponent = odm.models.archcomponent;
-    ArchComponent.delete(req.params.componentId).then((dbresponse) => {
+    ArchComponent.destroy(req.params.componentId).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);

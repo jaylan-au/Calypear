@@ -30,6 +30,6 @@ router.delete('/:componentId',celebrate({
   params: {
     componentId: Joi.string().required()
   }
-}),archComponentController.delete);
+}),archComponentController.destroy);
 
 module.exports = router;

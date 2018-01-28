@@ -65,7 +65,7 @@ class CalypearModel {
   }
 
   //Create the document in the datebase
-  create(doc) {
+  createSingle(doc) {
     //Validate the document first
     let schema = this.validationSchema;
     //Will throw an error if supplied doc doesn't match schema
@@ -96,6 +96,28 @@ class CalypearModel {
     //FIXME: Handle this and return a better error;
   }
 
+  //Create multiple documents
+  //FIXME: Add transactional support to rollback when there's a failure
+  create(docs) {
+
+    if Array.isArray(docs) {
+      //Doesn't use Pouch's bulkDocs as this doesn't support transactions either
+      let promiseArray = docs.map((currDoc) => {
+        return this.createSingle(currDoc);
+      });
+
+      return Promise.all(promiseArray).then((responses) => {
+        //arguments should actually be all the response objects so we can combine them
+        console.log(responses);
+        return responses;
+      });
+    } else {
+      return this.createSingle(docs);
+    }
+
+
+  }
+
   //Get a document purely by its ID
   get(docId, options) {
 
@@ -121,6 +143,7 @@ class CalypearModel {
       //Don't need to set _id or _rev as these are already supplied
       let updateObj = Object.assign({},dbDoc,changeAttributes,{
         docType: this.docType,
+        _id: docId,
       });
       //Validate the document first
       let validated = Joi.validate(updateObj,this.validationSchema);
@@ -132,7 +155,7 @@ class CalypearModel {
     });
   }
 
-  delete(docId) {
+  destroySingle(docId) {
     //Get the document first (to get the revId)
     return this.get(docId).then((dbDoc) => {
       //remove it
@@ -140,6 +163,21 @@ class CalypearModel {
         return dbresponse;
       });
     });
+  }
+
+  destroy(docIds) {
+    if Array.isArray(docIds) {
+      //Doesn't use Pouch's bulkDocs as this doesn't support transactions either
+      let promiseArray = docIds.map((currDocId) => {
+        return this.destroySingle(currDocId);
+      });
+
+      return Promise.all(promiseArray).then((responses) => {
+        return responses;
+      });
+    } else {
+      return this.removeSingle(docIds);
+    }
   }
 
   get docType(){
