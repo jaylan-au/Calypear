@@ -57,7 +57,7 @@ module.exports = {
     const odm = req.app.get('odm');
     const ComponentRelation = odm.models.componentrelation;
     let selector = {
-      from: res.params.componentId,
+      from: req.params.componentId,
     };
 
     ComponentRelation.find(selector).then((dbresponse) => {

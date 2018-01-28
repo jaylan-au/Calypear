@@ -16,7 +16,7 @@
             <div class="content" v-show="isEditing">
               <simple-type-select
                 v-bind:typeClassName="'componenttype'"
-                :selectedType="archComponent.componentType"
+                :selected="archComponent.componentType"
                 ref="componentType" >
               </simple-type-select>
             </div>

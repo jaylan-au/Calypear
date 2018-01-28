@@ -59,7 +59,7 @@ class CalypearModel {
 
   find(selector) {
     //FIXME: set this properly - at the moment it won't use indexes properly
-    let queryStatement = Object.assign({},{'selector': selector},options);
+    let queryStatement = Object.assign({},{'selector': selector});
     //Push selector to
     queryStatement.selector.docType = this.docType;
     return this._db.find(queryStatement).then((dbresponse) => {
@@ -123,7 +123,7 @@ class CalypearModel {
   }
 
   //Get a document purely by its ID
-  get(docId, options) {
+  get(docId) {
 
     return this._db.get(docId).then((dbresponse) => {
       //FIXME: Check the document is of the correct type

@@ -19,6 +19,11 @@ export default {
   components: {
     componentRelationItem,
     componentRelationNew,
+  },
+  methods: {
+    addComponentRelation() {
+
+    },
   }
 }
 
