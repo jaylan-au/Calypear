@@ -14,6 +14,9 @@ class CalypearModel {
       _rev: Joi.string(),
       _id: Joi.string(),
     });
+    if (docType == 'archcomponent') {
+      console.log('DECLARED');
+    }
   }
 
   static define(db,definition) {
@@ -69,6 +72,7 @@ class CalypearModel {
     //Validate the document first
     let schema = this.validationSchema;
     //Will throw an error if supplied doc doesn't match schema
+    //FIXME:P1 - This just errors out - need to wrap this in handling
     let validated = Joi.attempt(doc,schema);
     //FIXME: Should we create a document object first to implement functions?
 
@@ -100,7 +104,7 @@ class CalypearModel {
   //FIXME: Add transactional support to rollback when there's a failure
   create(docs) {
 
-    if Array.isArray(docs) {
+    if (Array.isArray(docs)) {
       //Doesn't use Pouch's bulkDocs as this doesn't support transactions either
       let promiseArray = docs.map((currDoc) => {
         return this.createSingle(currDoc);
@@ -141,9 +145,9 @@ class CalypearModel {
       //Copy the object and alter the properties
       //Force DocType to match this model
       //Don't need to set _id or _rev as these are already supplied
+      //FIXME: _id and _revId could be overwritten here - prevent this
       let updateObj = Object.assign({},dbDoc,changeAttributes,{
         docType: this.docType,
-        _id: docId,
       });
       //Validate the document first
       let validated = Joi.validate(updateObj,this.validationSchema);
@@ -166,7 +170,7 @@ class CalypearModel {
   }
 
   destroy(docIds) {
-    if Array.isArray(docIds) {
+    if (Array.isArray(docIds)) {
       //Doesn't use Pouch's bulkDocs as this doesn't support transactions either
       let promiseArray = docIds.map((currDocId) => {
         return this.destroySingle(currDocId);
@@ -176,7 +180,7 @@ class CalypearModel {
         return responses;
       });
     } else {
-      return this.removeSingle(docIds);
+      return this.destroySingle(docIds);
     }
   }
 

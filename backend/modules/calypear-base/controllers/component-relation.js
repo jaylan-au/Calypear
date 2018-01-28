@@ -53,20 +53,42 @@ module.exports = {
       res.sendStatus(500).send(err);
     });
   },
-  read: function(req, res, next) {
-    res.sendStatus(500).send('Not Implemented');
+  readAllForComponent: function(req, res, next) {
+    const odm = req.app.get('odm');
+    const ComponentRelation = odm.models.componentrelation;
+    let selector = {
+      from: res.params.componentId,
+    };
+
+    ComponentRelation.find(selector).then((dbresponse) => {
+      res.send(dbresponse);
+    }).catch((err) => {
+      res.sendStatus(500).send(err);
+    });
   },
   update: function(req, res, next) {
     res.sendStatus(500).send('Not Implemented');
   },
-  //Deletion is done via the transaction id - which
+  //Deletion is done via the transaction id - removes both sides of the transaction
   destroy: function(req, res, next) {
     const odm = req.app.get('odm');
     const ComponentRelation = odm.models.componentrelation;
 
+    ComponentRelation.find({
+      transaction: req.params.transaction
+    }).then((dbresponse) => {
+      //If an array isn't return then the transaction is wrong or invalid
+      if (Array.isArray(dbresponse)) {
+        let docIdsToDelete = dbresponse.map()
 
-    ComponentRelation.destory(req.params.transaction).then((dbresponse) => {
-      res.send(dbresponse);
+        ComponentRelation.destroy(docIdsToDelete).then((dbresponse) => {
+          res.send(dbresponse);
+        }).catch((err) => {
+          res.sendStatus(500).send(err);
+        });
+      } else {
+        res.sendStatus(500).send('Invalid Transaction Id');
+      }
     }).catch((err) => {
       res.sendStatus(500).send(err);
     });

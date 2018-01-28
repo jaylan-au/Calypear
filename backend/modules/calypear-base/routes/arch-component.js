@@ -16,14 +16,14 @@ router.post('/:componentId',celebrate({
   params: {
     componentId: Joi.string().required(),
   },
-  body: archComponentModel.attributes
+  body: Joi.object(archComponentModel.attributes).unknown()
 }),archComponentController.create);
 
 router.put('/:componentId',celebrate({
   params: {
     componentId: Joi.string().required(),
   },
-  body: archComponentModel.attributes
+  body: Joi.object(archComponentModel.attributes).unknown()
 }),archComponentController.update);
 
 router.delete('/:componentId',celebrate({

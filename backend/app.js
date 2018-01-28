@@ -46,12 +46,6 @@ let calypearODM = app.get('odm');
 app.use('/app',express.static(path.join(__dirname, '../frontend/src/html/index.html')));
 app.use('/static',express.static(path.join(__dirname, '../frontend/dist')));
 
-calypearODM.define({
-  docType: 'archcomponent',
-  attributes: {
-      componentName: Joi.string().min(1).required(),
-  }
-});
 console.log('Models Loaded');
 // calypearODM.models.archcomponent.create({
 //   componentName: 'Test1',

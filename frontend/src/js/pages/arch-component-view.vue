@@ -64,6 +64,8 @@ export default {
   data(){
     return {
       archComponent: {},
+      componentRelations: [],
+      componentTags: [],
       isEditing: false,
     }
   },
@@ -72,12 +74,18 @@ export default {
   },
   methods: {
     fetchArchComponent(componentId) {
-      //just load the full list for now
+      //Get the component's base details
       Axios.get('/arch-component/'.concat(componentId)).then((response) => {
         this.archComponent = response.data;
       }).catch((err) => {
         //FIXME: Handle this?
       })
+
+      //TODO: lift this up into the API to get everything at once
+      Axios.get('/component-relation/component/'.concat(componentId)).then((response) => {
+        this.componentRelations = response.data;
+      });
+      
     },
     typeNameByTypeId(typeClassName,id) {
       let typeData = this.$store.getters.typeByID(typeClassName,id);

@@ -20,6 +20,7 @@ module.exports = {
   read: function(req, res, next) {
     const odm = req.app.get('odm');
     const ArchComponent = odm.models.archcomponent;
+    const ComponentRelation = odm.models.componentrelation;
     ArchComponent.get(req.params.componentId).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
@@ -33,6 +34,7 @@ module.exports = {
     ArchComponent.update(req.params.componentId,updateParams).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
+      console.log(err);
       res.sendStatus(500).send(err);
     });
   },
