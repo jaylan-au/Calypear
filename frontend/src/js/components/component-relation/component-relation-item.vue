@@ -7,7 +7,9 @@
         {{typeNameResolver('relationtype',componentRelation.relationType,componentRelation.inverse)}}
     </div>
     <div class="from column">
+      <router-link :to="{name: 'arch-component-view', params: {componentId: componentRelation.to}}">
         {{archComponentNameResolver(componentRelation.to)}}
+      </router-link>
     </div>
     <div class="actions column">
       <a v-on:click="deleteComponentRelation">

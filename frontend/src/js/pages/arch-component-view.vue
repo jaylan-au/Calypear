@@ -133,8 +133,8 @@ export default {
     '$route' (to, from) {
       // react to route changes...
       //this.componentId = componentId;
-      this.fetchArchComponent(to.param.componentId)
-    }
+      this.fetchArchComponent(to.params.componentId)
+    },
   },
 }
 </script>

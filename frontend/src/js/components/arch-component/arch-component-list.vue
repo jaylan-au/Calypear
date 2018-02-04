@@ -11,7 +11,7 @@
           {{typeNameByTypeId('componenttype',archComponent.componentType)}}
         </div>
         <div class="meta">
-          <a v-on:click="deleteComponent">Delete</a>
+          <a v-on:click="deleteArchComponent(archComponent._id)">Delete</a>
         </div>
       </div>
     </div>
@@ -30,10 +30,10 @@ export default {
       }
       return '';
     },
-    deleteComponent() {
-      //FIXME: add confirmation
-      //TODO: Add function here (Do it via the store and update the results)
+    deleteArchComponent(id) {
+      this.$emit('arch-component-delete',{id:id});
     }
+    
   }
 }
 </script>

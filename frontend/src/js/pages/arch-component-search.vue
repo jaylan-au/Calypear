@@ -1,29 +1,40 @@
 <template>
   <div class="ui segement">
     <div class="header">Search Results</div>
-    <arch-component-list v-bind:archComponents="searchResults"></arch-component-list>
+    <arch-component-list
+      v-bind:archComponents="searchResults"
+      v-on:arch-component-delete="deleteArchComponent">
+    </arch-component-list>
+    <arch-component-new
+      v-on:arch-component-create="createArchComponent">
+    </arch-component-new>
   </div>
 </template>
 <script>
 import Axios from 'axios';
 import archComponentList from '../components/arch-component/arch-component-list.vue';
+import archComponentNew from '../components/arch-component/new.vue';
 
 export default {
   components: {
-    archComponentList
+    archComponentList,
+    archComponentNew,
   },
-  data(){
-    return {
-      searchResults: []
+  computed: {
+    searchResults: function(){
+      return this.$store.state.archComponent.archComponentCache;
     }
   },
-  created: function(){
-    //just load the full list for now
-    Axios.get('/arch-component').then((response) => {
-      this.searchResults = response.data;
-    }).catch((err) => {
-      //FIXME: Handle this?
-    })
+  methods: {
+    createArchComponent(createProps) {
+      this.$store.dispatch('archComponent/createArchComponent',createProps);
+    },
+    updateArchComponent(updateProps) {
+      this.$store.dispatch('archComponent/updateArchComponent',updateProps);
+    },
+    deleteArchComponent(deleteProps) {
+      this.$store.dispatch('archComponent/deleteArchComponent',deleteProps);
+    }
   }
 }
 </script>

@@ -7,7 +7,7 @@ export default {
     archComponentCache: [],
   },
   mutations: {
-    setArchComponentCache (state, payload) {
+    setArchComponentCache(state, payload) {
       Vue.set(state,'archComponentCache',payload.archComponents);
     },
   },
@@ -18,7 +18,31 @@ export default {
           archComponents: response.data,
         });
       });
-    }
+    },
+    createArchComponent({commit, dispatch}, createProps) {
+      Axios.post('/arch-component/'.concat(createProps.id),createProps).then((response) => {
+        //FIXME: actually update the cache intelligently
+        dispatch('reloadArchComponentCache');
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    updateArchComponent({commit, dispatch}, updateProps) {
+      Axios.put('/arch-component/'.concat(updateProps.id),updateProps).then((response) => {
+        //FIXME: actually update the cache intelligently
+        dispatch('reloadArchComponentCache');
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    deleteArchComponent({commit, dispatch}, deleteProps) {
+      Axios.delete('/arch-component/'.concat(deleteProps.id)).then((response) => {
+        //FIXME: actually update the cache intelligently
+        dispatch('reloadArchComponentCache');
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
   },
   getters: {
     archComponentById: (state) => (id) => {
