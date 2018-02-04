@@ -47,7 +47,7 @@
         </h1>
         <component-relation-list
           v-bind:componentRelations="archComponent.relations"
-          v-bind:componentId="archComponent._id" >
+          v-bind:componentId="componentId" >
         </component-relation-list>
       </div>
     </div>

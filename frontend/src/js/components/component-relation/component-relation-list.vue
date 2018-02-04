@@ -4,7 +4,8 @@
       v-for="componentRelation in componentRelations"
       v-bind:componentRelation="componentRelation" :key="componentRelation._id"
       :archComponentNameResolver="archComponentNameById"
-      :typeNameResolver="typeNameByTypeId">
+      :typeNameResolver="typeNameByTypeId"
+      v-on:component-relation-delete="deleteComponentRelation">
     </component-relation-item>
     <component-relation-new
       v-bind:componentId="componentId"
@@ -45,8 +46,8 @@ export default {
         console.log(err);
       });
     },
-    deleteComponentRelation(relationTransaction) {
-      Axios.delete('/component-relation/',relationTransaction).then((results) => {
+    deleteComponentRelation(transaction) {
+      Axios.delete('/component-relation/'.concat(transaction)).then((results) => {
         this.fetchComponentRelations(this.componentId);
       }).catch((err) => {
         //FIXME: handle this proeprly
@@ -75,7 +76,7 @@ export default {
       if (typeData) {
         return typeData.typeName;
       }
-      return '';
+      return 'Unknown type:'+id;
     },
   },
   watch: {

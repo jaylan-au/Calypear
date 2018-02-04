@@ -79,7 +79,9 @@ module.exports = {
     }).then((dbresponse) => {
       //If an array isn't return then the transaction is wrong or invalid
       if (Array.isArray(dbresponse)) {
-        let docIdsToDelete = dbresponse.map()
+        let docIdsToDelete = dbresponse.map((currDoc) => {
+          return currDoc._id;
+        })
 
         ComponentRelation.destroy(docIdsToDelete).then((dbresponse) => {
           res.send(dbresponse);
@@ -90,6 +92,7 @@ module.exports = {
         res.sendStatus(500).send('Invalid Transaction Id');
       }
     }).catch((err) => {
+      console.log(err);
       res.sendStatus(500).send(err);
     });
   }

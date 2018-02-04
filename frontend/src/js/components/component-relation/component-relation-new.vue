@@ -11,7 +11,10 @@
       </simple-type-select>
     </div>
     <div class="from ui input column">
-      <input type="text" class="input" v-model="componentRelation.to" placeholder="Related Component"/>
+      <arch-component-select
+        v-bind:selected="componentRelation.to"
+        ref="toArchComponent" >
+      </arch-component-select>
     </div>
     <button class="ui primary button" v-on:click="createRelation">Create</button>
   </div>
@@ -19,11 +22,13 @@
 <script>
 import Axios from 'axios';
 import simpleTypeSelect from '../simple-type/simple-type-select.vue';
+import archComponentSelect from '../arch-component/arch-component-select.vue';
 
 export default {
   props: ['componentId','archComponentNameResolver'],
   components: {
     simpleTypeSelect,
+    archComponentSelect,
   },
   data() {
     return {
@@ -37,6 +42,7 @@ export default {
   methods: {
     createRelation() {
       this.componentRelation.relationType = this.$refs.relationType.value;
+      this.componentRelation.to = this.$refs.toArchComponent.value;
       this.$emit('component-relation-new',{
         relationData: this.componentRelation
       });
