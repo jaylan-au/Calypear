@@ -4,6 +4,6 @@ module.exports = {
   attributes: {
     component: Joi.string().required(),
     tagType: Joi.string().required(),
-    value: Joi.string().required(),
+    value: Joi.string().required().allow(''),
   }
 };

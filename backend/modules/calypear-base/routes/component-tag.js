@@ -15,7 +15,7 @@ router.post('/',celebrate({
   body: {
     component: Joi.string().required(),
     tagType: Joi.string().required(),
-    value: Joi.string(),
+    value: Joi.string().allow(''),
   }
 }),componentTagController.create);
 

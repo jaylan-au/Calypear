@@ -5,7 +5,7 @@ module.exports = {
     componentName: Joi.string().min(1).required(),
     componentType: Joi.string().required(),
     alternativeNames: Joi.string(),
-    description: Joi.string(),
+    description: Joi.string().allow(''),
     tranche: Joi.string(),
   }
 };
