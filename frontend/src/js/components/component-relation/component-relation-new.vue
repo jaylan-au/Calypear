@@ -1,22 +1,24 @@
 <template>
   <div class="ui item component-relation three column row">
-    <div class="from ui input column">
-      {{archComponentNameResolver(componentRelation.from)}}
-    </div>
-    <div class="relation ui input column">
-      <simple-type-select
-        v-bind:typeClassName="'relationtype'"
-        v-bind:selected="componentRelation.relationType"
-        ref="relationType" >
-      </simple-type-select>
-    </div>
-    <div class="from ui input column">
-      <arch-component-select
-        v-bind:selected="componentRelation.to"
-        ref="toArchComponent" >
-      </arch-component-select>
-    </div>
-    <button class="ui primary button" v-on:click="createRelation">Create</button>
+    <form class="ui form">
+      <div class="from ui input column">
+        {{archComponentNameResolver(componentRelation.from)}}
+      </div>
+      <div class="relation ui input column">
+        <simple-type-select
+          v-bind:typeClassName="'relationtype'"
+          v-bind:selected="componentRelation.relationType"
+          ref="relationType" >
+        </simple-type-select>
+      </div>
+      <div class="from ui input column">
+        <arch-component-select
+          v-bind:selected="componentRelation.to"
+          ref="toArchComponent" >
+        </arch-component-select>
+      </div>
+      <button class="ui primary button" v-on:click="createRelation">Create</button>
+    </form>
   </div>
 </template>
 <script>

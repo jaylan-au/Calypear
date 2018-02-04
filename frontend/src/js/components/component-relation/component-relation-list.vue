@@ -32,8 +32,6 @@ export default {
     }
   },
   mounted() {
-    let vm = this;
-    console.log('a',vm.componentId);
     this.fetchComponentRelations(this.componentId);
   },
   methods: {

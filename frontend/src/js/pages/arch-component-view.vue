@@ -46,9 +46,21 @@
           Relations
         </h1>
         <component-relation-list
-          v-bind:componentRelations="archComponent.relations"
+          v-bind:componentRelations="componentRelations"
           v-bind:componentId="componentId" >
         </component-relation-list>
+      </div>
+    </div>
+
+    <div class="ui segment">
+      <div class="content">
+        <h1 class="header" >
+          Tags
+        </h1>
+        <component-tag-list
+          v-bind:componentTags="componentTags"
+          v-bind:componentId="componentId" >
+        </component-tag-list>
       </div>
     </div>
   </div>
@@ -57,12 +69,14 @@
 import Axios from 'axios';
 import simpleTypeSelect  from '../components/simple-type/simple-type-select.vue';
 import componentRelationList from '../components/component-relation/component-relation-list.vue';
+import componentTagList from '../components/component-tag/component-tag-list.vue';
 
 export default {
   props: ['componentId'],
   components: {
     simpleTypeSelect,
     componentRelationList,
+    componentTagList,
   },
   data(){
     return {
@@ -84,10 +98,7 @@ export default {
         //FIXME: Handle this?
       })
 
-      //TODO: lift this up into the API to get everything at once
-      Axios.get('/component-relation/component/'.concat(componentId)).then((response) => {
-        this.componentRelations = response.data;
-      });
+      
 
     },
     typeNameByTypeId(typeClassName,id) {
