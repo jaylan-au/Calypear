@@ -4,7 +4,7 @@
         {{archComponentNameResolver(componentRelation.from)}}
     </div>
     <div class="relation column">
-        {{typeNameResolver('relationtype',componentRelation.relationType)}}
+        {{typeNameResolver('relationtype',componentRelation.relationType,componentRelation.inverse)}}
     </div>
     <div class="from column">
         {{archComponentNameResolver(componentRelation.to)}}

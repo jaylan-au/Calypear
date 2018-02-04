@@ -71,10 +71,15 @@ export default {
 
       return 'Unknown Component:'+id;
     },
-    typeNameByTypeId(typeClassName,id) {
+    typeNameByTypeId(typeClassName,id,isInverse = false) {
       let typeData = this.$store.getters.typeByID(typeClassName,id);
       if (typeData) {
-        return typeData.typeName;
+        //Handle the special case for relation types
+        if ((isInverse) && (typeClassName == 'relationtype')) {
+          return typeData.typeNameInverse;
+        } else {
+          return typeData.typeName;
+        }
       }
       return 'Unknown type:'+id;
     },
