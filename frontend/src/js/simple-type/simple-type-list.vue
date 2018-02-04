@@ -40,7 +40,7 @@ export default {
   computed: {
     classTypes: function(){
       console.log(this.$store.state);
-      return this.$store.state[this.typeClassName];
+      return this.$store.state.simpleType[this.typeClassName];
     }
   },
   methods: {

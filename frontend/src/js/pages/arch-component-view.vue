@@ -97,6 +97,13 @@ export default {
       }
       return '';
     },
+    archComponentNameById(id) {
+      let archComponentName = this.$store.getters.archComponentNameById(id);
+      if (archComponentName) {
+        return archComponentName;
+      }
+      return '';
+    },
     showEditForm() {
       this.isEditing = true;
     },
@@ -105,7 +112,7 @@ export default {
 
       let updateData = {
         componentName: this.$refs.componentName.value,
-        componentType: this.$refs.componentType.selectedType,
+        componentType: this.$refs.componentType.value,
         description: this.$refs.description.value,
       };
 

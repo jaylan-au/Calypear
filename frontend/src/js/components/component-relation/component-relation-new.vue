@@ -1,16 +1,16 @@
 <template>
-  <div class="ui item component-relation">
-    <div class="from ui input">
-      <input type="text" v-model="componentRelation.from" placeholder=""/>
+  <div class="ui item component-relation three column row">
+    <div class="from ui input column">
+      {{archComponentNameResolver(componentRelation.from)}}
     </div>
-    <div class="relation ui input">
+    <div class="relation ui input column">
       <simple-type-select
         v-bind:typeClassName="'relationtype'"
         v-bind:selected="componentRelation.relationType"
         ref="relationType" >
       </simple-type-select>
     </div>
-    <div class="from ui input">
+    <div class="from ui input column">
       <input type="text" class="input" v-model="componentRelation.to" placeholder="Related Component"/>
     </div>
     <button class="ui primary button" v-on:click="createRelation">Create</button>
@@ -21,7 +21,7 @@ import Axios from 'axios';
 import simpleTypeSelect from '../simple-type/simple-type-select.vue';
 
 export default {
-  props: ['componentId'],
+  props: ['componentId','archComponentNameResolver'],
   components: {
     simpleTypeSelect,
   },
@@ -35,15 +35,16 @@ export default {
     }
   },
   methods: {
-    typeNameByTypeId(typeClassName,id) {
-      let typeData = this.$store.getters.typeByID(typeClassName,id);
-      if (typeData) {
-        return typeData.typeName;
-      }
-      return '';
-    },
     createRelation() {
-      this.$emit('component-relation-new');
+      this.componentRelation.relationType = this.$refs.relationType.value;
+      this.$emit('component-relation-new',{
+        relationData: this.componentRelation
+      });
+    },
+  },
+  watch: {
+    componentId: function(to, from) {
+      this.componentRelation.from = to;
     }
   }
 }

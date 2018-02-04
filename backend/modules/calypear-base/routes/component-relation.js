@@ -12,12 +12,16 @@ router.get('/component/:componentId',celebrate({
 }),componentRelationController.readAllForComponent);
 
 router.post('/',celebrate({
-  body: Joi.object(ComponentRelationModel.attributes).unknown()
+  body: {
+    from: Joi.string().required(),
+    relationType: Joi.string().required(),
+    to: Joi.string().required(),
+  }
 }),componentRelationController.create);
 
 router.delete('/:transaction',celebrate({
   params: {
-    componentId: Joi.string().required()
+    transaction: Joi.string().required()
   }
 }),componentRelationController.destroy);
 

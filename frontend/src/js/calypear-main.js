@@ -37,6 +37,7 @@ const app = new Vue({
   store,
   created: function() {
     this.$store.dispatch('reloadAllTypes');
+    this.$store.dispatch('archComponent/reloadArchComponentCache')
   }
 }).$mount('#vueapp');
 // new Vue({
