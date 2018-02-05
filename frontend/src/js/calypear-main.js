@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import Logger from './lib/logger';
 import store from './store/calypear-store.js';
 
-import simpleTypeList from './simple-type/simple-type-list.vue';
+import simpleTypeList from './pages/admin/simple-type-list.vue';
 import relationTypeList from './components/relation-type/list.vue';
 import archComponentSearch from './pages/arch-component-search.vue';
 import archComponentView from './pages/arch-component-view.vue';
@@ -16,8 +16,9 @@ Vue.use(Logger);
 const router = new VueRouter({
   routes: [
     {
-      path: '/admin/simple-type/:typeClass',
-      component: simpleTypeList
+      path: '/admin/simple-type/:typeClassName',
+      component: simpleTypeList,
+      props: (route) => ({"typeClassName": route.params.typeClassName})
     },
     {
       path: '/admin/relation-type',
