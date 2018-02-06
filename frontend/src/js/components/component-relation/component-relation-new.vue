@@ -1,25 +1,25 @@
 <template>
-  <div class="ui item component-relation three column row">
-    <form class="ui form">
-      <div class="from ui input column">
+  <tr>
+      <td>
         {{archComponentNameResolver(componentRelation.from)}}
-      </div>
-      <div class="relation ui input column">
+      </td>
+      <td>
         <simple-type-select
           v-bind:typeClassName="'relationtype'"
           v-bind:selected="componentRelation.relationType"
           ref="relationType" >
         </simple-type-select>
-      </div>
-      <div class="from ui input column">
+      </td>
+      <td>
         <arch-component-select
           v-bind:selected="componentRelation.to"
           ref="toArchComponent" >
         </arch-component-select>
-      </div>
-      <button class="ui primary button" v-on:click="createRelation">Create</button>
-    </form>
-  </div>
+      </td>
+      <td>
+        <button class="ui primary button" v-on:click="createRelation">Create</button>
+      </td>
+  </tr>
 </template>
 <script>
 import Axios from 'axios';

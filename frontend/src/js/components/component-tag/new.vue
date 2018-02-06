@@ -1,24 +1,22 @@
 <template>
-  <div class="ui item component-tag three column row">
-    <form class="ui form">
-      <div class="relation ui input column">
+  <tr>
+      <td>
         <simple-type-select
           v-bind:typeClassName="'tagtype'"
           v-bind:selected="componentTag.tagType"
           ref="tagType" >
         </simple-type-select>
-      </div>
-      <div class="from ui input column">
-        <div class="field">
+      </td>
+      <td>
+        <div class="ui input field">
           <label>Value</label>
           <input placeholder="Tag value" type="text" v-model="componentTag.value">
         </div>
-      </div>
-      <div class="column">
+      </td>
+      <td>
         <button class="ui primary button" v-on:click="createComponentTag">Create</button>
-      </div>
-    </form>
-  </div>
+      </td>
+  </tr>
 </template>
 <script>
 import Axios from 'axios';

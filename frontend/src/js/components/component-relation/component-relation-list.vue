@@ -1,19 +1,21 @@
 <template>
-  <div class="ui list grid">
-    <component-relation-item
-      v-for="componentRelation in componentRelations"
-      v-bind:componentRelation="componentRelation" :key="componentRelation._id"
-      :archComponentNameResolver="archComponentNameById"
-      :typeNameResolver="typeNameByTypeId"
-      v-on:component-relation-delete="deleteComponentRelation">
-    </component-relation-item>
-    <component-relation-new
-      v-bind:componentId="componentId"
-      v-on:component-relation-new="addComponentRelation"
-      :archComponentNameResolver="archComponentNameById"
-      :typeNameResolver="typeNameByTypeId">
-    </component-relation-new>
-  </div>
+  <table class="ui table">
+    <tbody>
+      <component-relation-item
+        v-for="componentRelation in componentRelations"
+        v-bind:componentRelation="componentRelation" :key="componentRelation._id"
+        :archComponentNameResolver="archComponentNameById"
+        :typeNameResolver="typeNameByTypeId"
+        v-on:component-relation-delete="deleteComponentRelation">
+      </component-relation-item>
+      <component-relation-new
+        v-bind:componentId="componentId"
+        v-on:component-relation-new="addComponentRelation"
+        :archComponentNameResolver="archComponentNameById"
+        :typeNameResolver="typeNameByTypeId">
+      </component-relation-new>
+    </tbody>
+  </table>
 </template>
 <script>
 import Axios from 'axios';

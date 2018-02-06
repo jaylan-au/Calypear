@@ -1,17 +1,19 @@
 <template>
-  <div class="ui list grid">
-    <component-tag-item
-      v-for="componentTag in componentTags"
-      v-bind:componentTag="componentTag" :key="componentTag._id"
-      :typeNameResolver="typeNameByTypeId"
-      v-on:component-tag-delete="deleteComponentTag">
-    </component-tag-item>
-    <component-tag-new
-      v-bind:componentId="componentId"
-      v-on:component-tag-new="createComponentTag"
-      :typeNameResolver="typeNameByTypeId">
-    </component-tag-new>
-  </div>
+  <table class="ui table">
+    <tbody>
+      <component-tag-item
+        v-for="componentTag in componentTags"
+        v-bind:componentTag="componentTag" :key="componentTag._id"
+        :typeNameResolver="typeNameByTypeId"
+        v-on:component-tag-delete="deleteComponentTag">
+      </component-tag-item>
+      <component-tag-new
+        v-bind:componentId="componentId"
+        v-on:component-tag-new="createComponentTag"
+        :typeNameResolver="typeNameByTypeId">
+      </component-tag-new>
+    </tbody>
+  </table>
 </template>
 <script>
 import Axios from 'axios';

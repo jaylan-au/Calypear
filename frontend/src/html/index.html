@@ -9,15 +9,23 @@
 
   </head>
   <body>
-    <div id="vueapp">
-      <!-- <component-type-list></component-type-list> -->
+    <div id="vueapp" class="ui">
       <div class="ui menu horizontal attached top">
+        <div class="ui container">
           <router-link class="item" to="/admin/simple-type/componenttype">Component Types</router-link>
           <router-link class="item" to="/admin/relation-type">Relation Types</router-link>
           <router-link class="item" to="/admin/simple-type/tagtype">Tag Types</router-link>
           <router-link class="item" :to="{name: 'arch-component-search'}">Arch Component</router-link>
+        </div>
       </div>
-      <router-view></router-view>
+      <div class="ui grid container">
+        <div class="four wide column">
+        </div>
+        <div class="twelve wide column">
+          <!-- <component-type-list></component-type-list> -->
+          <router-view class="ui container"></router-view>
+        </div>
+      </div>
     </div>
     <script src="/static/js/app.js"></script>
   </body>

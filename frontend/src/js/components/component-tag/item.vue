@@ -1,18 +1,18 @@
 <template>
-  <div class="ui item component-tag three column row">
-    <div class="tagType column">
+  <tr>
+    <td>
         {{typeNameResolver('tagtype',componentTag.tagType)}}
-    </div>
-    <div class="tagValue column">
+    </td>
+    <td>
         {{componentTag.value}}
-    </div>
-    <div class="actions column">
+    </td>
+    <td>
       <a v-on:click="deleteComponentTag">
         <i class="trash icon"></i>
         Delete
       </a>
-    </div>
-  </div>
+    </td>
+  </tr>
 </template>
 <script>
 import Axios from 'axios';

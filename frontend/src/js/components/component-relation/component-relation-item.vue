@@ -1,23 +1,23 @@
 <template>
-  <div class="ui item component-relation ui four column row">
-    <div class="from column">
+  <tr class="">
+    <td>
         {{archComponentNameResolver(componentRelation.from)}}
-    </div>
-    <div class="relation column">
+    </td>
+    <td>
         {{typeNameResolver('relationtype',componentRelation.relationType,componentRelation.inverse)}}
-    </div>
-    <div class="from column">
+    </td>
+    <td>
       <router-link :to="{name: 'arch-component-view', params: {componentId: componentRelation.to}}">
         {{archComponentNameResolver(componentRelation.to)}}
       </router-link>
-    </div>
-    <div class="actions column">
+    </td>
+    <td>
       <a v-on:click="deleteComponentRelation">
-        <span class="trash icon"></span>
+        <i class="trash icon"></i>
         Delete
       </a>
-    </div>
-  </div>
+    </td>
+  </tr>
 </template>
 <script>
 import Axios from 'axios';

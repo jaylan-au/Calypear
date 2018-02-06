@@ -47,11 +47,3 @@ const app = new Vue({
     this.$store.dispatch('archComponent/reloadArchComponentCache');
   }
 }).$mount('#vueapp');
-// new Vue({
-//   el: '#vueapp',
-//   store,
-//   components: {
-//     componentTypeList
-//   }
-//
-// });

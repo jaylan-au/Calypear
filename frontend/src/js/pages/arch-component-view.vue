@@ -1,5 +1,5 @@
 <template>
-  <div class="ui container">
+  <div>
     <div class="ui segment">
       <div class="content">
         <h1 class="header" v-show="!isEditing">
@@ -89,6 +89,9 @@ export default {
   created: function(){
     this.fetchArchComponent(this.componentId)
   },
+  mounted() {
+    $('.ui.dropdown').dropdown();
+  },
   methods: {
     fetchArchComponent(componentId) {
       //Get the component's base details
@@ -147,5 +150,8 @@ export default {
       this.fetchArchComponent(to.params.componentId)
     },
   },
+
 }
+
+
 </script>

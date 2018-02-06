@@ -7,10 +7,13 @@
             {{archComponent.componentName}}
           </router-link>
         </div>
-        <div class="description">
+        <div class="meta">
           {{typeNameByTypeId('componenttype',archComponent.componentType)}}
         </div>
-        <div class="meta">
+        <div class="description">
+          {{archComponent.description}}
+        </div>
+        <div class="extra">
           <a v-on:click="deleteArchComponent(archComponent._id)">Delete</a>
         </div>
       </div>
@@ -33,7 +36,7 @@ export default {
     deleteArchComponent(id) {
       this.$emit('arch-component-delete',{id:id});
     }
-    
+
   }
 }
 </script>
