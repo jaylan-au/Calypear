@@ -10,7 +10,7 @@ module.exports = {
       selector.component = req.query.component;
     }
 
-    ComponentTag.find(selector).then((dbresponse) => {
+    ComponentTag.find({selector}).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);
@@ -40,7 +40,7 @@ module.exports = {
       component: req.params.componentId,
     };
 
-    ComponentTag.find(selector).then((dbresponse) => {
+    ComponentTag.find({selector}).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);

@@ -17,8 +17,7 @@ module.exports = {
     if (req.query.to) {
       selector.to = req.query.to;
     }
-
-    ComponentRelation.find(selector).then((dbresponse) => {
+    ComponentRelation.find({'selector': selector}).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);
@@ -60,7 +59,7 @@ module.exports = {
       from: req.params.componentId,
     };
 
-    ComponentRelation.find(selector).then((dbresponse) => {
+    ComponentRelation.find({selector}).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);
@@ -75,7 +74,9 @@ module.exports = {
     const ComponentRelation = odm.models.componentrelation;
 
     ComponentRelation.find({
-      transaction: req.params.transaction
+      selector: {
+        transaction: req.params.transaction
+      }
     }).then((dbresponse) => {
       //If an array isn't return then the transaction is wrong or invalid
       if (Array.isArray(dbresponse)) {
