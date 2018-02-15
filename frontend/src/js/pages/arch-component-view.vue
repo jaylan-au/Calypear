@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ui segment">
+    <div class="ui">
       <div class="content">
         <h1 class="header" v-show="!isEditing">
           {{archComponent.componentName}}
@@ -40,7 +40,7 @@
         <button class="ui primary button" v-show="isEditing" v-on:click="saveEditForm">Save</button>
       </div>
     </div>
-    <div class="ui segment">
+    <div class="ui">
       <div class="content">
         <h1 class="header" >
           Relations
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <div class="ui segment">
+    <div class="ui">
       <div class="content">
         <h1 class="header" >
           Tags
