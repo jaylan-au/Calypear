@@ -20,12 +20,29 @@ export default {
     archComponentList,
     archComponentNew,
   },
-  computed: {
-    searchResults: function(){
-      return this.$store.state.archComponent.archComponentCache;
-    }
+  data() {
+    return {
+      searchResults: []
+    };
+  },
+  mounted: function(){
+    console.log(this.$route.query);
+    this.getSearchResults(this.$route.query.name);
   },
   methods: {
+    getSearchResults(queryText) {
+
+      let queryParams = '';
+      if (queryText) {
+        queryParams += '/?name=' + queryText;
+      }
+      Axios.get('/arch-component/'.concat(queryParams)).then((response) => {
+        console.log(response.data);
+        this.searchResults = response.data;
+      });
+      ///?name=mantra
+      //return this.$store.state.archComponent.archComponentCache;
+    },
     createArchComponent(createProps) {
       this.$store.dispatch('archComponent/createArchComponent',createProps);
     },
@@ -34,6 +51,11 @@ export default {
     },
     deleteArchComponent(deleteProps) {
       this.$store.dispatch('archComponent/deleteArchComponent',deleteProps);
+    }
+  },
+  watch: {
+    '$route': function (to, from) {
+      this.getSearchResults(to.query.name);
     }
   }
 }
