@@ -2,7 +2,14 @@ module.exports = {
   search: function(req, res, next) {
     const odm = req.app.get('odm');
     const ArchComponent = odm.models.archcomponent;
-    ArchComponent.all().then((dbresponse) => {
+
+    let querySelector = {}
+    if (req.query.name) {
+      querySelector.componentName = {
+        $regex: new RegExp(req.query.name,'gi')
+      };
+    }
+    ArchComponent.find({'selector': querySelector}).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);

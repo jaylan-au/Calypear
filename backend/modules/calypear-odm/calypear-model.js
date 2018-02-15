@@ -57,12 +57,14 @@ class CalypearModel {
     })
   }
 
-  find(selector) {
+  find(query) {
     //FIXME: set this properly - at the moment it won't use indexes properly
-    let queryStatement = Object.assign({},{'selector': selector});
+    let queryStatement = Object.assign({},query);
     //Push selector to
     queryStatement.selector.docType = this.docType;
+    console.log(queryStatement);
     return this._db.find(queryStatement).then((dbresponse) => {
+      console.log(dbresponse);
       return dbresponse.docs;
     });
   }
