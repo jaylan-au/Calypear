@@ -1,6 +1,6 @@
 <template>
   <div class="ui segement">
-    <div class="header">Search Results</div>
+    <h1 class="header">Search Results</h1>
     <arch-component-list
       v-bind:archComponents="searchResults"
       v-on:arch-component-delete="deleteArchComponent">
@@ -26,8 +26,7 @@ export default {
     };
   },
   mounted: function(){
-    console.log(this.$route.query);
-    this.getSearchResults(this.$route.query.name);
+    this.getSearchResults(this.$route.query.q);
   },
   methods: {
     getSearchResults(queryText) {
@@ -55,7 +54,7 @@ export default {
   },
   watch: {
     '$route': function (to, from) {
-      this.getSearchResults(to.query.name);
+      this.getSearchResults(to.query.q);
     }
   }
 }

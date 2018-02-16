@@ -8,6 +8,7 @@ import simpleTypeList from './pages/admin/simple-type-list.vue';
 import relationTypeList from './components/relation-type/list.vue';
 import archComponentSearch from './pages/arch-component-search.vue';
 import archComponentView from './pages/arch-component-view.vue';
+import archComponentQuicksearch from './components/arch-component/arch-component-quicksearch.vue';
 //import store from './calypear-store.js';
 
 Vue.use(VueRouter);
@@ -39,6 +40,9 @@ const router = new VueRouter({
 })
 
 const app = new Vue({
+  components: {
+    archComponentQuicksearch
+  },
   router: router,
   store,
   created: function() {
