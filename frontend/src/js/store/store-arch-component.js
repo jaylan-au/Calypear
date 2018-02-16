@@ -19,13 +19,16 @@ export default {
         });
       });
     },
-    createArchComponent({commit, dispatch}, createProps) {
-      Axios.post('/arch-component/'.concat(createProps.id),createProps).then((response) => {
-        //FIXME: actually update the cache intelligently
+    createdArchComponent({commit, dispatch}, createProps) {
+      // Axios.post('/arch-component/'.concat(createProps.id),createProps).then((response) => {
+      //   //FIXME: actually update the cache intelligently
+      //   if (response.data._id) {
+      //     this.lastCreatedComponentId = response.data._id;
+      //   }
         dispatch('reloadArchComponentCache');
-      }).catch((err) => {
-        console.log(err);
-      });
+      // }).catch((err) => {
+      //   console.log(err);
+      // });
     },
     updateArchComponent({commit, dispatch}, updateProps) {
       Axios.put('/arch-component/'.concat(updateProps.id),updateProps).then((response) => {

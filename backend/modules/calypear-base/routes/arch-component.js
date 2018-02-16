@@ -12,10 +12,7 @@ router.get('/:componentId',celebrate({
   }
 }),archComponentController.read);
 
-router.post('/:componentId',celebrate({
-  params: {
-    componentId: Joi.string().required(),
-  },
+router.post('/',celebrate({
   body: Joi.object(archComponentModel.attributes).unknown()
 }),archComponentController.create);
 

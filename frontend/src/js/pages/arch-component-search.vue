@@ -6,7 +6,7 @@
       v-on:arch-component-delete="deleteArchComponent">
     </arch-component-list>
     <arch-component-new
-      v-on:arch-component-create="createArchComponent">
+      v-on:arch-component-created="createdArchComponent">
     </arch-component-new>
   </div>
 </template>
@@ -48,8 +48,8 @@ export default {
       ///?name=mantra
       //return this.$store.state.archComponent.archComponentCache;
     },
-    createArchComponent(createProps) {
-      this.$store.dispatch('archComponent/createArchComponent',createProps);
+    createdArchComponent(createProps) {
+      this.$store.dispatch('archComponent/createdArchComponent',createProps);
     },
     updateArchComponent(updateProps) {
       this.$store.dispatch('archComponent/updateArchComponent',updateProps);

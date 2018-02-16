@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="ui section">
+      <h1 class="header">Relation Types</h1>
       <div class="ui middle aligned selection list ">
         <relation-type-item
           v-for="relationType in relationTypes"

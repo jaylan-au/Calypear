@@ -1,5 +1,6 @@
 <template>
   <div class="ui section">
+    <h1 class="header">{{classTypeDisplayName}}</h1>
     <div class="ui middle aligned selection list ">
       <simple-type-item
         v-for="simpleTypeData in classTypes"
@@ -34,6 +35,19 @@ export default {
   computed: {
     classTypes: function(){
       return this.$store.state.simpleType[this.typeClassName];
+    },
+    classTypeDisplayName: function(){
+      switch (this.typeClassName) {
+        case 'componenttype':
+          return 'Component Types'
+          break;
+        case 'relationtype':
+          return 'Relation Types'
+          break;
+        case 'tagtype':
+          return 'Tag Types'
+          break;
+      }
     }
   },
   methods: {

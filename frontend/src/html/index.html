@@ -19,9 +19,14 @@
             </div>
             <component-type-filter-list>
             </component-type-filter-list>
-            <router-link class="item" to="/admin/simple-type/componenttype">Component Types</router-link>
-            <router-link class="item" to="/admin/relation-type">Relation Types</router-link>
-            <router-link class="item" to="/admin/simple-type/tagtype">Tag Types</router-link>
+            <div class="item">
+              <div class="header">Admin</div>
+              <div class="menu">
+                <router-link class="item" to="/admin/simple-type/componenttype">Component Types</router-link>
+                <router-link class="item" to="/admin/relation-type">Relation Types</router-link>
+                <router-link class="item" to="/admin/simple-type/tagtype">Tag Types</router-link>
+              </div>
+            </div>
             <router-link class="item" :to="{name: 'arch-component-search'}">Arch Component</router-link>
           </div>
         </div>
