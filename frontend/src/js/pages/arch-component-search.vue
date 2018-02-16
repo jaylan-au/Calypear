@@ -33,11 +33,11 @@ export default {
 
       let queryParams = '';
       if (queryText) {
-        queryParams += '/?name=' + queryText;
+        queryParams += '/?componentName=' + queryText;
       }
 
       if (typeFilter) {
-        queryParams = '/?type=' + typeFilter;
+        queryParams = '/?componentType=' + typeFilter;
       }
 
 

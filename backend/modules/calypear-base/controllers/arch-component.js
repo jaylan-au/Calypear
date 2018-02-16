@@ -4,15 +4,15 @@ module.exports = {
     const ArchComponent = odm.models.archcomponent;
 
     let querySelector = {}
-    if (req.query.name) {
+    if (req.query.componentName) {
       querySelector.componentName = {
-        $regex: new RegExp(req.query.name,'gi')
+        $regex: new RegExp(req.query.componentName,'gi')
       };
     }
 
-    if (req.query.type) {
+    if (req.query.componentType) {
       querySelector.componentType = {
-        $eq: req.query.type
+        $eq: req.query.componentType
       }
     }
     ArchComponent.find({'selector': querySelector}).then((dbresponse) => {
