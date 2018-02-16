@@ -3,7 +3,7 @@
     <div class="header">Component Types</div>
     <div class="menu">
       <div class="ui item" v-for="componentType in componentTypes">
-        <router-link :to="{ name: 'arch-component-search', query: {type: componentType.typeName} }">{{componentType.typeName}}</router-link>
+        <router-link :to="{ name: 'arch-component-search', query: {type: componentType._id} }">{{componentType.typeName}}</router-link>
       </div>
     </div>
   </div>

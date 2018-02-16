@@ -9,6 +9,12 @@ module.exports = {
         $regex: new RegExp(req.query.name,'gi')
       };
     }
+
+    if (req.query.type) {
+      querySelector.componentType = {
+        $eq: req.query.type
+      }
+    }
     ArchComponent.find({'selector': querySelector}).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {

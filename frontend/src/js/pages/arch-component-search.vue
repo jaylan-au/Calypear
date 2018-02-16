@@ -26,15 +26,21 @@ export default {
     };
   },
   mounted: function(){
-    this.getSearchResults(this.$route.query.q);
+    this.getSearchResults(this.$route.query.q,this.$route.query.type);
   },
   methods: {
-    getSearchResults(queryText) {
+    getSearchResults(queryText,typeFilter) {
 
       let queryParams = '';
       if (queryText) {
         queryParams += '/?name=' + queryText;
       }
+
+      if (typeFilter) {
+        queryParams = '/?type=' + typeFilter;
+      }
+
+
       Axios.get('/arch-component/'.concat(queryParams)).then((response) => {
         console.log(response.data);
         this.searchResults = response.data;
@@ -54,7 +60,7 @@ export default {
   },
   watch: {
     '$route': function (to, from) {
-      this.getSearchResults(to.query.q);
+      this.getSearchResults(to.query.q,to.query.type);
     }
   }
 }
