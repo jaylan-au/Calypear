@@ -1,6 +1,6 @@
 <template>
   <form v-on:submit="doSearch">
-    <div class="ui icon input">
+    <div class="ui icon input fluid">
       <input placeholder="Search..." type="text" ref="searchQuery" >
       <i class="search link icon" v-on:click="doSearch"></i>
     </div>
