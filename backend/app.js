@@ -44,6 +44,8 @@ const calypearBaseModule = require('./modules/calypear-base').initialize(app,'/'
 let calypearODM = app.get('odm');
 
 app.use('/app',express.static(path.join(__dirname, '../frontend/src/html/index.html')));
+app.use('/app/*',express.static(path.join(__dirname, '../frontend/src/html/index.html')));
+app.use('/vis',express.static(path.join(__dirname, '../frontend/src/html/vis.html')));
 app.use('/static',express.static(path.join(__dirname, '../frontend/dist')));
 
 console.log('Models Loaded');

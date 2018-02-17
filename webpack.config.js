@@ -4,8 +4,12 @@ var path = require('path');
 
 // Naming and path settings
 var appName = 'app';
-var entryPoint = './frontend/src/js/calypear-main.js';
+var entryPoint = {
+  main: './frontend/src/js/calypear-main.js',
+  vis: './frontend/src/js/vis/calypear-vis.js',
+}
 var exportPath = path.resolve(__dirname, './frontend/dist/js');
+var exportFilename = appName+'_[name].js'
 
 // Enviroment flag
 var plugins = [];
@@ -33,7 +37,7 @@ module.exports = {
   entry: entryPoint,
   output: {
     path: exportPath,
-    filename: appName
+    filename: exportFilename
   },
   module: {
     loaders: [

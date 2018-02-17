@@ -16,6 +16,7 @@ Vue.use(VueRouter);
 Vue.use(Logger);
 
 const router = new VueRouter({
+  mode: 'history',
   routes: [
     {
       path: '/admin/simple-type/:typeClassName',
