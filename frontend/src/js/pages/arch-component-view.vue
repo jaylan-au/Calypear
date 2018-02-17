@@ -87,10 +87,10 @@ export default {
     }
   },
   created: function(){
-    this.fetchArchComponent(this.componentId)
+    this.fetchArchComponent(this.componentId);
   },
   mounted() {
-    $('.ui.dropdown').dropdown();
+
   },
   methods: {
     fetchArchComponent(componentId) {
@@ -147,7 +147,7 @@ export default {
     '$route' (to, from) {
       // react to route changes...
       //this.componentId = componentId;
-      this.fetchArchComponent(to.params.componentId)
+      this.fetchArchComponent(to.params.componentId);
     },
   },
 
