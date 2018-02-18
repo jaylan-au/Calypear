@@ -60,6 +60,7 @@ module.exports = {
       'vue': 'vue/dist/vue.js',
       'vuex': 'vuex/dist/vuex.js',
       'axios': 'axios/dist/axios.js',
+      'd3': 'd3/build/d3.min.js',
     }
   },
   plugins

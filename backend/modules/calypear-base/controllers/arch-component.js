@@ -33,12 +33,16 @@ module.exports = {
   read: function(req, res, next) {
     const odm = req.app.get('odm');
     const ArchComponent = odm.models.archcomponent;
-    const ComponentRelation = odm.models.componentrelation;
+
     ArchComponent.get(req.params.componentId).then((dbresponse) => {
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);
     });
+
+    Promise.all([
+
+    ]).then(())
   },
   update: function(req, res, next) {
     const odm = req.app.get('odm');
