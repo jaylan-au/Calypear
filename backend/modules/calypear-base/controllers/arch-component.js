@@ -39,10 +39,6 @@ module.exports = {
     }).catch((err) => {
       res.sendStatus(500).send(err);
     });
-
-    Promise.all([
-
-    ]).then(())
   },
   update: function(req, res, next) {
     const odm = req.app.get('odm');

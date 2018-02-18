@@ -40,17 +40,84 @@ export default class CalypearDiagram {
     return filledComponent;
   }
 
+  getComponentById(componentId) {
+    return this._components.find((currItem) => {
+      return currItem._id == componentId;
+    });
+  }
+
+  hasComponentId(componentId) {
+    let component = this.getComponentById(componentId);
+    if (component) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   addComponentById(componentId){
     //TODO: If it already exists - don't add it
     //TODO: Consider updating it if it already exists
-    this.fetchComponentData(componentId).then((componentData) => {
-      let addComponent = new DiagramComponent(componentData);
-      this._components.push(addComponent);
-    }).catch((err) => {
-      throw new Error(err);
+    if (!this.hasComponentId(componentId)) {
+      this.fetchComponentData(componentId).then((componentData) => {
+        let addComponent = new DiagramComponent(componentData);
+        this._components.push(addComponent);
+      }).catch((err) => {
+        throw new Error(err);
+      });
+    }
+
+    return this;
+  }
+
+  addComponentsById(componentIds) {
+    //co-oerve the parameter to an array
+    componentIds = [].concat(componentIds);
+    componentIds.forEach((currComponentId) => {
+      this.addComponentById(currComponentId);
     });
 
     return this;
+  }
+
+  getRelatedComponentIds(componentId) {
+    //Find the component -> and its relations
+    let component = this.getComponentById(componentId);
+    if (component) {
+      //TODO: De-dup this
+      return component.relations.map((currItem) => {
+        return currItem.inverse?currItem.from:currItem.to;
+      });
+    } else {
+      return null;
+    }
+  }
+
+  addRelatedComponents(componentId) {
+    let relatedComponentIds = this.getRelatedComponentIds(componentId);
+    if (relatedComponentIds) {
+      this.addComponentsById(relatedComponentIds);
+    }
+
+
+    return this;
+  }
+
+  get componentIds(){
+    return this._components.map((currItem) => {
+      return currItem._id;
+    });
+  }
+
+  addAllRelatedComponents() {
+    let currComponentIds = this.componentIds;
+    this.addRelatedComponents(currComponentIds);
+  }
+
+  reloadComponents() {
+    let currComponentIds = this.componentIds;
+    this._components = [];
+    this.addComponentsById(currComponentIds);
   }
 
   get nodes() {
