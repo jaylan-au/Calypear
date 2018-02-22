@@ -4,6 +4,8 @@ export default class CalypearDiagramComponent {
 
     //Assign settings from the options
     Object.assign(this,data);
+    this.x = 1;
+    this.y = 1;
   }
 
   get isPinned() {

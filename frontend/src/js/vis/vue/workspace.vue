@@ -14,27 +14,34 @@
       </div>
     </div>
     <svg viewBox="0 0 1000 1000" id="workbench" >
-      <g class="nodes"></g>
-      <g class="links"></g>
     </svg>
   </div>
 </template>
 <script>
 import CalypearDiagram from '../components/calypear-diagram.js';
+import VisWorkspace from '../components/vis-workspace.js';
+import * as d3 from 'd3';
 
 export default {
-  data() {
-    return {
-      calypearDiagram: new CalypearDiagram()
-    }
-  },
-  computed: {
-    nodes() {
-      return calypearDiagram.nodes;
-    },
-    links() {
-      return calypearDiagram.links;
-    }
+
+  // data() {
+  //   return {
+  //     calypearDiagram: new CalypearDiagram()
+  //   }
+  // },
+  mounted(){
+    this.visWorkbench = new VisWorkspace(),
+    this.diagram = new CalypearDiagram(),
+    this.visWorkbench.svg = d3.select('#workbench');
+    console.log(this.visWorkbench.svg);
+    this.diagram.addComponentById('0c731fbe-c83d-422a-93cd-25d7823e51db').then((d) => {
+        this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
+    });
+    //this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
+    window.diagram = this.diagram;
+    window.workbench = this.visWorkbench;
+    //console.log(this.diagram.nodes,this.diagram.links)
+    //console.log(d3);
   },
   methods: {
 

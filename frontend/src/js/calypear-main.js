@@ -19,21 +19,21 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/admin/simple-type/:typeClassName',
+      path: '/app/admin/simple-type/:typeClassName',
       component: simpleTypeList,
       props: (route) => ({"typeClassName": route.params.typeClassName})
     },
     {
-      path: '/admin/relation-type',
+      path: '/app/admin/relation-type',
       component: relationTypeList
     },
     {
-      path: '/arch-component',
+      path: '/app/arch-component',
       name: 'arch-component-search',
       component: archComponentSearch
     },
     {
-      path: '/arch-component/view/:componentId',
+      path: '/app/arch-component/view/:componentId',
       name: 'arch-component-view',
       component: archComponentView,
       props: (route) => ({"componentId": route.params.componentId})

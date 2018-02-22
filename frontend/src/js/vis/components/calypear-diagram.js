@@ -5,18 +5,9 @@ import DiagramComponent from './calypear-diagram-component.js';
 
 export default class CalypearDiagram {
   constructor(options){
-    this._svg = null;
     this._components = [];
   }
 
-  set svg(svg) {
-    this._svg = svgElement;
-    return this;
-  }
-
-  get svg() {
-    return this._svg;
-  }
 
   async fetchComponentData(componentId) {
     let filledComponent = await Promise.all([
@@ -59,15 +50,17 @@ export default class CalypearDiagram {
     //TODO: If it already exists - don't add it
     //TODO: Consider updating it if it already exists
     if (!this.hasComponentId(componentId)) {
-      this.fetchComponentData(componentId).then((componentData) => {
+      return this.fetchComponentData(componentId).then((componentData) => {
         let addComponent = new DiagramComponent(componentData);
         this._components.push(addComponent);
+        return this;
       }).catch((err) => {
         throw new Error(err);
       });
+    } else {
+      return Promise.resolve(this);
     }
 
-    return this;
   }
 
   addComponentsById(componentIds) {
@@ -125,9 +118,24 @@ export default class CalypearDiagram {
   }
 
   get links() {
+    let activeComponentIds = this.componentIds;
+
     //TODO: Filter out inverse relations that don't have a partner if a direct relation exists
-    return this._components.reduce((accumulator, currentItem) => {
+    let links =  this._components.reduce((accumulator, currentItem) => {
       return accumulator.concat(currentItem.relations);
     },[]);
+    //Map source/target
+    links.forEach((currLink) => {
+      currLink.source = currLink.from;
+      currLink.target = currLink.to;
+    });
+
+    //Filter out links to items that aren't in the workspace;
+    //links.filter
+
+    return links.filter((currLink) => {
+      return activeComponentIds.includes(currLink.to);
+    });
+    //return [];
   }
 }

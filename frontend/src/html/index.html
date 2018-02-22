@@ -20,11 +20,14 @@
             <component-type-filter-list>
             </component-type-filter-list>
             <div class="item">
+              <a href="/vis">Visual Workbench</a>
+            </div>
+            <div class="item">
               <div class="header">Admin</div>
               <div class="menu">
-                <router-link class="item" to="/admin/simple-type/componenttype">Component Types</router-link>
-                <router-link class="item" to="/admin/relation-type">Relation Types</router-link>
-                <router-link class="item" to="/admin/simple-type/tagtype">Tag Types</router-link>
+                <router-link class="item" to="/app/admin/simple-type/componenttype">Component Types</router-link>
+                <router-link class="item" to="/app/admin/relation-type">Relation Types</router-link>
+                <router-link class="item" to="/app/admin/simple-type/tagtype">Tag Types</router-link>
               </div>
             </div>
             <router-link class="item" :to="{name: 'arch-component-search'}">Arch Component</router-link>
