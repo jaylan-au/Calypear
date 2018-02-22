@@ -6,8 +6,8 @@ export default class VisWorkspace {
   constructor(options) {
     this._svg = null;
     this._diagram = new CalypearDiagram();
-    this._width = 1000;
-    this._height = 1000;
+    this._width = 500;
+    this._height = 500;
   }
 
   set diagram(diagram) {
@@ -91,6 +91,17 @@ export default class VisWorkspace {
       //   d3.event.stopPropagation();
       // })
       .attr("id",function(d) {return "node"+d._id;})
+      .call(d3.drag()
+          .on("start", function(d) {
+            this.dragStarted(d);
+          }.bind(this))
+          .on("drag", function(d) {
+            this.dragged(d);
+          }.bind(this))
+          .on("end", function(d) {
+            this.dragEnded(d);
+          }.bind(this))
+        )
       .append("circle")
         .attr("cx",0)
         .attr("cy",0)
@@ -98,10 +109,6 @@ export default class VisWorkspace {
           console.log('rendered');
           return 5;
         });
-      // .call(d3.drag()
-      //     .on("start", dragstarted)
-      //     .on("drag", dragged)
-      //     .on("end", dragended));
       console.log(graphNodes);
     simulation.nodes(graphNodes);
 
@@ -112,6 +119,40 @@ export default class VisWorkspace {
     simulation.alpha(1).restart();
     //setTimeout(function(){ simulation.stop(); }, 3000);
     this._nodeElements = this._nodeGroup.selectAll(".diagram-node");
+  }
+
+  dragStarted(d) {
+    if (!d3.event.active) this._simulation.alphaTarget(0.3).restart();
+    d.putAt(d.x,d.y);
+    // d.fx = d.x;
+    // d.fy = d.y;
+  }
+
+  dragged(d) {
+    var grid = 10;
+    // Don't lock to the grid until we actually start dragging a bit
+    if ((Math.abs(d.x-d3.event.x) > 5) || (Math.abs(d.y-d3.event.y) > 5)) {
+      //Force items to land on a squared off grid - to avoid finicky positioning
+      d.putAt(Math.round(d3.event.x/grid)*grid,Math.round(d3.event.y/grid)*grid);
+      // d.fx = ;
+      // d.fy = ;
+    }
+
+  }
+
+  dragEnded(d) {
+    if (!d3.event.active) {
+      this._simulation.alphaTarget(0)
+      //If the Shift key is held down then lock the node in position
+      //Touching the node again will free it
+      //Need to resolve this.
+      if (!d.isPinned) {
+        d.putRelease();
+        // d.fx = null;
+        // d.fy = null
+      }
+    };
+
   }
 
   simulationTick(){

@@ -65,12 +65,13 @@ export default class CalypearDiagram {
 
   addComponentsById(componentIds) {
     //co-oerve the parameter to an array
+    let addPromiseList = [];
     componentIds = [].concat(componentIds);
     componentIds.forEach((currComponentId) => {
-      this.addComponentById(currComponentId);
+      addPromiseList.push(this.addComponentById(currComponentId));
     });
 
-    return this;
+    return Promise.all(addPromiseList);
   }
 
   getRelatedComponentIds(componentId) {
@@ -138,4 +139,6 @@ export default class CalypearDiagram {
     });
     //return [];
   }
+
+
 }

@@ -4,15 +4,14 @@ export default class CalypearDiagramComponent {
 
     //Assign settings from the options
     Object.assign(this,data);
-    this.x = 1;
-    this.y = 1;
   }
 
   get isPinned() {
     return this._pinned;
   }
 
-  putAt() {
+
+  putAt(x,y) {
     this.fx = x;
     this.fy = y;
 
@@ -20,7 +19,7 @@ export default class CalypearDiagramComponent {
   }
 
   pinAt(x,y) {
-    this.holdAt(x,y);
+    this.putAt(x,y);
 
     if (x || y) {
       this._pinned = true;
@@ -28,6 +27,14 @@ export default class CalypearDiagramComponent {
       this._pinned = false;
     }
     return this;
+  }
+
+  pinAtPosition() {
+    this.pinAt(this.x,this.y);
+  }
+
+  putRelease() {
+    this.putAt(null,null);
   }
 
   pinRelease() {

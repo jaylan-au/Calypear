@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <svg viewBox="0 0 1000 1000" id="workbench" >
+    <svg viewBox="0 0 500 500" id="workbench" >
     </svg>
   </div>
 </template>
@@ -34,7 +34,10 @@ export default {
     this.diagram = new CalypearDiagram(),
     this.visWorkbench.svg = d3.select('#workbench');
     console.log(this.visWorkbench.svg);
-    this.diagram.addComponentById('0c731fbe-c83d-422a-93cd-25d7823e51db').then((d) => {
+    this.diagram.addComponentsById([
+      '0c731fbe-c83d-422a-93cd-25d7823e51db',
+      '7359539a-e204-4529-9f75-394fdd40026f'
+    ]).then((d) => {
         this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
     });
     //this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
