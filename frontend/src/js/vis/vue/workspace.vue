@@ -13,8 +13,16 @@
         </div>
       </div>
     </div>
-    <svg viewBox="0 0 500 500" id="workbench" >
+    <svg viewBox="0 0 600 600" id="workbench" v-on:click="workspaceClick">
     </svg>
+    <div class="ui menu" id="workbench-tools">
+      <div class="ui item">
+        <i class="expand arrows alternate small icon" v-on:click="expandNodes"></i>
+      </div>
+      <div class="ui item">
+        <i class="trash small icon" v-on:click="deleteNodes"></i>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -47,7 +55,26 @@ export default {
     //console.log(d3);
   },
   methods: {
-
+    expandNodes(){
+      let selectedItems = this.visWorkbench.selectedNodes;
+      this.diagram.addRelatedComponents(selectedItems).then((d) => {
+        this.visWorkbench.update(this.diagram.nodes,this.diagram.links);
+        this.visWorkbench.clearSelectedNodes();
+      });
+    },
+    deleteNodes(){
+      let selectedItems = this.visWorkbench.selectedNodes;
+      this.diagram.removeComponentsById(selectedItems).then((d) => {
+        console.log('updating');
+        this.visWorkbench.update(this.diagram.nodes,this.diagram.links);
+        this.visWorkbench.clearSelectedNodes();
+      });
+    },
+    workspaceClick(){
+      console.log('workspace click');
+      this.visWorkbench.clearSelectedNodes();
+      console.log(this.visWorkbench.selectedNodes);
+    }
   }
 }
 </script>

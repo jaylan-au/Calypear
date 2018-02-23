@@ -87,14 +87,25 @@ export default class CalypearDiagram {
     }
   }
 
-  addRelatedComponents(componentId) {
-    let relatedComponentIds = this.getRelatedComponentIds(componentId);
-    if (relatedComponentIds) {
-      this.addComponentsById(relatedComponentIds);
+  addRelatedComponents(componentIds) {
+    //Coerce to an array
+    if (!Array.isArray(componentIds)) {
+      componentIds = [componentIds];
     }
 
+    let relatedComponentIds = [];
 
-    return this;
+    componentIds.forEach((currComponentId) => {
+      relatedComponentIds = relatedComponentIds.concat(
+        this.getRelatedComponentIds(currComponentId)
+      );
+    })
+
+    if (relatedComponentIds) {
+      return this.addComponentsById(relatedComponentIds);
+    } else {
+      return null;
+    }
   }
 
   get componentIds(){
@@ -112,6 +123,25 @@ export default class CalypearDiagram {
     let currComponentIds = this.componentIds;
     this._components = [];
     this.addComponentsById(currComponentIds);
+  }
+
+  removeComponentById(componentId) {
+    //Remove all instances of the component - should only be one but just in case
+    this._components = this._components.filter((currComponent) => {
+      return (currComponent._id != componentId)
+    });
+  }
+
+  removeComponentsById(componentIds) {
+    if (!Array.isArray(componentIds)) {
+      componentIds = [componentIds];
+    }
+
+    componentIds.forEach((currComponentId) => {
+      this.removeComponentById(currComponentId)
+    });
+
+    return Promise.resolve(componentIds);
   }
 
   get nodes() {

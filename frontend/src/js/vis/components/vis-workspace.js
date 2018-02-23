@@ -6,8 +6,9 @@ export default class VisWorkspace {
   constructor(options) {
     this._svg = null;
     this._diagram = new CalypearDiagram();
-    this._width = 500;
-    this._height = 500;
+    this._width = 600;
+    this._height = 600;
+    this._selectedNodes = [];
   }
 
   set diagram(diagram) {
@@ -43,8 +44,57 @@ export default class VisWorkspace {
     return this._height;
   }
 
-  init(graphNodes,graphEdges) {
+  get connectorPathGenerator() {
+    return d3.line().curve(d3.curveBasis);
+  }
+
+  set selectedNodes(selectedNodes){
+    this._selectedNodes = selectedNodes;
+  }
+
+  get selectedNodes() {
+    return this._selectedNodes;
+  }
+
+  nodeIsSelected(id) {
+    return (this._selectedNodes.indexOf(id) > -1);
+  }
+
+  clearSelectedNodes(){
+    this.selectedNodes = [];
+    d3.selectAll(".diagram-node").classed('selected',false);
+  }
+
+  toggleNodeSelected(id) {
+    if (this.nodeIsSelected(id)) {
+      this.deselectNode(id)
+    } else {
+      this.selectNode(id);
+    }
+
+    console.log(this._selectedNodes);
+  }
+
+  selectNode(id) {
+    if (!this.nodeIsSelected()) {
+      this._selectedNodes.push(id);
+    }
+    d3.selectAll("#node"+id).classed('selected',true);
+  }
+
+  deselectNode(id) {
+    let elementId = this._selectedNodes.indexOf(id);
+    if (elementId > -1 ) {
+      console.log('Deleting index %s',elementId);
+      this._selectedNodes.splice(elementId,1);
+      d3.selectAll("#node"+id).classed('selected',false);
+    }
+
+  }
+
+  init(graphNodes,graphLinks) {
     let svgWorkspace = this._svg;
+
     this._linkGroup = svgWorkspace.append("g")
         .attr("class", "link-group");
     this._linkElements = this._linkGroup.selectAll(".diagram-link");
@@ -69,37 +119,38 @@ export default class VisWorkspace {
       //   //workspace.simulationTick(workspace, this);
       // }.bind({workspace: this}));
 
-    this.update(graphNodes,graphEdges);
+    this.update(graphNodes,graphLinks);
 
   }
 
-  update(graphNodes, graphEdges) {
+  update(graphNodes, graphLinks) {
     let simulation = this._simulation;
     let svgWorkspace = this._svg;
     let nodeElementsDataMerge = this._nodeGroup.selectAll(".diagram-node")
       .data(graphNodes,function(d) {return d._id;});
 
+    let linkElementsDataMerge = this._linkGroup.selectAll(".diagram-link")
+      .data(graphLinks,function(d) {return d._id;});
 
-    //nodeElements.exit().remove();
+    nodeElementsDataMerge.exit().remove();
 
     let nodeEnter = nodeElementsDataMerge.enter()
       .append("g")
       .attr("class","diagram-node")
-
-      // .on("click",function(d){
-      //   nodeClicked(d);
-      //   d3.event.stopPropagation();
-      // })
+      .on("click",function(d){
+        this.nodeClicked(d);
+        d3.event.stopPropagation();
+      }.bind(this))
       .attr("id",function(d) {return "node"+d._id;})
       .call(d3.drag()
           .on("start", function(d) {
-            this.dragStarted(d);
+            this.nodeDragStarted(d);
           }.bind(this))
           .on("drag", function(d) {
-            this.dragged(d);
+            this.nodeDragged(d);
           }.bind(this))
           .on("end", function(d) {
-            this.dragEnded(d);
+            this.nodeDragEnded(d);
           }.bind(this))
         )
       .append("circle")
@@ -109,26 +160,37 @@ export default class VisWorkspace {
           console.log('rendered');
           return 5;
         });
-      console.log(graphNodes);
+
+    linkElementsDataMerge.exit().remove();
+
+    let linkEnter = linkElementsDataMerge.enter()
+      .append("path")
+      .attr("class","diagram-link")
+      .attr("stroke-width", 1)
+      .attr("id",function(d) {return "link"+d._id;});
+
     simulation.nodes(graphNodes);
 
     simulation.force("link")
-       .links(graphEdges)
+       .links(graphLinks)
        .distance(function(link){return 200});
+
+    this._nodeElements = this._nodeGroup.selectAll(".diagram-node");
+    this._linkElements = this._linkGroup.selectAll(".diagram-link");
 
     simulation.alpha(1).restart();
     //setTimeout(function(){ simulation.stop(); }, 3000);
-    this._nodeElements = this._nodeGroup.selectAll(".diagram-node");
+
   }
 
-  dragStarted(d) {
+  nodeDragStarted(d) {
     if (!d3.event.active) this._simulation.alphaTarget(0.3).restart();
     d.putAt(d.x,d.y);
     // d.fx = d.x;
     // d.fy = d.y;
   }
 
-  dragged(d) {
+  nodeDragged(d) {
     var grid = 10;
     // Don't lock to the grid until we actually start dragging a bit
     if ((Math.abs(d.x-d3.event.x) > 5) || (Math.abs(d.y-d3.event.y) > 5)) {
@@ -140,7 +202,7 @@ export default class VisWorkspace {
 
   }
 
-  dragEnded(d) {
+  nodeDragEnded(d) {
     if (!d3.event.active) {
       this._simulation.alphaTarget(0)
       //If the Shift key is held down then lock the node in position
@@ -155,17 +217,23 @@ export default class VisWorkspace {
 
   }
 
+  nodeClicked(d) {
+
+    this.toggleNodeSelected(d._id);
+  }
+
+
   simulationTick(){
-    // linkElements
-    //   .attr("d",function(d) {
-    //     var offsetSource = calculateNodeBlockSize(d.source);
-    //     var offsetTarget = calculateNodeBlockSize(d.target)
-    //     var points = [
-    //       [d.source.x,d.source.y-(offsetSource.y/2)],
-    //       [d.target.x,d.target.y-(offsetTarget.y/2)]
-    //     ];
-    //     return connectorGenerator(points);
-    //   });
+    let connectorGenerator = this.connectorPathGenerator;
+    this._linkElements.attr("d",function(d) {
+        var offsetSource = 0; //calculateNodeBlockSize(d.source);
+        var offsetTarget = 0; //calculateNodeBlockSize(d.target)
+        var points = [
+          [d.source.x,d.source.y],
+          [d.target.x,d.target.y]
+        ];
+        return connectorGenerator(points);
+      });
 
     //console.log(this._nodeElements);
     this._nodeElements.attr("transform", function(d) {
