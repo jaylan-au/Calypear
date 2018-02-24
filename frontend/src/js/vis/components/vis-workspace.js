@@ -9,6 +9,7 @@ export default class VisWorkspace {
     this._width = 600;
     this._height = 600;
     this._selectedNodes = [];
+    this._colorMap = null;
   }
 
   set diagram(diagram) {
@@ -44,6 +45,14 @@ export default class VisWorkspace {
     return this._height;
   }
 
+  get colorMap() {
+    return this._colorMap;
+  }
+
+  set colorMap(colorMap) {
+    this._colorMap = colorMap;
+  }
+
   get connectorPathGenerator() {
     return d3.line().curve(d3.curveBasis);
   }
@@ -71,8 +80,6 @@ export default class VisWorkspace {
     } else {
       this.selectNode(id);
     }
-
-    console.log(this._selectedNodes);
   }
 
   selectNode(id) {
@@ -124,7 +131,14 @@ export default class VisWorkspace {
 
     this._svg.call(this._zoomController);
 
+    this.colorMap = d3.scaleOrdinal(d3.schemeCategory10);
+
+
     this.update(graphNodes,graphLinks);
+  }
+
+  componentTypeColorMapper(componentTypeId) {
+    return this.colorMap(componentTypeId)
   }
 
   nodeGenerator(ctx){
@@ -133,7 +147,10 @@ export default class VisWorkspace {
       .attr("cy",0)
       .attr("r",function(d) {
         return 5;
-      });
+      })
+      .attr("fill",function(d) {
+        return this.componentTypeColorMapper(d._id);
+      }.bind(this));
     ctx.append("text")
       .attr("x",0)
       .attr("y",5)

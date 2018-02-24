@@ -1,5 +1,5 @@
 <template>
-  <div class="ui item">
+  <div class="ui items">
     <div class="header">
       {{component.componentName}}
     </div>

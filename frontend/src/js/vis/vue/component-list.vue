@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ui items">
     <component-list-item v-for="component in components"
     :key="component._id"
     v-bind:component="component"
