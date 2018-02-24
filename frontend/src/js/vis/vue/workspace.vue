@@ -71,24 +71,21 @@ export default {
       return this.visWorkbench.selectedNodes;
     }
   },
-  mounted(){
-    this.visWorkbench = new VisWorkspace(),
+  mounted() {
+    //Setup the workspace diagram rendered
+    this.visWorkbench = new VisWorkspace();
     this.visWorkbench.width = 1000;
     this.visWorkbench.height = 1000;
-    this.diagram = new CalypearDiagram(),
+    //Setup the diagram to manage the components
+    this.diagram = new CalypearDiagram();
+
+    //Link the workbench with the svg on the page
     this.visWorkbench.svg = d3.select('#workbench');
-    console.log(this.visWorkbench.svg);
-    this.diagram.addComponentsById([
-      '0c731fbe-c83d-422a-93cd-25d7823e51db',
-      '7359539a-e204-4529-9f75-394fdd40026f'
-    ]).then((d) => {
-        this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
-    });
-    //this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
+    this.visWorkbench.init(this.diagram.nodes,this.diagram.links);
+    //Register helpful globals for dev
     window.diagram = this.diagram;
     window.workbench = this.visWorkbench;
-    //console.log(this.diagram.nodes,this.diagram.links)
-    //console.log(d3);
+
   },
   methods: {
     expandNodes(){
