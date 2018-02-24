@@ -52,7 +52,10 @@ export default class CalypearDiagram {
     if (!this.hasComponentId(componentId)) {
       return this.fetchComponentData(componentId).then((componentData) => {
         let addComponent = new DiagramComponent(componentData);
-        this._components.push(addComponent);
+        //Re-check again we aren't adding a duplicate as onemay have been added in another thread
+        if (!this.hasComponentId(componentData._id)) {
+          this._components.push(addComponent);
+        }
         return this;
       }).catch((err) => {
         throw new Error(err);
@@ -65,6 +68,7 @@ export default class CalypearDiagram {
 
   addComponentsById(componentIds) {
     //co-oerve the parameter to an array
+    //FIXME: Filter out duplicates - addComponentById will check for existing duplicates buy th async nature means any duplicates we give it now may be added as two
     let addPromiseList = [];
     componentIds = [].concat(componentIds);
     componentIds.forEach((currComponentId) => {
@@ -80,7 +84,8 @@ export default class CalypearDiagram {
     if (component) {
       //TODO: De-dup this
       return component.relations.map((currItem) => {
-        return currItem.inverse?currItem.from:currItem.to;
+        //Regardless of inverse or not TO will always be the foreign item
+        return currItem.to;
       });
     } else {
       return null;
@@ -108,6 +113,10 @@ export default class CalypearDiagram {
     }
   }
 
+  get components() {
+    return this._components;
+  }
+
   get componentIds(){
     return this._components.map((currItem) => {
       return currItem._id;
@@ -116,7 +125,7 @@ export default class CalypearDiagram {
 
   addAllRelatedComponents() {
     let currComponentIds = this.componentIds;
-    this.addRelatedComponents(currComponentIds);
+    return this.addRelatedComponents(currComponentIds);
   }
 
   reloadComponents() {
@@ -144,8 +153,22 @@ export default class CalypearDiagram {
     return Promise.resolve(componentIds);
   }
 
+  pinNodesById(componentIds){
+    if (!Array.isArray(componentIds)) {
+      componentIds = [componentIds];
+    }
+
+    //Cycle through all - rather than filter then cycle - effective resource usage is the same
+    this._components.forEach((currComponent) => {
+      if (componentIds.includes(currComponent._id)) {
+        currComponent.pinAtPosition();
+      }
+    });
+
+  }
+
   get nodes() {
-    return Array.from(this._components);
+    return this._components.slice();
   }
 
   get links() {

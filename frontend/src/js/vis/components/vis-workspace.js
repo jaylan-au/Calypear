@@ -123,8 +123,43 @@ export default class VisWorkspace {
 
   }
 
+  nodeGenerator(ctx){
+    ctx.append("circle")
+      .attr("cx",0)
+      .attr("cy",0)
+      .attr("r",function(d) {
+        return 5;
+      });
+    ctx.append("text")
+      .attr("x",0)
+      .attr("y",5)
+      .attr("dy","1em")
+      .classed("node-text",true)
+      .text(function(d) {
+        return d.componentName;
+      });
+
+    // ctx.append("foreignObject")
+    //   //To the left of the object
+    //   .attr("x",-40/*-(nodeBlockTextSize.width/2)*/)
+    //   //Align the text in the middle (0,0 is the middle of the object)
+    //   .attr("y",function(d){
+    //     return 5;
+    //     //return (calculateNodeSize(d)+nodeBlockTextSize.offset.y)-(calculateNodeBlockSize(d).y/2);
+    //   })
+    //   // need atleast one dimension
+    //   .attr("width",80 /*nodeBlockTextSize.width*/)
+    //   //Let the object figure out height on its own
+    //   //This needs to be added back in for the export (otherwise text dissapears)
+    //   .attr("height",40 /*nodeBlockTextSize.height*/)
+    //   .attr("class","node-text")
+    //   .append("xhtml:div")
+    //   .append("xhtml:p")
+    //     .text(function(d) {return d.componentName});
+  }
+
   update(graphNodes, graphLinks) {
-    let simulation = this._simulation;
+    //let simulation = this._simulation;
     let svgWorkspace = this._svg;
     let nodeElementsDataMerge = this._nodeGroup.selectAll(".diagram-node")
       .data(graphNodes,function(d) {return d._id;});
@@ -153,13 +188,8 @@ export default class VisWorkspace {
             this.nodeDragEnded(d);
           }.bind(this))
         )
-      .append("circle")
-        .attr("cx",0)
-        .attr("cy",0)
-        .attr("r",function(d) {
-          console.log('rendered');
-          return 5;
-        });
+    this.nodeGenerator(nodeEnter);
+
 
     linkElementsDataMerge.exit().remove();
 
@@ -169,19 +199,25 @@ export default class VisWorkspace {
       .attr("stroke-width", 1)
       .attr("id",function(d) {return "link"+d._id;});
 
-    simulation.nodes(graphNodes);
 
-    simulation.force("link")
+    //FIXME: Findout why we need to clear the links before resetting nodes? normally this isn't a problem???
+    //This wasn't a problem in the old version or other instances of the code...
+    //Possibly because node and link removal are sperate now??
+    this._simulation.force("link").links([]);
+    this._simulation.nodes(graphNodes);
+
+    this._simulation.force("link")
        .links(graphLinks)
        .distance(function(link){return 200});
 
+
     this._nodeElements = this._nodeGroup.selectAll(".diagram-node");
     this._linkElements = this._linkGroup.selectAll(".diagram-link");
-
-    simulation.alpha(1).restart();
+    this._simulation.alpha(1).restart();
     //setTimeout(function(){ simulation.stop(); }, 3000);
 
   }
+
 
   nodeDragStarted(d) {
     if (!d3.event.active) this._simulation.alphaTarget(0.3).restart();

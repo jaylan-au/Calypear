@@ -34,7 +34,7 @@
     "canvas-toBlob": "^1.0.0",
     "celebrate": "^7.0.4",
     "cookie-parser": "~1.4.3",
-    "css-loader": "^0.28.9",
+    "css-loader": "^0.28.10",
     "d3": "^4.13.0",
     "debug": "^2.6.9",
     "express": "~4.15.5",
@@ -48,7 +48,7 @@
     "serve-favicon": "~2.4.5",
     "sqlite3": "^3.1.13",
     "style-loader": "^0.19.1",
-    "uglifyjs-webpack-plugin": "^1.1.8",
+    "uglifyjs-webpack-plugin": "^1.2.2",
     "uuid": "^3.2.1",
     "vue": "^2.5.13",
     "vue-html-loader": "^1.2.4",
@@ -56,7 +56,7 @@
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.13",
     "vuex": "^3.0.1",
-    "webpack": "^3.10.0"
+    "webpack": "^3.11.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1"
