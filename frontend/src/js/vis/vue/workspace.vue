@@ -20,7 +20,7 @@
         v-on:vis-add-component="addComponentToDiagram">
       </component-list>
     </div>
-    <svg viewBox="0 0 600 600" id="workbench" v-on:click="workspaceClick">
+    <svg viewBox="0 0 1000 1000" id="workbench" v-on:click="workspaceClick">
     </svg>
     <div class="ui menu" id="workbench-tools">
       <div class="ui item">
@@ -73,6 +73,8 @@ export default {
   },
   mounted(){
     this.visWorkbench = new VisWorkspace(),
+    this.visWorkbench.width = 1000;
+    this.visWorkbench.height = 1000;
     this.diagram = new CalypearDiagram(),
     this.visWorkbench.svg = d3.select('#workbench');
     console.log(this.visWorkbench.svg);

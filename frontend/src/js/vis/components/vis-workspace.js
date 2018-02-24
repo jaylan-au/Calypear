@@ -93,8 +93,8 @@ export default class VisWorkspace {
   }
 
   init(graphNodes,graphLinks) {
-    let svgWorkspace = this._svg;
-
+    this._svgWorkspace = this._svg.append("g").attr("class","zoom-wrapper");
+    let svgWorkspace = this._svgWorkspace;
     this._linkGroup = svgWorkspace.append("g")
         .attr("class", "link-group");
     this._linkElements = this._linkGroup.selectAll(".diagram-link");
@@ -114,13 +114,17 @@ export default class VisWorkspace {
       .on("tick",function(){
         this.simulationTick();
       }.bind(this));
-      // .on("tick",function(){
-      //   //console.log(this);
-      //   //workspace.simulationTick(workspace, this);
-      // }.bind({workspace: this}));
+
+    this._zoomController = d3.zoom()
+      .scaleExtent([-20, 20])
+      .duration('750')
+      .on("zoom", function() {
+        this._svgWorkspace.attr("transform",d3.event.transform);
+      }.bind(this));
+
+    this._svg.call(this._zoomController);
 
     this.update(graphNodes,graphLinks);
-
   }
 
   nodeGenerator(ctx){
