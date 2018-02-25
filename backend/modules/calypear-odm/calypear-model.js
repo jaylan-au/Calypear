@@ -5,7 +5,7 @@ const Joi = require('joi');
 
 class CalypearModel {
 
-  constructor(db,docType, attributes, options) {
+  constructor(db,docType, attributes, methods, options) {
     this._db = db;
     this._docType = docType;
     //TODO: Append _id and _rev attributes to the attributes this sets their validation and prevents the validation failing when they are present
@@ -14,6 +14,11 @@ class CalypearModel {
       _rev: Joi.string(),
       _id: Joi.string(),
     });
+    if (methods) {
+      Object.entries(methods).forEach((currMethod) => {
+        this[currMethod[0]] = currMethod[1];
+      });
+    }
     if (docType == 'archcomponent') {
       console.log('DECLARED');
     }
@@ -35,12 +40,15 @@ class CalypearModel {
           attributes: Joi.array().items(Joi.string().min(1)).min(1).required(),
         })),
       //an array of objects defining methods to create for the model
-      methods: Joi.array()
+      methods: Joi.object()
         .description('Methods attached to this model'),
     });
 
     let validatedDefinition = Joi.attempt(definition, definitionSchema);
-    let calypearModel = new CalypearModel(db,validatedDefinition.docType, validatedDefinition.attributes,null);
+    let calypearModel = new CalypearModel(db,
+      validatedDefinition.docType,
+      validatedDefinition.attributes,
+      validatedDefinition.methods,null);
     return calypearModel;
   }
 
@@ -62,7 +70,10 @@ class CalypearModel {
     let queryStatement = Object.assign({},query);
     console.log(queryStatement);
     //Push selector to
-     
+    if (!queryStatement.selector) {
+      queryStatement.selector = {};
+    }
+
     queryStatement.selector.docType = this.docType;
     console.log(queryStatement);
     return this._db.find(queryStatement).then((dbresponse) => {

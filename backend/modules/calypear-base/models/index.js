@@ -5,4 +5,5 @@ module.exports = [].concat([
   require('./arch-component'),
   require('./component-relation'),
   require('./component-tag'),
+  require('./app-user'),
 ]);

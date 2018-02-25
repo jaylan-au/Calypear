@@ -10,6 +10,7 @@ import archComponentSearch from './pages/arch-component-search.vue';
 import archComponentView from './pages/arch-component-view.vue';
 import archComponentQuicksearch from './components/arch-component/arch-component-quicksearch.vue';
 import componentTypeFilterList from './components/component-type/component-type-filter-list.vue';
+import appUserList from './pages/admin/app-user.vue';
 //import store from './calypear-store.js';
 
 Vue.use(VueRouter);
@@ -28,6 +29,10 @@ const router = new VueRouter({
       component: relationTypeList
     },
     {
+      path: '/app/admin/app-user',
+      component: appUserList
+    },
+    {
       path: '/app/arch-component',
       name: 'arch-component-search',
       component: archComponentSearch
@@ -44,7 +49,8 @@ const router = new VueRouter({
 const app = new Vue({
   components: {
     archComponentQuicksearch,
-    componentTypeFilterList
+    componentTypeFilterList,
+    appUserList
   },
   router: router,
   store,
