@@ -28,12 +28,13 @@ module.exports = {
         if (dbresponse.length < 1) {
           //No user detected - create it
           return this.create(userObject).then((createResponse) => {
-            return createResponse.data;
+            return createResponse;
           });
         } else {
           return Promise.reject(new Error(409,'User exists'));
         }
       }).catch((err) => {
+        console.log(err);
         return Promise.reject(err);
       });
     }

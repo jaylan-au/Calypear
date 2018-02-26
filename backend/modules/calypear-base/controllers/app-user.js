@@ -11,12 +11,12 @@ module.exports = {
   create: function(req, res, next) {
     const odm = req.app.get('odm');
     const AppUser = odm.models.appuser;
-    const bcrypt = require('bcrypt');
     AppUser.createUser(req.body).then((dbresponse) => {
       //Don't send the DB response as normal as this will contain the password
-      res.json(Object.assign({},dbresponse.data,{authentication:''}));
+      res.json(Object.assign({},dbresponse,{authentication:''}));
     }).catch((err) => {
-      res.sendStatus(500).send(err);
+      console.log(err);
+      res.send(err);
     });
   },
   read: function(req,res,next) {
@@ -32,7 +32,7 @@ module.exports = {
       res.sendStatus(500).send(err);
     });
   },
-  authenticateLogin(req,res,next) {
+  authenticateLogin: function(req,res,next) {
     const odm = req.app.get('odm');
     const AppUser = odm.models.appuser;
     AppUser.find({
@@ -50,7 +50,7 @@ module.exports = {
       res.sendStatus(500).send(err);
     });
   },
-  updateAuthentication(req,res,next) {
+  updateAuthentication: function(req,res,next) {
 
   },
   update: function(req,res,next) {

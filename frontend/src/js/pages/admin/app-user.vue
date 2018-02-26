@@ -1,37 +1,28 @@
 <template>
   <div class="ui segement">
     <h1 class="header">Users</h1>
-    <div class="ui relaxed divided list">
-      <div class="ui item" v-for="appUser in appUsers">
-        <i class="large user middle aligned icon"></i>
-        <div class="content">
-          <div class="header">{{appUser.username}}</div>
-        </div>
-
-      </div>
-      <div class="ui item">
-        <form class="ui form">
-          <div class="ui input fluid">
-            <input type="text"/>
-          </div>
-          <div class="ui input fluid">
-            <input type="password"/>
-          </div>
-            <input type="submit" class="ui submit primary button" value="Create"/>
-        </form>
-      </div>
-    </div>
+    <app-user-list
+     :appUsers="appUsers">
+    </app-user-list>
+    <app-user-new
+      v-on:app-user-create="createUser">
+    </app-user-new>
   </div>
 </template>
 <script>
+import appUserList from '../../components/app-user/list.vue';
+import appUserNew from '../../components/app-user/new.vue';
+
 import Axios from 'axios';
+
 export default {
   components: {
-
+    appUserList,
+    appUserNew
   },
   data() {
     return {
-      appUsers: []
+      appUsers: [],
     };
   },
   created() {
@@ -40,7 +31,17 @@ export default {
     });
   },
   methods: {
+    createUser(payload) {
+      const newUser = Object.assign({},payload);
+      console.log(newUser);
+      Axios.post('/admin/app-user',newUser).then((dbresponse) => {
+        this.appUsers.push(dbresponse.data);
+        console.log(dbresponse.data);
+      }).catch((err) => {
+        console.log(err);
+      })
 
+    }
   }
 }
 </script>
