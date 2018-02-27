@@ -13,4 +13,30 @@ router.post('/',celebrate({
   }
 }),appUserController.create);
 
+router.put('/:appUserId',celebrate({
+  params: {
+    appUserId: Joi.string().min(1).required(),
+  },
+  body: {
+    username: Joi.string().min(1).required(),
+    authentication: Joi.string().min(1).required(),
+  }
+}),appUserController.update);
+
+router.put('/:appUserId/changepassword',celebrate({
+  params: {
+    appUserId: Joi.string().min(1).required(),
+  },
+  body: {
+    authentication: Joi.string().min(1).required(),
+  }
+}),appUserController.updateAuthentication);
+
+router.delete('/:appUserId',celebrate({
+  params: {
+    appUserId: Joi.string().min(1).required(),
+  },
+}),appUserController.delete)
+
+
 module.exports = router;

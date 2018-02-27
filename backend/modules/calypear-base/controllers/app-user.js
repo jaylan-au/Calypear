@@ -51,12 +51,35 @@ module.exports = {
     });
   },
   updateAuthentication: function(req,res,next) {
-
+    const odm = req.app.get('odm');
+    const AppUser = odm.models.appuser;
+    AppUser.update(req.params.appUserId,{
+      authentication: AppUser.encodePassword(req.body.authentication),
+    }).then((dbresponse) => {
+      res.sendStatus(200);
+    }).catch((err) => {
+      res.sendStatus(500).send(err);
+    });
   },
   update: function(req,res,next) {
-
+    const odm = req.app.get('odm');
+    const AppUser = odm.models.appuser;
+    AppUser.update(req.params.appUserId,{
+      username: req.body.authentication,
+      authentication: AppUser.encodePassword(req.body.authentication),
+    }).then((dbresponse) => {
+      res.sendStatus(200);
+    }).catch((err) => {
+      res.sendStatus(500).send(err);
+    });
   },
   delete: function(req, res, next) {
-
+    const odm = req.app.get('odm');
+    const AppUser = odm.models.appuser;
+    AppUser.destroy(req.params.appUserId).then((dbresponse) => {
+      res.sendStatus(200);
+    }).catch((err) => {
+      res.sendStatus(500).send(err);
+    });
   },
 }
