@@ -3,6 +3,13 @@ module.exports = {
     const odm = req.app.get('odm');
     const AppUser = odm.models.appuser;
     AppUser.find().then((dbresponse) => {
+
+      //Clear the Authentication Field
+      dbresponse.forEach((currUser) => {
+        if (currUser.authentication) {
+          currUser.authentication = '';
+        }
+      });
       res.send(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);
@@ -27,7 +34,13 @@ module.exports = {
         username: req.params.username
       }
     }).then((dbresponse) => {
-      res.json(dbresponse.data);
+      //Clear the Authentication Field
+      dbresponse.forEach((currUser) => {
+        if (currUser.authentication) {
+          currUser.authentication = '';
+        }
+      });
+      res.json(dbresponse);
     }).catch((err) => {
       res.sendStatus(500).send(err);
     });

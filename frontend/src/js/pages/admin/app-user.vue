@@ -1,7 +1,7 @@
 <template>
   <div class="ui segement">
     <h1 class="header">Users</h1>
-    <div class="ui relaxed divided list">
+    <div class="ui relaxed list">
       <app-user-item
         v-for="appUser in appUsers"
         v-bind:key="appUser._id"
