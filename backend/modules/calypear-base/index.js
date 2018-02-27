@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('passport');
+const passportLocal = require('passport-local');
 
 let pluginModule = {
   checkAndCreateAdminUser(app) {
