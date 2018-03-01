@@ -11,6 +11,7 @@ import archComponentView from './pages/arch-component-view.vue';
 import archComponentQuicksearch from './components/arch-component/arch-component-quicksearch.vue';
 import componentTypeFilterList from './components/component-type/component-type-filter-list.vue';
 import appUserList from './pages/admin/app-user.vue';
+import loginPage from './pages/auth/login.vue';
 //import store from './calypear-store.js';
 
 Vue.use(VueRouter);
@@ -42,6 +43,11 @@ const router = new VueRouter({
       name: 'arch-component-view',
       component: archComponentView,
       props: (route) => ({"componentId": route.params.componentId})
+    },
+    {
+      path: '/app/login',
+      name: 'login',
+      component: loginPage,
     }
   ]
 })

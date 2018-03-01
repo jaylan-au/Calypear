@@ -3,9 +3,11 @@ const { celebrate, Joi, errors } = require('celebrate');
 const relationTypeController = require('../controllers/relation-type.js');
 
 const router = express.Router();
+const requiresAuth = require('../lib/requires-auth.js');
+
 //Validate the typeClass is supplied properly
 router.get('/',relationTypeController.all);
-router.post('/',celebrate(
+router.post('/',requiresAuth,celebrate(
   {
     body: {
       typeName: Joi.string().required(),

@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const session = require('express-session');
 
 var app = express();
 
@@ -18,6 +19,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//FIXME: Retrieve the secret from a config file (or the db)
+app.use(session({ secret: "test1" }));
 //app.use(express.static(path.join(__dirname, 'public')));
 
 //Application event logger
