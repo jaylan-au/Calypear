@@ -77,7 +77,7 @@ let pluginModule = {
     app.post('/login/local',
       passport.authenticate('local', { failureRedirect: '/login' }),
       function(req, res) {
-        res.sendStatus(200);
+        res.status(200).send(req.user);
       }
     );
   },

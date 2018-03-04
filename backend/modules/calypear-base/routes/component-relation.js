@@ -2,6 +2,7 @@ const express = require('express');
 const { celebrate, Joi, errors } = require('celebrate');
 const componentRelationController = require('../controllers/component-relation.js');
 const ComponentRelationModel = require('../models/component-relation.js');
+const requiresAuth = require('../lib/requires-auth.js');
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get('/component/:componentId',celebrate({
   }
 }),componentRelationController.readAllForComponent);
 
-router.post('/',celebrate({
+router.post('/',requiresAuth,celebrate({
   body: {
     from: Joi.string().required(),
     relationType: Joi.string().required(),
@@ -19,7 +20,7 @@ router.post('/',celebrate({
   }
 }),componentRelationController.create);
 
-router.delete('/:transaction',celebrate({
+router.delete('/:transaction',requiresAuth,celebrate({
   params: {
     transaction: Joi.string().required()
   }

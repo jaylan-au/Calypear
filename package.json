@@ -48,6 +48,7 @@
     "path": "^0.12.7",
     "pouchdb": "^6.4.3",
     "pouchdb-find": "^6.4.3",
+    "qs": "^6.5.1",
     "serve-favicon": "~2.4.5",
     "sqlite3": "^3.1.13",
     "style-loader": "^0.19.1",

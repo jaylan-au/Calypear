@@ -13,5 +13,13 @@ export default new Vuex.Store({
     archComponent: storeArchComponent,
     simpleType: storeSimpleType,
     relationType: storeRelationType,
+  },
+  state: {
+    currentUser: {}
+  },
+  mutations: {
+    setCurrentUser (state, payload) {
+      Vue.set(state,'currentUser',payload);
+    },
   }
 });

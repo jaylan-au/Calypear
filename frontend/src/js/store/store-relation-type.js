@@ -59,6 +59,8 @@ export default {
         typeName : updateProps.relationType.typeName,
         typeNameInverse : updateProps.relationType.typeNameInverse
       };
+
+
       Axios.put('/admin/relation-type/'.concat(updateProps.relationType._id),updateRequestProps).then((response) => {
         commit('updateRelationType',{
           relationType: response.data

@@ -1,9 +1,10 @@
 const express = require('express');
 const { celebrate, Joi, errors } = require('celebrate');
 const relationTypeController = require('../controllers/relation-type.js');
+const requiresAuth = require('../lib/requires-auth.js');
 
 const router = express.Router();
-const requiresAuth = require('../lib/requires-auth.js');
+
 
 //Validate the typeClass is supplied properly
 router.get('/',relationTypeController.all);
@@ -16,7 +17,7 @@ router.post('/',requiresAuth,celebrate(
   }
 ),relationTypeController.create);
 
-router.put('/:typeId',celebrate(
+router.put('/:typeId',requiresAuth,celebrate(
   {
     params: {
       typeId: Joi.string().required(),
@@ -28,7 +29,7 @@ router.put('/:typeId',celebrate(
   }
 ),relationTypeController.update);
 
-router.delete('/:typeId',celebrate(
+router.delete('/:typeId',requiresAuth,celebrate(
   {
     params: {
       typeId: Joi.string().required(),

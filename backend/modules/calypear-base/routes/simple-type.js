@@ -1,6 +1,7 @@
 const express = require('express');
 const { celebrate, Joi, errors } = require('celebrate');
 const simpleTypeController = require('../controllers/simple-type.js');
+const requiresAuth = require('../lib/requires-auth.js');
 
 const router = express.Router();
 //Validate the typeClass is supplied properly
@@ -15,7 +16,7 @@ router.get('/:typeClass',celebrate(
     }
   }
 ),simpleTypeController.all);
-router.post('/:typeClass',celebrate(
+router.post('/:typeClass',requiresAuth,celebrate(
   {
     params: {
       typeClass: Joi.string().lowercase().valid([
@@ -31,7 +32,7 @@ router.post('/:typeClass',celebrate(
 ),simpleTypeController.create);
 
 router.route('/:typeClass/:typeId')
-  .all(celebrate(
+  .all(requiresAuth,celebrate(
     {
       params: {
         typeClass: Joi.string().lowercase().valid([

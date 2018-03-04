@@ -28,7 +28,17 @@ export default {
         password: this.password
       }
       axios.post('/login/local',userAuth).then((response) => {
-        console.log(response);
+        //Response was ok forward back to the requestor
+        // if (this.$route.query.forwardTo) {
+        //   window.location = this.$route.query.forwardTo;
+        // }
+        // else {
+        //this.$store.user
+        //FIXME: this needs to be pulled from the server
+        this.$store.commit('setCurrentUser',response.data)
+
+        //window.location = '/app';
+        // }
       }).catch((err) => {
         console.log('Error',err);
       })

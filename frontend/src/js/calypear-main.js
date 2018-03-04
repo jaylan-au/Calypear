@@ -13,6 +13,8 @@ import componentTypeFilterList from './components/component-type/component-type-
 import appUserList from './pages/admin/app-user.vue';
 import loginPage from './pages/auth/login.vue';
 //import store from './calypear-store.js';
+import Axios from 'axios';
+import qs from 'qs';
 
 Vue.use(VueRouter);
 Vue.use(Logger);
@@ -51,6 +53,36 @@ const router = new VueRouter({
     }
   ]
 })
+
+//Register an interceptor to handle standard backend errors
+Axios.interceptors.response.use(function (response) {
+  return response;
+}, function (err) {
+    if (401 === err.response.status) {
+      //Redirect to login
+      let loginParams = {
+        forwardTo: err.request.responseURL
+      }
+      window.location = '/app/login?'+qs.stringify(loginParams);
+      //Forward on the error
+      return Promise.reject(err);
+    } else {
+      //Some other error let the caller handle it
+      return Promise.reject(err);
+    }
+});
+
+store.subscribe((mutation, state) => {
+	// Store the state object as a JSON string
+  console.log('Store Mutation');
+
+  // where mutation.type = 'setCurrentUser'
+  if (mutation.type == 'setCurrentUser') {
+      let userState = mutation.payload;
+      localStorage.setItem('user', JSON.stringify(userState));
+  }
+	//localStorage.setItem('store', JSON.stringify(state));
+});
 
 const app = new Vue({
   components: {
