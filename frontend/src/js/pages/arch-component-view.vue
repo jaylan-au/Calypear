@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ui">
+    <div class="ui form">
       <div class="content">
         <h1 class="header" v-show="!isEditing">
           {{archComponent.componentName}}

@@ -7,8 +7,8 @@
         {{componentTag.value}}
     </td>
     <td>
-      <a v-on:click="deleteComponentTag">
-        <i class="trash icon"></i>
+      <a href="#" v-on:click="deleteComponentTag">
+        <i class="trash link icon"></i>
         Delete
       </a>
     </td>

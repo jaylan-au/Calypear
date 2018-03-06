@@ -12,8 +12,8 @@
       </router-link>
     </td>
     <td>
-      <a v-on:click="deleteComponentRelation">
-        <i class="trash icon"></i>
+      <a href="#" v-on:click="deleteComponentRelation">
+        <i class="trash link icon"></i>
         Delete
       </a>
     </td>
