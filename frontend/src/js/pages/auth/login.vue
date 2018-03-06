@@ -1,14 +1,17 @@
 <template>
-  <div class="ui form">
-    <div class="field">
-      <label>Username</label>
-      <input type="text" name="username" v-model="username"/>
+  <div class="ui segement">
+    <h1 class="header">Login</h1>
+    <div class="ui form">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" name="username" v-model="username"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" v-model="password"/>
+      </div>
+      <button class="ui button" type="submit" v-on:click="login">Login</button>
     </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" name="password" v-model="password"/>
-    </div>
-    <button class="ui button" type="submit" v-on:click="login">Login</button>
   </div>
 </template>
 <script>
@@ -37,7 +40,7 @@ export default {
         //FIXME: this needs to be pulled from the server
         this.$store.commit('setCurrentUser',response.data)
 
-        //window.location = '/app';
+        window.location = '/app';
         // }
       }).catch((err) => {
         console.log('Error',err);

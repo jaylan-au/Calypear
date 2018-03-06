@@ -1,24 +1,19 @@
 <template>
-  <div class="ui segement">
+  <div>
     <h1 class="header">Search Results</h1>
     <arch-component-list
       v-bind:archComponents="searchResults"
       v-on:arch-component-delete="deleteArchComponent">
     </arch-component-list>
-    <arch-component-new
-      v-on:arch-component-created="createdArchComponent">
-    </arch-component-new>
   </div>
 </template>
 <script>
 import Axios from 'axios';
 import archComponentList from '../components/arch-component/arch-component-list.vue';
-import archComponentNew from '../components/arch-component/new.vue';
 
 export default {
   components: {
     archComponentList,
-    archComponentNew,
   },
   data() {
     return {

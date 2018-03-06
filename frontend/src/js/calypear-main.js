@@ -8,6 +8,7 @@ import simpleTypeList from './pages/admin/simple-type-list.vue';
 import relationTypeList from './components/relation-type/list.vue';
 import archComponentSearch from './pages/arch-component-search.vue';
 import archComponentView from './pages/arch-component-view.vue';
+import archComponentNewPage from './pages/arch-component-new.vue';
 import archComponentQuicksearch from './components/arch-component/arch-component-quicksearch.vue';
 import componentTypeFilterList from './components/component-type/component-type-filter-list.vue';
 import appUserList from './pages/admin/app-user.vue';
@@ -39,6 +40,11 @@ const router = new VueRouter({
       path: '/app/arch-component',
       name: 'arch-component-search',
       component: archComponentSearch
+    },
+    {
+      path: '/app/arch-component/new',
+      name: 'arch-component-new',
+      component: archComponentNewPage,
     },
     {
       path: '/app/arch-component/view/:componentId',
