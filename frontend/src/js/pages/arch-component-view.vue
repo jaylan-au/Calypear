@@ -25,8 +25,6 @@
             <div class="content" v-show="!isEditing">
               {{ archComponent.description }}
             </div>
-          </div>
-          <div class="item">
             <div class="content" v-show="isEditing">
                 <textarea
                   placeholder="Component Description"
