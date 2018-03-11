@@ -11,6 +11,7 @@
           v-on:update-relation-type="updateRelationType" >
         </relation-type-item>
         <relation-type-new
+          v-show="isUserLoggedIn"
           v-on:create-relation-type="createRelationType" >
         </relation-type-new>
       </div>
@@ -34,7 +35,11 @@ export default {
   computed: {
     relationTypes: function(){
       return this.$store.state.relationType.relationTypeCache;
+    },
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
     }
+
   },
   methods: {
     createRelationType(createProps) {

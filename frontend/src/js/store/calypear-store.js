@@ -15,11 +15,23 @@ export default new Vuex.Store({
     relationType: storeRelationType,
   },
   state: {
-    currentUser: {}
+    currentUser: null
   },
   mutations: {
     setCurrentUser (state, payload) {
       Vue.set(state,'currentUser',payload);
+    },
+  },
+  getters: {
+    isUserLoggedIn: state => {
+      if (state.currentUser) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    loggedInUser: state => {
+      return state.currentUser;
     },
   }
 });

@@ -36,7 +36,7 @@
               </div>
           </div>
         </div>
-        <button class="ui primary button" v-show="!isEditing" v-on:click="showEditForm">Edit</button>
+        <button class="ui primary button" v-show="((!isEditing) && isUserLoggedIn)" v-on:click="showEditForm">Edit</button>
         <button class="ui primary button" v-show="isEditing" v-on:click="saveEditForm">Save</button>
       </div>
     </div>
@@ -88,6 +88,11 @@ export default {
   },
   created: function(){
     this.fetchArchComponent(this.componentId);
+  },
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
+    }
   },
   mounted() {
 

@@ -95,4 +95,13 @@ module.exports = {
       res.sendStatus(500).send(err);
     });
   },
+  currentUser: function(req, res, next) {
+    if(req.isAuthenticated()){
+      //if user is looged in, req.isAuthenticated() will return true
+      res.json(req.user);
+    } else{
+      //not authenticated leave it to the UI to handle this
+      res.json({});
+    }
+  }
 }

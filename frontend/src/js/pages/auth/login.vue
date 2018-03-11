@@ -40,7 +40,7 @@ export default {
         //FIXME: this needs to be pulled from the server
         this.$store.commit('setCurrentUser',response.data)
 
-        window.location = '/app';
+        //window.location = '/app';
         // }
       }).catch((err) => {
         console.log('Error',err);

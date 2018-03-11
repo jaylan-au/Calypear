@@ -24,10 +24,23 @@ let pluginModule = {
   authSetup(app) {
     const passport = require('passport')
     const LocalStrategy = require('passport-local').Strategy;
+    const PassportJWT = require('passport-jwt');
+    const JWTStrategy = PassportJWT.Strategy;
+    const ExtractJWT = PassportJWT.ExtractJwt;
+    const jwt = require('jsonwebtoken');
     const odm = app.get('odm');
+
+    // passport.use(new JWTStrategy({
+    //   secretOrKey: 'test1',
+    //   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    // },function(jwt_payload, done){
+    //   console.log(jwt_payload);
+    //   done(null,jwt_payload.sub);
+    // }));
 
     passport.use(new LocalStrategy({
       passReqToCallback: true,
+      session: false,
     },
       function(req, username, password, done) {
         const odm = req.app.get('odm');
@@ -75,11 +88,41 @@ let pluginModule = {
 
 
     app.post('/login/local',
-      passport.authenticate('local', { failureRedirect: '/login' }),
+      passport.authenticate('local', { failureRedirect: '/login'}),
       function(req, res) {
         res.status(200).send(req.user);
       }
     );
+    // app.post('/login/local',function(req,res,next) {
+    //   const odm = req.app.get('odm');
+    //   const AppUser = odm.models.appuser;
+    //   let username = req.body.username;
+    //   let password = req.body.password;
+    //   AppUser.find({selector: { username: username }}).then((dbresponse) => {
+    //
+    //     if (!dbresponse) {
+    //       res.status(401).json({message: 'Incorrect username'});
+    //       //return done(null, false, { message: 'Incorrect username.' });
+    //     } else {
+    //       if (!AppUser.authenticatePassword(dbresponse[0].authentication,password)) {
+    //         res.status(401).json({message: 'Incorrect username'});
+    //         //return done(null, false, { message: 'Incorrect password.' });
+    //       } else {
+    //         let jwtPayload = {
+    //           username: dbresponse[0].username,
+    //           sub: dbresponse[0]._id,
+    //           testing: 'sdfgsdfgsdfgsdfg',
+    //         }
+    //         var token = jwt.sign(jwtPayload, 'test1');
+    //         res.json({message: "ok", token: token});
+    //       }
+    //     }
+    //   }).catch((err) => {
+    //     console.log(err);
+    //     res.status(500).json(err);
+    //   });
+    //
+    // });
   },
   initialize: function(app,mountPath) {
     const odm = app.get('odm');

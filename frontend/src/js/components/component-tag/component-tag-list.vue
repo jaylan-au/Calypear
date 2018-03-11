@@ -8,6 +8,7 @@
         v-on:component-tag-delete="deleteComponentTag">
       </component-tag-item>
       <component-tag-new
+        v-show="isUserLoggedIn"
         v-bind:componentId="componentId"
         v-on:component-tag-new="createComponentTag"
         :typeNameResolver="typeNameByTypeId">
@@ -29,6 +30,11 @@ export default {
   data() {
     return {
       componentTags: [],
+    }
+  },
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
     }
   },
   mounted() {

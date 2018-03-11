@@ -9,6 +9,7 @@
         v-on:component-relation-delete="deleteComponentRelation">
       </component-relation-item>
       <component-relation-new
+        v-show="isUserLoggedIn"
         v-bind:componentId="componentId"
         v-on:component-relation-new="addComponentRelation"
         :archComponentNameResolver="archComponentNameById"
@@ -31,6 +32,11 @@ export default {
   data() {
     return {
       componentRelations: [],
+    }
+  },
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
     }
   },
   mounted() {

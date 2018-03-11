@@ -7,7 +7,9 @@
         {{componentTag.value}}
     </td>
     <td>
-      <a href="#" v-on:click="deleteComponentTag">
+      <a href="#"
+        v-on:click="deleteComponentTag"
+        v-show="isUserLoggedIn">
         <i class="trash link icon"></i>
         Delete
       </a>
@@ -19,6 +21,11 @@ import Axios from 'axios';
 
 export default {
   props: ['componentTag','componentId','archComponentNameResolver','typeNameResolver'],
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
+    }
+  },
   methods: {
     deleteComponentTag(){
       this.$emit('component-tag-delete',this.componentTag._id);

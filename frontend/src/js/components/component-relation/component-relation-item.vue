@@ -12,7 +12,9 @@
       </router-link>
     </td>
     <td>
-      <a href="#" v-on:click="deleteComponentRelation">
+      <a href="#"
+        v-on:click="deleteComponentRelation"
+        v-show="isUserLoggedIn">
         <i class="trash link icon"></i>
         Delete
       </a>
@@ -24,6 +26,11 @@ import Axios from 'axios';
 
 export default {
   props: ['componentRelation','componentId','archComponentNameResolver','typeNameResolver'],
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
+    }
+  },
   methods: {
     deleteComponentRelation(){
       this.$emit('component-relation-delete',this.componentRelation.transaction);

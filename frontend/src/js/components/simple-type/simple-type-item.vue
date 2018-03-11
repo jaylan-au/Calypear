@@ -4,7 +4,7 @@
     <div class="content" v-show="!isEditing">
       <div class="header">{{ simpleTypeData.typeName }}</div>
       <div class="description">
-        id: {{ simpleTypeData._id }} <a v-on:click="showForm">Edit</a> <a v-on:click="deleteSimpleType(simpleTypeData._id)">Delete</a>
+        id: {{ simpleTypeData._id }} <a v-show="isUserLoggedIn" v-on:click="showForm">Edit</a> <a v-show="isUserLoggedIn" v-on:click="deleteSimpleType(simpleTypeData._id)">Delete</a>
       </div>
     </div>
     <div class="content" v-show="isEditing">
@@ -26,6 +26,11 @@ export default {
     return {
       isEditing: false,
     };
+  },
+  computed: {
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
+    }
   },
   methods: {
     showForm() {

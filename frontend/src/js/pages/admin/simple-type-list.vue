@@ -10,7 +10,7 @@
         v-on:delete-simple-type="deleteSimpleType"
         v-on:update-simple-type="updateSimpleType" >
       </simple-type-item>
-      <simple-type-new
+      <simple-type-new v-show="isUserLoggedIn"
         v-bind:typeClassName="typeClassName"
         v-on:create-simple-type="createSimpleType" >
       </simple-type-new>
@@ -48,6 +48,9 @@ export default {
           return 'Tag Types'
           break;
       }
+    },
+    isUserLoggedIn() {
+      return this.$store.getters.isUserLoggedIn;
     }
   },
   methods: {

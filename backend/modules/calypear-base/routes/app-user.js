@@ -6,8 +6,9 @@ const requiresAuth = require('../lib/requires-auth.js');
 
 const router = express.Router();
 
+router.get('/',requiresAuth,appUserController.search);
+router.get('/currentUser',appUserController.currentUser);
 
-router.get('/',appUserController.search);
 router.post('/',requiresAuth,celebrate({
   body: {
     username: Joi.string().min(1).required(),
