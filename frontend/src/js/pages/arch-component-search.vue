@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1 class="header">Search Results</h1>
+    <div v-show="(searchResults.length < 1)">
+      No results found
+    </div>
     <arch-component-list
       v-bind:archComponents="searchResults"
       v-on:arch-component-delete="deleteArchComponent">
