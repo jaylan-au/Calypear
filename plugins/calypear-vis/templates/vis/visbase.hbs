@@ -788,8 +788,8 @@ svg {
     $('#workspaceExportPNGCommand').click(function(){
       exporter = new PNGDiagramExporter();
       exporter.generateData(svg.node(),{
-        width: 2000,
-        height: 2000
+        width: 5000,
+        height: 5000
       }).then((imageBlob) => {
           saveAs(imageBlob,diagram.name() + '.png');
       });
